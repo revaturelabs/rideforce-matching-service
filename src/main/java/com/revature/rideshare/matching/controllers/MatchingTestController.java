@@ -5,16 +5,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.revature.rideshare.matching.clients.MapsClient;
+import com.revature.rideshare.matching.clients.UserClient;
 
 @RestController
 public class MatchingTestController {
 	@Autowired
-	MapsClient mapsClient;
+	private UserClient userClient;
 
 	@RequestMapping(value = "/test", method = RequestMethod.GET)
 	public String test() {
-		return mapsClient.getRoute("2925 Rensselaer Ct. Vienna, VA 22181", "11730 Plaza America Dr. Reston, VA")
-				.toString();
+		return userClient.findByOfficeAndRole(1, "DRIVER").toString();
 	}
 }

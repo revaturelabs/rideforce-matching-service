@@ -12,7 +12,14 @@ import com.revature.rideshare.matching.beans.Route;
  */
 @FeignClient("maps-service")
 public interface MapsClient {
-	@GetMapping(path = "/route", params = { "start",
-			"end" }, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	/**
+	 * Gets information for a route between two addresses.
+	 * 
+	 * @param start the start address
+	 * @param end   the end address
+	 * @return route information, consisting of the distance and duration of the
+	 *         trip (on foot)
+	 */
+	@GetMapping(path = "/route", params = { "start", "end" }, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	Route getRoute(@RequestParam("start") String start, @RequestParam("end") String end);
 }
