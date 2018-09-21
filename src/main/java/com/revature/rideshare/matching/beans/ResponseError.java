@@ -2,9 +2,9 @@ package com.revature.rideshare.matching.beans;
 
 import java.util.Arrays;
 
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
-import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -34,7 +34,7 @@ public class ResponseError {
 	 * Any additional details that may be relevant to the error (can be empty).
 	 */
 	@NotNull
-	private String[] details;
+	private String[] details = {};
 
 	/**
 	 * Constructs a new {@code ResponseError} from the given exception.
