@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.revature.rideshare.matching.beans.User;
@@ -23,4 +24,7 @@ public interface UserClient {
 	 */
 	@GetMapping(path = "/users", params = { "office", "role" }, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	List<User> findByOfficeAndRole(@RequestParam("office") int officeId, @RequestParam("role") String role);
+	
+	@GetMapping(path = "/users/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	User findById(@PathVariable("id") int id);
 }
