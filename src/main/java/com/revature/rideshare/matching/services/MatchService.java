@@ -87,7 +87,7 @@ public class MatchService {
 	private double rankMatch(User rider, User driver) {
 		// Right now, this only takes distance into consideration.
 		Route riderToDriver = mapsClient.getRoute(rider.getAddress(), driver.getAddress());
-		return 1 / (riderToDriver.getDistance() + 1);
+		return 1 / ((double) riderToDriver.getDistance() + 1);
 	}
 
 	/**
