@@ -1,61 +1,36 @@
 package com.revature.rideshare.matching.beans;
 
-import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
 
 @Entity
+@Table(name="DISLIKES")
 public class Dislike {
 
-	@Id
-	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="DISLIKE_SEQ")
-	@SequenceGenerator(sequenceName="dislike_sequence", allocationSize=1, name="DISLIKE_SEQ")
-	int id;
-	
-	@Column(nullable=false)
-	int userId;
-	
-	@Column(nullable=false)
-	int dislikedId;
+	@EmbeddedId
+	private Pair pair;
 	
 	public Dislike() {}
-	
-	public Dislike(int userId, int dislikedId) {
+
+	public Dislike(Pair pair) {
 		super();
-		this.userId = userId;
-		this.dislikedId = dislikedId;
+		this.pair = pair;
 	}
 
-	public int getId() {
-		return id;
+	public Pair getPair() {
+		return pair;
 	}
 
-	public void setId(int id) {
-		this.id = id;
-	}
-
-	public int getUserId() {
-		return userId;
-	}
-
-	public void setUserId(int userId) {
-		this.userId = userId;
-	}
-
-	public int getDislikedId() {
-		return dislikedId;
-	}
-
-	public void setDislikedId(int dislikedId) {
-		this.dislikedId = dislikedId;
+	public void setPair(Pair pair) {
+		this.pair = pair;
 	}
 
 	@Override
 	public String toString() {
-		return "Dislike [id=" + id + ", userId=" + userId + ", dislikedId=" + dislikedId + "]";
+		return "Dislike [" + pair.toString() + "]";
 	}
+	
+	
 	
 }

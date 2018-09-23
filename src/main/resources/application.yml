@@ -9,6 +9,10 @@ spring:
     driver-class-name: oracle.jdbc.OracleDriver
   application:
     name: matching-service
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database-platform: Oracle10g
 
 eureka:
   client:

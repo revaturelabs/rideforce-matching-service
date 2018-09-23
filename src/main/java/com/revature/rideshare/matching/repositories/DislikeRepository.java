@@ -12,5 +12,5 @@ import com.revature.rideshare.matching.beans.Dislike;
 @Transactional
 public interface DislikeRepository extends JpaRepository<Dislike, Integer>{
 
-	List<Dislike> findByUserId(int userId);
+	List<Dislike> findByPairUserId(int userId);
 }
