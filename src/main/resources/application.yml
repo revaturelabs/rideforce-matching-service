@@ -2,10 +2,20 @@ server:
   port: 4444
 
 spring:
+  datasource:
+    url: jdbc:oracle:thin:@localhost:1521:XE
+    username: rideshare_match_db
+    password: password
+    driver-class-name: oracle.jdbc.OracleDriver
   application:
     name: matching-service
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database-platform: Oracle10g
 
 eureka:
   client:
     service-url:
       default-zone: http://localhost:8761/eureka
+      
