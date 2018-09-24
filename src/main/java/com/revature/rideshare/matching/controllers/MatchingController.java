@@ -40,10 +40,10 @@ public class MatchingController {
 				.collect(Collectors.toList());
 	}
 	
-	@RequestMapping(value = "/minus-likes-dislikes/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/likes-dislikes/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<String> getAllMinusAffects(@PathVariable int id) {
 		User rider = userClient.findById(id);
-		return matchService.findMatchesMinusAffects(rider).stream()
+		return matchService.findMatchesByAffects(rider).stream()
 				.map(driver -> UriComponentsBuilder.fromPath("/users/{id}").buildAndExpand(driver.getId()).toString())
 				.collect(Collectors.toList());
 	}

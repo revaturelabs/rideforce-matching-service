@@ -83,19 +83,22 @@ public class MatchService {
 				.limit(MAX_MATCHES).map(rankedUser -> rankedUser.user).collect(Collectors.toList());
 	}
 	
-	public List<User> findMatchesMinusAffects(User rider) {
+	/**
+	 * Find drivers who would be good drivers. Rank drivers who the rider has
+	 * liked or disliked (affected drivers)
+	 * 
+	 * @param rider the rider for whom to find drivers
+	 * @return the list if drivers who match the given rider, minus affected (up to {@link #MAX_MATCHES})
+	 */
+	public List<User> findMatchesByAffects(User rider) {
 		int officeId = officeLinkToId(rider.getOffice());
 		List<User> drivers = null;
-		// Here we find all potential drivers minus those who are liked
-		// or disliked by the user
-		List<Integer> dislikes = dislikeService.getDislikes(rider.getId()).stream()
-				.map(dislike -> dislike.getPair().getAffectedId()).collect(Collectors.toList());
-		List<Integer> likes = likeService.getLikes(rider.getId()).stream()
-				.map(like -> like.getPair().getAffectedId()).collect(Collectors.toList());
+		List<Integer> likes = getLikedIds(rider);
+		List<Integer> dislikes = getDislikedIds(rider);
 		drivers = userClient.findByOfficeAndRole(officeId, rider.getRole()).stream()
-				.filter(driver -> dislikes.stream().noneMatch(id -> id.equals(driver.getId())))
-				.filter(driver -> likes.stream().noneMatch(id -> id.equals(rider.getId())))
-				.collect(Collectors.toList());
+				.map(driver -> new RankedUser(driver, rankByAffect(rider, driver, likes, dislikes)))
+				.sorted(Comparator.reverseOrder())
+				.limit(MAX_MATCHES).map(rankedUser -> rankedUser.user).collect(Collectors.toList());
 		return drivers;
 	}
 	
@@ -127,6 +130,27 @@ public class MatchService {
 		Route riderToDriver = mapsClient.getRoute(rider.getAddress(), driver.getAddress());
 		return 1 / ((double) riderToDriver.getDistance() + 1);
 	}
+	
+	
+	/**
+	 * Ranks a rider based on whether they have been liked or disliked
+	 * 
+	 * @param rider the rider under consideration
+	 * @param driver the potential driver who we are ranking
+	 * @param likes a list of driver IDs for whom the rider has liked. Consult the getLikedIds() function below
+	 * @param dislikes a list of driver IDs for whom the rider has disliked. Consult the getDislikedIds() function below
+	 * @return
+	 */
+	private double rankByAffect(User rider, User driver, List<Integer> likes, List<Integer> dislikes) {
+		// Determines whether the user has a good affect, and ranks them accordingly
+		if(dislikes.stream().anyMatch(id -> id.equals(driver.getId()))) {
+			return 0.0;
+		} else if(likes.stream().anyMatch(id -> id.equals(driver.getId()))) {
+			return 1.0;
+		} else {
+			return 0.5;
+		}
+	}
 
 	/**
 	 * Extracts the office ID from an office link.
@@ -142,5 +166,29 @@ public class MatchService {
 		} catch (NumberFormatException e) {
 			throw new IllegalArgumentException(link + " is not a valid office link.");
 		}
+	}
+	
+	/**
+	 * Returns a list of liked driver IDs. Used to reduce the number of calls for 
+	 * this functionality in the ranking mechanism
+	 * 
+	 * @param rider the rider for whom we want to find the correspond likes
+	 * @return
+	 */
+	private List<Integer> getLikedIds(User rider) {
+		return likeService.getLikes(rider.getId()).stream()
+				.map(like -> like.getPair().getAffectedId()).collect(Collectors.toList());
+	}
+	
+	/**
+	 * Returns a list of disliked driver IDs. Used to reduce the number of calls for 
+	 * this functionality in the ranking mechanism
+	 * 
+	 * @param rider the rider for whom we want to find the correspond likes
+	 * @return
+	 */
+	private List<Integer> getDislikedIds(User rider) {
+		return dislikeService.getDislikes(rider.getId()).stream()
+				.map(dislike -> dislike.getPair().getAffectedId()).collect(Collectors.toList());
 	}
 }
