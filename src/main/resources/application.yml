@@ -3,10 +3,10 @@ server:
 
 spring:
   datasource:
-    url: jdbc:oracle:thin:@localhost:1521:XE
-    username: rideshare_match_db
-    password: password
-    driver-class-name: oracle.jdbc.OracleDriver
+    url: ${JDBC_URL}
+    username: ${JDBC_USERNAME}
+    password: ${JDBC_PASSWORD}
+    driver-class-name: ${JDBC_DRIVER}
   application:
     name: matching-service
   jpa:
