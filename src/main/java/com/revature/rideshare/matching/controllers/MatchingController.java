@@ -39,6 +39,23 @@ public class MatchingController {
 				.map(driver -> UriComponentsBuilder.fromPath("/users/{id}").buildAndExpand(driver.getId()).toString())
 				.collect(Collectors.toList());
 	}
+	
+	@RequestMapping(value = "/minus-likes-dislikes/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<String> getAllMinusAffects(@PathVariable int id) {
+		User rider = userClient.findById(id);
+		return matchService.findMatchesMinusAffects(rider).stream()
+				.map(driver -> UriComponentsBuilder.fromPath("/users/{id}").buildAndExpand(driver.getId()).toString())
+				.collect(Collectors.toList());
+	}
+	
+	@RequestMapping(value = "/distance/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<String> getByDistance(@PathVariable int id) {
+		User rider = userClient.findById(id);
+		return matchService.findMatchesByDistance(rider).stream()
+				.map(driver -> UriComponentsBuilder.fromPath("/users/{id}").buildAndExpand(driver.getId()).toString())
+				.collect(Collectors.toList());
+
+	}
 
 	@RequestMapping(value = "/likes/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<String> getLiked(@PathVariable("id") int id) {

@@ -33,6 +33,12 @@ public class MatchService {
 
 	@Autowired
 	private UserClient userClient;
+	
+	@Autowired
+	private LikeService likeService;
+	
+	@Autowired
+	private DislikeService dislikeService;
 
 	/**
 	 * An association of a user with a rank.
@@ -66,7 +72,7 @@ public class MatchService {
 	 * @param rider the rider for whom to find drivers
 	 * @return the drivers who match the given rider (up to {@link #MAX_MATCHES})
 	 */
-	public List<User> findMatches(User rider) {
+	public List<User> findMatchesByDistance(User rider) {
 		int officeId = officeLinkToId(rider.getOffice());
 		// Here, we find all potential drivers. We associate each with a
 		// ranking, and then sort by ranking (descending). We take the first
@@ -75,6 +81,38 @@ public class MatchService {
 		return userClient.findByOfficeAndRole(officeId, DRIVER_ROLE).stream()
 				.map(driver -> new RankedUser(driver, rankMatch(rider, driver))).sorted(Comparator.reverseOrder())
 				.limit(MAX_MATCHES).map(rankedUser -> rankedUser.user).collect(Collectors.toList());
+	}
+	
+	public List<User> findMatchesMinusAffects(User rider) {
+		int officeId = officeLinkToId(rider.getOffice());
+		List<User> drivers = null;
+		// Here we find all potential drivers minus those who are liked
+		// or disliked by the user
+		List<Integer> dislikes = dislikeService.getDislikes(rider.getId()).stream()
+				.map(dislike -> dislike.getPair().getAffectedId()).collect(Collectors.toList());
+		List<Integer> likes = likeService.getLikes(rider.getId()).stream()
+				.map(like -> like.getPair().getAffectedId()).collect(Collectors.toList());
+		drivers = userClient.findByOfficeAndRole(officeId, rider.getRole()).stream()
+				.filter(driver -> dislikes.stream().noneMatch(id -> id.equals(driver.getId())))
+				.filter(driver -> likes.stream().noneMatch(id -> id.equals(rider.getId())))
+				.collect(Collectors.toList());
+		return drivers;
+	}
+	
+	/**
+	 * Finds drivers based on a weighted rank from distance and batch-end
+	 * 
+	 * @param rider for whom to find suitable drivers
+	 * @return	the drivers who match the given rider (up to {@link #MAX_MATCHES})
+	 */
+	public List<User> findMatches(User rider) {
+		int officeId = officeLinkToId(rider.getOffice());
+		List<User> drivers = null;
+		// Find all potential drivers, filter out those who are liked and 
+		// disliked by the rider. Rank them based on distance and batch end. 
+		// Then sort the list and return the first MAX_MATCHES matches
+		
+		return drivers;
 	}
 
 	/**
