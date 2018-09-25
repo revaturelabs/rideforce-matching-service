@@ -69,12 +69,12 @@ public class MatchingController {
 	public List<String> getLiked(@PathVariable("id") int id) {
 		List<String> likes = null;
 		//TODO: Uncomment to test with real users!
-//		likes = likeService.getLikes(id).stream()
-//				.map(like -> UriComponentsBuilder.fromPath("/users/{id}").buildAndExpand(like.getPair().getAffectedId()).toString())
-//				.collect(Collectors.toList());
 		likes = likeService.getLikes(id).stream()
-				.map(like -> like.toString())
+				.map(like -> UriComponentsBuilder.fromPath("/users/{id}").buildAndExpand(like.getPair().getAffectedId()).toString())
 				.collect(Collectors.toList());
+//		likes = likeService.getLikes(id).stream()
+//				.map(like -> like.toString())
+//				.collect(Collectors.toList());
 		return likes;
 	}
 
@@ -92,12 +92,12 @@ public class MatchingController {
 	public List<String> getDisliked(@PathVariable("id") int id) {
 		List<String> dislikes = null;
 		//TODO: Uncomment to test with real users!
-//		dislikes = dislikeService.getDislikes(id).stream()
-//				.map(dislike -> UriComponentsBuilder.fromPath("/users/{id}").buildAndExpand(dislike.getPair().getAffectedId()).toString())
-//				.collect(Collectors.toList());
 		dislikes = dislikeService.getDislikes(id).stream()
-				.map(dislike -> dislike.toString())
+				.map(dislike -> UriComponentsBuilder.fromPath("/users/{id}").buildAndExpand(dislike.getPair().getAffectedId()).toString())
 				.collect(Collectors.toList());
+//		dislikes = dislikeService.getDislikes(id).stream()
+//				.map(dislike -> dislike.toString())
+//				.collect(Collectors.toList());
 		return dislikes;
 	}
 
