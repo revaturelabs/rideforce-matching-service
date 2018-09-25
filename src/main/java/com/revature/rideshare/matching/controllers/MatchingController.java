@@ -56,6 +56,14 @@ public class MatchingController {
 				.collect(Collectors.toList());
 
 	}
+	
+	@RequestMapping(value = "/batch-end/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<String> getByBatchEnd(@PathVariable int id){
+        User rider = userClient.findById(id);
+        return matchService.findMatchesByBatchEnd(rider).stream()
+                .map(driver -> UriComponentsBuilder.fromPath("/users/{id}").buildAndExpand(driver.getId()).toString())
+                .collect(Collectors.toList());
+    }
 
 	@RequestMapping(value = "/likes/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<String> getLiked(@PathVariable("id") int id) {
