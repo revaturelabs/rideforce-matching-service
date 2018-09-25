@@ -6,12 +6,12 @@ spring:
     url: ${JDBC_URL}
     username: ${JDBC_USERNAME}
     password: ${JDBC_PASSWORD}
-    driver-class-name: ${JDBC_DRIVER}
+    driver-class-name: oracle.jdbc.driver.OracleDriver
   application:
     name: matching-service
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: validate
     database-platform: Oracle10g
 
 eureka:
