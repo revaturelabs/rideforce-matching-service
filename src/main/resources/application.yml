@@ -2,10 +2,20 @@ server:
   port: 4444
 
 spring:
+  datasource:
+    url: ${JDBC_URL}
+    username: ${JDBC_USERNAME}
+    password: ${JDBC_PASSWORD}
+    driver-class-name: ${JDBC_DRIVER}
   application:
     name: matching-service
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database-platform: Oracle10g
 
 eureka:
   client:
     service-url:
       default-zone: http://localhost:8761/eureka
+      
