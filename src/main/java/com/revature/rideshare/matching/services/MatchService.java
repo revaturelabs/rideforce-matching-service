@@ -96,7 +96,7 @@ public class MatchService {
 		List<User> drivers = null;
 		List<Integer> likes = getLikedIds(rider);
 		List<Integer> dislikes = getDislikedIds(rider);
-		drivers = userClient.findByOfficeAndRole(officeId, rider.getRole()).stream()
+		drivers = userClient.findByOfficeAndRole(officeId, DRIVER_ROLE).stream()
 				.map(driver -> new RankedUser(driver, rankByAffect(rider, driver, likes, dislikes)))
 				.sorted(Comparator.reverseOrder())
 				.limit(MAX_MATCHES).map(rankedUser -> rankedUser.user).collect(Collectors.toList());
@@ -135,7 +135,7 @@ public class MatchService {
 		// Then sort the list and return the first MAX_MATCHES matches
 		List<Integer> likes = getLikedIds(rider);
 		List<Integer> dislikes = getDislikedIds(rider);		
-		drivers = userClient.findByOfficeAndRole(officeId, rider.getRole()).stream()
+		drivers = userClient.findByOfficeAndRole(officeId, DRIVER_ROLE).stream()
 				.map(driver -> new RankedUser(driver, rankMatch(rider, driver, likes, dislikes))).sorted(Comparator.reverseOrder())
 				.limit(MAX_MATCHES).map(rankedUser -> rankedUser.user).collect(Collectors.toList());
 		return drivers;
