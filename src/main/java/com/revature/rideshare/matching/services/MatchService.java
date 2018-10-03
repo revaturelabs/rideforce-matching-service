@@ -93,7 +93,10 @@ public class MatchService {
 	public List<User> findMatchesByAffects(User rider) {
 		int officeId = officeLinkToId(rider.getOffice());
 		List<User> drivers = null;
+		
+		// Get a list of driver Id's whom this user has liked
 		List<Integer> likes = getLikedIds(rider);
+		// Get a list of driver Id's whom this user has disliked
 		List<Integer> dislikes = getDislikedIds(rider);
 		drivers = userClient.findByOfficeAndRole(officeId, DRIVER_ROLE).stream()
 				.map(driver -> new RankedUser(driver, rankByAffect(rider, driver, likes, dislikes)))
@@ -129,11 +132,14 @@ public class MatchService {
 	public List<User> findMatches(User rider) {
 		int officeId = officeLinkToId(rider.getOffice());
 		List<User> drivers = null;
+		
+		// Get the lists of driver ID's whom the rider has liked or disliked. 
+		List<Integer> likes = getLikedIds(rider);
+		List<Integer> dislikes = getDislikedIds(rider);
+		
 		// Find all potential drivers, filter out those who are liked and 
 		// disliked by the rider. Rank them based on distance and batch end. 
 		// Then sort the list and return the first MAX_MATCHES matches
-		List<Integer> likes = getLikedIds(rider);
-		List<Integer> dislikes = getDislikedIds(rider);		
 		drivers = userClient.findByOfficeAndRole(officeId, DRIVER_ROLE).stream()
 				.map(driver -> new RankedUser(driver, rankMatch(rider, driver, likes, dislikes))).sorted(Comparator.reverseOrder())
 				.limit(MAX_MATCHES).map(rankedUser -> rankedUser.user).collect(Collectors.toList());
@@ -150,14 +156,17 @@ public class MatchService {
 	 * @return
 	 */
 	private double rankMatch(User rider, User driver, List<Integer> likes, List<Integer> dislikes) {
-		double distanceCoefficient = 1;
-		double batchEndCoefficient = 4;
-		double affectCoefficient = 1;
+		// These are the weights given to each individual category. 
+		final double distanceCoefficient = 1;
+		final double batchEndCoefficient = 4;
+		final double affectCoefficient = 1;
 		
+		// Compute the individual rank metrics. 
 		double distanceRank = rankByDistance(rider, driver);
 		double batchEndRank = rankByBatchEnd(rider, driver);
 		double affectRank = rankByAffect(rider, driver, likes, dislikes);
 		
+		// Return the computed value of all the different ranks and their weights. 
 		return (distanceCoefficient * distanceRank + 
 				batchEndCoefficient * batchEndRank + 
 				affectCoefficient * affectRank) /
@@ -173,13 +182,14 @@ public class MatchService {
 	 */
 	private double rankByDistance(User rider, User driver) {
 		// Right now, this only takes distance into consideration.
+		//TODO: This could be null based on the MapClient service. 
 		Route riderToDriver = mapsClient.getRoute(rider.getAddress(), driver.getAddress());
 		return 1 / ((double) riderToDriver.getDistance() + 1);
 	}
 	
 	
 	/**
-	 * Ranks a rider based on whether they have been liked or disliked
+	 * Ranks a driver based on whether they have been liked or disliked
 	 * 
 	 * @param rider the rider under consideration
 	 * @param driver the potential driver who we are ranking
@@ -199,9 +209,10 @@ public class MatchService {
 	}
 	
 	/**
+	 * Ranks a driver based on if their batch ends sooner or later than the riders batch. 
 	 * 
-	 * @param rider
-	 * @param driver
+	 * @param rider - the rider under consideration
+	 * @param driver - the potential driver whom we are ranking
 	 * @return
 	 */
 	private double rankByBatchEnd(User rider, User driver) {
