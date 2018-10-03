@@ -4,15 +4,18 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import javax.validation.constraints.Min;
 
 @Embeddable
 public class Pair implements Serializable {
 	
 	private static final long serialVersionUID = 3070299328660926894L;
 
+	@Min(value=1)
 	@Column
 	private int userId;
 	
+	@Min(value=1)
 	@Column
 	private int affectedId;
 	

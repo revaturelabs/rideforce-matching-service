@@ -3,8 +3,12 @@ package com.revature.bean.tests;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
-import org.hibernate.validator.HibernateValidator;
 
+import java.util.Set;
+
+import javax.validation.ConstraintViolation;
+
+import org.hibernate.validator.HibernateValidator;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
@@ -14,7 +18,9 @@ import com.revature.rideshare.matching.beans.Pair;
 public class PairBeanTest {
 	
 private LocalValidatorFactoryBean localValidatorFactory;
+
 	
+
 	@Before
 	public void setupValidatorFactory () {
 		localValidatorFactory = new LocalValidatorFactoryBean();
@@ -54,5 +60,26 @@ private LocalValidatorFactoryBean localValidatorFactory;
 	public void testGetAffectedId() {
 		Pair p = new Pair(101,201);
 		assertTrue(p.getAffectedId() == 201);
+	}
+	
+	@Test
+	public void testZeroIdOnPair() {
+		Pair p = new Pair(0, 0);
+        Set<ConstraintViolation<Pair>> violations = localValidatorFactory.validate(p);
+        assertTrue(violations.size() == 2);
+	}
+	
+	@Test
+	public void testNegativeIdOnPair() {
+		Pair p = new Pair(-1, -1);
+        Set<ConstraintViolation<Pair>> violations = localValidatorFactory.validate(p);
+        assertTrue(violations.size() == 2);
+	}
+	
+	@Test
+	public void test1AsIdOnPair() {
+		Pair p = new Pair(1, 1);
+        Set<ConstraintViolation<Pair>> violations = localValidatorFactory.validate(p);
+        assertTrue(violations.size() == 0);
 	}
 }
