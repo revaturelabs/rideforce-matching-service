@@ -4,6 +4,10 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
+import java.util.Set;
+
+import javax.validation.ConstraintViolation;
+
 import org.hibernate.validator.HibernateValidator;
 import org.junit.Before;
 import org.junit.Test;
@@ -27,12 +31,20 @@ public class DislikeBeanTest {
 	@Test
 	public void testDislikeConstructor() {
 
-		Dislike dis = new Dislike(new Pair(100, 200));
+		Pair pair = new Pair(100, 200);
+		Dislike dis = new Dislike(pair);
+		
 
-		assertSame("Pair constructor accepting two ints did not create obj as expected.", 100,
-				dis.getPair().getUserId());
-		assertSame("Pair constructor accepting two ints did not create obj as expected.", 200,
-				dis.getPair().getAffectedId());
+		assertTrue("Pair constructor accepting two ints did not create obj as expected.", dis.getPair().equals(pair));
+	}
+	
+	@Test
+	public void testDislikeConstructorNull() {
+
+		Dislike dis = new Dislike(null);
+
+		Set<ConstraintViolation<Dislike>> violations = localValidatorFactory.validate(dis);
+		assertTrue(violations.size() == 1);
 	}
 	
 	@Test
@@ -40,10 +52,8 @@ public class DislikeBeanTest {
 
 		Dislike dis = new Dislike(new Pair());
 
-		assertSame("Pair constructor accepting two ints did not create obj as expected.", 100,
-				dis.getPair().getUserId());
-		assertSame("Pair constructor accepting two ints did not create obj as expected.", 200,
-				dis.getPair().getAffectedId());
+		Set<ConstraintViolation<Dislike>> violations = localValidatorFactory.validate(dis);
+		assertTrue(violations.size() == 0);
 	}
 
 	public void testDislikeEquals() {

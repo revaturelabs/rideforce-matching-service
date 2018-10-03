@@ -4,9 +4,10 @@ import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
+import javax.validation.constraints.NotNull;;
 // TODO: Auto-generated Javadoc
 /**
- * The Class Dislike. It is used to represent the relationship between a user and a different
+ * The Class Dislike. It is used to represent the relationship between a user and an other
  * user that they have marked as not liking.
  */
 @Entity
@@ -14,6 +15,7 @@ import javax.persistence.Table;
 public class Dislike {
 
 	/** The pair. */
+	@NotNull
 	@EmbeddedId
 	private Pair pair;
 	

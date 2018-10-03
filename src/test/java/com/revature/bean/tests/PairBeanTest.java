@@ -34,6 +34,7 @@ public class PairBeanTest {
 		assertSame("Pair constructor accepting two ints did not create obj as expected.", 1, pair.getUserId());
 		assertSame("Pair constructor accepting two ints did not create obj as expected.", 2, pair.getAffectedId());
 	}
+	
 
 	@Test
 	public void testPairEquals() {
@@ -78,5 +79,23 @@ public class PairBeanTest {
 		Pair p = new Pair(1, 1);
 		Set<ConstraintViolation<Pair>> violations = localValidatorFactory.validate(p);
 		assertTrue(violations.size() == 0);
+	}
+	
+	@Test
+	public void testUserIdSetter() {
+		Pair p = new Pair(1, 1);
+		p.setUserId(100);;
+		
+		assertTrue("Setter did not work: affectedId did not change as expected", p.getUserId() == 100);
+		
+	}
+	@Test
+	public void testAffectedIdSetter() {
+		Pair p = new Pair(1, 1);
+		p.setAffectedId(200);
+		System.out.println("What? " + p.getAffectedId());
+		
+		assertTrue("Setter did not work: affectedId did not change as expected", p.getAffectedId() == 200);
+		
 	}
 }
