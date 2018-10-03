@@ -1,5 +1,8 @@
 package com.revature.rideshare.matching.beans;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class Route {
 	long distance;
 	long duration;
