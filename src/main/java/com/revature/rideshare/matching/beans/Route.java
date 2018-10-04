@@ -75,6 +75,7 @@ public class Route {
 	}
 
 	
+	/** Returns a hashcode for this Route object.  */
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -84,7 +85,12 @@ public class Route {
 		return result;
 	}
 
-	
+	/** Tests for equality between this route and another object. This returns 
+	 * true if the provided object reference is a non-null reference to a Route 
+	 * object, and that the distances and durations of this and the other Route
+	 * objects are equal. Returns false otherwise. 
+	 * @param obj - An object to test for equality against
+	 * @return True if this and {@code obj} are equal. False otherwise. */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -101,6 +107,10 @@ public class Route {
 		return true;
 	}
 
+	/**
+	 * Returns a string representation of this object. 
+	 * @return A string representation of this object. 
+	 */
 	@Override
 	public String toString() {
 		return "Route [distance=" + distance + ", duration=" + duration + "]";
