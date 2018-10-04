@@ -2,6 +2,13 @@ package com.revature.rideshare.matching.beans;
 
 import org.springframework.stereotype.Component;
 
+/** 
+ * This object used to store the computed distance and duration of a drive 
+ * between two addresses, as computed by the google maps API. 
+ * 
+ * Currently, according to the {@code RouteService} in the {@code map-service} 
+ * project, the units are in meters for distance, and seconds for duration. 
+ */
 @Component
 public class Route {
 	
@@ -75,7 +82,8 @@ public class Route {
 	}
 
 	
-	/** Returns a hashcode for this Route object.  */
+	/** Returns a hashcode for this Route object. This code is based on the 
+	 * distance and duration. */
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -85,10 +93,10 @@ public class Route {
 		return result;
 	}
 
-	/** Tests for equality between this route and another object. This returns 
-	 * true if the provided object reference is a non-null reference to a Route 
-	 * object, and that the distances and durations of this and the other Route
-	 * objects are equal. Returns false otherwise. 
+	/** Tests for equality between this {@code Route} and another object. This 
+	 * returns true if the provided object reference is a non-null reference to 
+	 * a {@code Route}  object, and that the distances and durations of this 
+	 * and the other {@code Route} objects are equal. Returns false otherwise. 
 	 * @param obj - An object to test for equality against
 	 * @return True if this and {@code obj} are equal. False otherwise. */
 	@Override
