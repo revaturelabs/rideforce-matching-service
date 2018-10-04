@@ -30,5 +30,4 @@ public class LikeService {
 		Like like = new Like(new Pair(id,liked));
 		likeRepository.delete(like);
 	}
-	
 }
