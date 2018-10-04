@@ -15,8 +15,8 @@ public class DislikeService {
 	@Autowired
 	private DislikeRepository dislikeRepository;
 	
-	public void saveDislike(int id, int disliked) {
-		Dislike newDislike = new Dislike(new Pair(id,disliked));
+	public void saveDislike(int userId, int disliked) {
+		Dislike newDislike = new Dislike(new Pair(userId,disliked));
 		newDislike = dislikeRepository.save(newDislike);
 	}
 	
