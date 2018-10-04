@@ -19,6 +19,11 @@ import com.revature.rideshare.matching.beans.Like;
 import com.revature.rideshare.matching.beans.Pair;
 import com.revature.rideshare.matching.repositories.LikeRepository;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class LikeRepositoryRegressionTest. Repo regression tests are done only to check that
+ * repo is empty and on custom repo methods.
+ */
 @SpringBootTest(classes = Application.class)
 @RunWith(SpringRunner.class)
 @DataJpaTest
@@ -26,18 +31,26 @@ import com.revature.rideshare.matching.repositories.LikeRepository;
 
 public class LikeRepositoryRegressionTest {
 	
+	/** The entity manager. */
 	@Autowired
 	TestEntityManager entityManager;
 	
+	/** The like repository. */
 	@Autowired
 	private LikeRepository likeRepo;
 
+	/**
+	 * Should be empty.
+	 */
 	@Test
 	public void shouldBeEmpty() {
 		List<Like> likes = likeRepo.findAll();
 		assertThat(likes).hasSize(0);
 	}
 	
+	/**
+	 * Test find pair by user id.
+	 */
 	@Test
 	public void testFindPairByUserId() {
 		entityManager.persist(new Like(new Pair(1, 2)));
