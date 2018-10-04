@@ -9,7 +9,7 @@ import java.util.Set;
 import javax.validation.ConstraintViolation;
 
 import org.hibernate.validator.HibernateValidator;
-import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
@@ -17,10 +17,10 @@ import com.revature.rideshare.matching.beans.Pair;
 
 public class PairBeanTest {
 
-	private LocalValidatorFactoryBean localValidatorFactory;
+	private static LocalValidatorFactoryBean localValidatorFactory;
 
-	@Before
-	public void setupValidatorFactory() {
+	@BeforeClass
+	static public void setupValidatorFactory() {
 		localValidatorFactory = new LocalValidatorFactoryBean();
 		localValidatorFactory.setProviderClass(HibernateValidator.class);
 		localValidatorFactory.afterPropertiesSet();
