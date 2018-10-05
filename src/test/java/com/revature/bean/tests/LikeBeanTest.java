@@ -1,8 +1,4 @@
 package com.revature.bean.tests;
-import com.revature.rideshare.matching.beans.Pair;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Set;
@@ -12,20 +8,21 @@ import javax.validation.Validator;
 
 import org.assertj.core.api.Assertions;
 import org.hibernate.validator.HibernateValidator;
-import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
 import com.revature.rideshare.matching.beans.Like;
+import com.revature.rideshare.matching.beans.Pair;
 
 // TODO: Auto-generated Javadoc
 /**
  * The Class LikeTest. 
  */
-public class LikeTest {
+public class LikeBeanTest {
 	
 	/** The local validator factory. */
-	private LocalValidatorFactoryBean localValidatorFactory;
+	private static LocalValidatorFactoryBean localValidatorFactory;
 	
 	/** The like. */
 	private Like like;
@@ -36,8 +33,8 @@ public class LikeTest {
 	/**
 	 * Setup validator factory.
 	 */
-	@Before
-	public void setupValidatorFactory () {
+	@BeforeClass
+	public static void setupValidatorFactory () {
 		localValidatorFactory = new LocalValidatorFactoryBean();
 		localValidatorFactory.setProviderClass(HibernateValidator.class);
 		localValidatorFactory.afterPropertiesSet();

@@ -80,25 +80,45 @@ public class ResponseError {
 	 * @return the wrapped {@code ResponseError}
 	 */
 	public ResponseEntity<ResponseError> toResponseEntity(HttpStatus status) {
-		return new ResponseEntity<ResponseError>(this, status);
+		return new ResponseEntity<>(this, status);
 	}
 
+	/** 
+	 * Returns the string message describing the error that occurred. 
+	 * @return A string describing the error. 
+	 */
 	public String getMessage() {
 		return message;
 	}
-
+	
+	/**
+	 * Sets the string message describing the error that occurred.
+	 * @param message - A string describing the error. 
+	 */
 	public void setMessage(String message) {
 		this.message = message;
 	}
 
+	/**
+	 * Gets the string array of details about the error that occurred. The array 
+	 * might not contain any detail strings. 
+	 * @return Array of strings holding details of the error
+	 */
 	public String[] getDetails() {
 		return details;
 	}
 
+	/**
+	 * Sets the details of this {@code ResponseError} object.
+	 * @param details - the details to associate with this error. These will 
+	 * 					overwrite any existing details that were specified earlier.
+	 */
 	public void setDetails(String[] details) {
 		this.details = details;
 	}
 
+	/** Returns a hashcode for this Route object. This code is based on the 
+	 * message string and the array of details strings. */
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -108,6 +128,14 @@ public class ResponseError {
 		return result;
 	}
 
+	/** Tests for equality between this {@code ResponseError} and another object. 
+	 * This returns true if the provided object reference is a non-null reference 
+	 * to a {@code ResponseError} object, and that the message and details of 
+	 * this and the other {@code ResponseError}objects are equal. For details this 
+	 * tests equality of each element. Returns false if the this and the provided 
+	 * object aren't equal. 
+	 * @param obj - An object to test for equality against
+	 * @return True if this and {@code obj} are equal. False otherwise. */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -122,11 +150,16 @@ public class ResponseError {
 		if (message == null) {
 			if (other.message != null)
 				return false;
-		} else if (!message.equals(other.message))
+		} else if (!message.equals(other.message)) {
 			return false;
+		}
 		return true;
 	}
 
+	/**
+	 * Returns a string representation of this object. 
+	 * @return A string representation of this object. 
+	 */
 	@Override
 	public String toString() {
 		return "ResponseError [message=" + message + ", details=" + Arrays.toString(details) + "]";
