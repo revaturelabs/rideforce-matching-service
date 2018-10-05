@@ -1,18 +1,16 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.revature.rideshare</groupId>
 	<artifactId>rideshare-matching-service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-
-
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>2.0.4.RELEASE</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
-
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
@@ -24,8 +22,6 @@
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
-
-
 	<dependencies>
 		<!-- Spring Boot -->
 		<dependency>
@@ -44,7 +40,7 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
-		
+
 		<!-- Spring Cloud -->
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
@@ -67,24 +63,12 @@
 			<artifactId>spring-cloud-sleuth-zipkin</artifactId>
 		</dependency>
 
-		<!--Spring Security 
-		<dependency>
-			<groupId>org.springframework.security</groupId>
-			<artifactId>spring-security-core</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.security</groupId>
-			<artifactId>spring-security-config</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.security</groupId>
-			<artifactId>spring-security-web</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.security</groupId>
-			<artifactId>spring-security-test</artifactId>
-		</dependency>
-		-->
+		<!--Spring Security <dependency> <groupId>org.springframework.security</groupId> 
+			<artifactId>spring-security-core</artifactId> </dependency> <dependency> 
+			<groupId>org.springframework.security</groupId> <artifactId>spring-security-config</artifactId> 
+			</dependency> <dependency> <groupId>org.springframework.security</groupId> 
+			<artifactId>spring-security-web</artifactId> </dependency> <dependency> <groupId>org.springframework.security</groupId> 
+			<artifactId>spring-security-test</artifactId> </dependency> -->
 		<!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-devtools -->
 
 		<!-- Testing -->
@@ -97,6 +81,10 @@
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-jdbc</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>io.springfox</groupId>
@@ -133,13 +121,7 @@
 			<artifactId>ojdbc7</artifactId>
 			<version>11.2.0</version>
 		</dependency>
-		<dependency>
-			<groupId>com.h2database</groupId>
-			<artifactId>h2</artifactId>
-			<scope>test</scope>
-		</dependency>
 	</dependencies>
-
 	<build>
 		<finalName>rideshare-matching-service</finalName>
 		<pluginManagement>
