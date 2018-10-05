@@ -1,9 +1,7 @@
 package com.revature.service.tests;
 
 
-import static org.junit.Assert.fail;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.assertj.core.api.Assertions;

@@ -10,7 +10,8 @@ import com.revature.rideshare.matching.beans.Pair;
 import com.revature.rideshare.matching.repositories.DislikeRepository;
 
 /**
- * This Class, DislikeService, will provide access to the repository for data retrieval.
+ * This Class, DislikeService, will provide access to the repository for data retrieval to
+ * get data referring to the affection relationship between users.
  */
 @Service
 public class DislikeService {
@@ -20,7 +21,7 @@ public class DislikeService {
 	private DislikeRepository dislikeRepository;
 	
 	/**
-	 * Saves a dislike.
+	 * Saves a new dislike.
 	 *
 	 * @param userId the user id
 	 * @param disliked the disliked
@@ -31,7 +32,8 @@ public class DislikeService {
 	}
 	
 	/**
-	 * Gets the dislikes.
+	 * Gets the dislikes associated with the user id passed. These
+	 * will be the the dislikes owned by the user id passed.
 	 *
 	 * @param id the id
 	 * @return the dislikes
@@ -43,9 +45,9 @@ public class DislikeService {
 	}
 	
 	/**
-	 * Delete dislike.
+	 * Deletes dislike by the user id of both users associated by the dislike.
 	 *
-	 * @param id the id
+	 * @param Userid the AffectedId
 	 * @param disliked the disliked
 	 */
 	public void deleteDislike(int id, int disliked) {

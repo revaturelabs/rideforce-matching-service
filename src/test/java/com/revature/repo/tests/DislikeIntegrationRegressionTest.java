@@ -29,7 +29,7 @@ import com.revature.rideshare.matching.repositories.DislikeRepository;
 @RunWith(SpringRunner.class)
 @DataJpaTest
 @AutoConfigureTestDatabase(replace= Replace.NONE)
-public class DislikeRepositoryRegressionTest {
+public class DislikeIntegrationRegressionTest {
 
 	/** The entity manager. */
 	@Autowired
