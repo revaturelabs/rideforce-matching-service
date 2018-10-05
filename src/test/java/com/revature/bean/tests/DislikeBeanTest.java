@@ -1,7 +1,7 @@
+
 package com.revature.bean.tests;
 
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Set;
@@ -10,24 +10,37 @@ import javax.validation.ConstraintViolation;
 
 import org.hibernate.validator.HibernateValidator;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
 import com.revature.rideshare.matching.beans.Dislike;
 import com.revature.rideshare.matching.beans.Pair;
 
+/**
+ * This test, DislikeBeanTest, will act as 
+ * regression testing to ensure the stability of our 
+ * dislike bean.
+ */
 public class DislikeBeanTest {
 	
-	private LocalValidatorFactoryBean localValidatorFactory;
+	/** The local validator factory. */
+	private static LocalValidatorFactoryBean localValidatorFactory;
 
-	@Before
-	public void setupValidatorFactory () {
+	/**
+	 * Setup validator factory.
+	 */
+	@BeforeClass
+	static public void setupValidatorFactory () {
 		localValidatorFactory = new LocalValidatorFactoryBean();
 		localValidatorFactory.setProviderClass(HibernateValidator.class);
 		localValidatorFactory.afterPropertiesSet();
 	}
 	
 
+	/**
+	 * Test dislike constructor.
+	 */
 	@Test
 	public void testDislikeConstructor() {
 
@@ -38,6 +51,9 @@ public class DislikeBeanTest {
 		assertTrue("Pair constructor accepting two ints did not create obj as expected.", dis.getPair().equals(pair));
 	}
 	
+	/**
+	 * Test dislike constructor when a null is passed.
+	 */
 	@Test
 	public void testDislikeConstructorNull() {
 
@@ -47,6 +63,9 @@ public class DislikeBeanTest {
 		assertTrue(violations.size() == 1);
 	}
 	
+	/**
+	 * Test dislike constructor with an empty pair.
+	 */
 	@Test
 	public void testDislikeConstructorEmptyPair() {
 
@@ -56,6 +75,10 @@ public class DislikeBeanTest {
 		assertTrue(violations.size() == 0);
 	}
 
+	/**
+	 * Test dislike equals method
+	 */
+	@Test
 	public void testDislikeEquals() {
 
 		Pair pair = new Pair(1, 2);
