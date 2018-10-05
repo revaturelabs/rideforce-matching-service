@@ -122,7 +122,6 @@
 			<version>11.2.0</version>
 		</dependency>
 	</dependencies>
-
 	<build>
 		<finalName>rideshare-matching-service</finalName>
 		<pluginManagement>

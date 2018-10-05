@@ -15,20 +15,19 @@ public class LikeService {
 	@Autowired
 	LikeRepository likeRepository;
 	
-	public void saveLike(int id, int liked) {
-		Like newLike = new Like(new Pair(id,liked));
+	public void saveLike(int userId, int liked) {
+		Like newLike = new Like(new Pair(userId,liked));
 		newLike = likeRepository.save(newLike);
 	}
 
-	public List<Like> getLikes(int id) {
+	public List<Like> getLikes(int userId) {
 		List<Like> likes = null;
-		likes = likeRepository.findByPairUserId(id);
+		likes = likeRepository.findByPairUserId(userId);
 		return likes;
 	}
 	
-	public void deleteLike(int id, int liked) {
-		Like like = new Like(new Pair(id,liked));
+	public void deleteLike(int userId, int liked) {
+		Like like = new Like(new Pair(userId, liked));
 		likeRepository.delete(like);
 	}
-	
 }
