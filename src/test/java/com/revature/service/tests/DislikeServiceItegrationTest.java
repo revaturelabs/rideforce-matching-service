@@ -2,8 +2,8 @@ package com.revature.service.tests;
 
 
 
-import static org.assertj.core.api.Assertions.*;
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertNotNull;
 
 import java.util.List;
 
@@ -16,6 +16,8 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.revature.rideshare.matching.Application;
@@ -25,11 +27,19 @@ import com.revature.rideshare.matching.repositories.DislikeRepository;
 import com.revature.rideshare.matching.services.DislikeService;
 
 @SpringBootTest(classes=Application.class)
-//@ContextConfiguration(classes=TestConfig.class)
 @RunWith(SpringRunner.class)
 @DataJpaTest
 @AutoConfigureTestDatabase(replace= Replace.NONE) //do i need this?
-public class DislikeServiceRegressionTest {
+public class DislikeServiceItegrationTest {
+	
+	@TestConfiguration
+    static class DislikeServiceImplTestContextConfiguration {
+  
+        @Bean
+        public DislikeService dislikeService() {
+            return new DislikeService();
+        }
+    }
 	
 	@Autowired
 	private TestEntityManager entityManager;
@@ -47,14 +57,16 @@ public class DislikeServiceRegressionTest {
 	   entityManager.persist(new Dislike(new Pair(10,20)));
 	   entityManager.persist(new Dislike(new Pair(11,21)));
 	   entityManager.persist(new Dislike(new Pair(10,21)));
-	   entityManager.persist(new Dislike(new Pair(1,2)));
+	   entityManager.persist(new Dislike(new Pair(10,2)));
 	}
+	
 	
 	@Test
 	public void validate() {
 		assertNotNull(entityManager);
 		assertNotNull(dislikeRepo);
 		assertThat(dislikeRepo.findAll()).size().isEqualTo(5);
+		assertNotNull(dislikeServ);
 	}
 	
 	@Test
@@ -70,7 +82,7 @@ public class DislikeServiceRegressionTest {
 	@Test
 	public void getDislikesTest() {
 		List<Dislike> dees = dislikeServ.getDislikes(10);
-		assertThat(dees).size().isEqualTo(2);
+		assertThat(dees).size().isEqualTo(3);
 	}
 
 	@Test

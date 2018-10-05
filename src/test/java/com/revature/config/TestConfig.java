@@ -17,8 +17,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @Configuration
 @EnableJpaRepositories("com.revature.rideshare.matching.repositories")
 @EnableTransactionManagement
-@ComponentScan(basePackages="com.revature.rideshare")
+@ComponentScan(basePackages = { "com.revature.rideshare" })
 public class TestConfig {
-	
 
 }
