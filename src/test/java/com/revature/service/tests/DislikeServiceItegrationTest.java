@@ -28,6 +28,11 @@ import com.revature.rideshare.matching.beans.Pair;
 import com.revature.rideshare.matching.repositories.DislikeRepository;
 import com.revature.rideshare.matching.services.DislikeService;
 
+// TODO: Auto-generated Javadoc
+/**
+ * This Class, DislikeServiceItegrationTest, is used to test the dislikeService to ensure
+ * code stability throughout code development.
+ */
 @SpringBootTest(classes=Application.class)
 @RunWith(SpringRunner.class)
 @DataJpaTest
@@ -35,24 +40,39 @@ import com.revature.rideshare.matching.services.DislikeService;
 @DirtiesContext(classMode= ClassMode.AFTER_CLASS)
 public class DislikeServiceItegrationTest {
 	
+	/**
+	 * The Class DislikeServiceImplTestContextConfiguration.
+	 * This class is just for setting up mock service for testing
+	 */
 	@TestConfiguration
     static class DislikeServiceImplTestContextConfiguration {
   
+        /**
+         * returns a mock of the Dislike service.
+         *
+         * @return the dislike service
+         */
         @Bean
         public DislikeService dislikeService() {
             return new DislikeService();
         }
     }
 	
+	/** The entity manager. */
 	@Autowired
 	private TestEntityManager entityManager;
 	
+	/** The dislike serv. */
 	@Autowired
 	private DislikeService dislikeServ;
 	
+	/** The dislike repo. */
 	@Autowired
 	private DislikeRepository dislikeRepo;
 
+	/**
+	 * Sets up the mock data for testing.
+	 */
 	@Before
 	public void setUp() {
 	 
@@ -64,6 +84,9 @@ public class DislikeServiceItegrationTest {
 	}
 	
 	
+	/**
+	 * Validates that the setup for testing is established correctly.
+	 */
 	@Test
 	public void validate() {
 		assertNotNull(entityManager);
@@ -72,6 +95,9 @@ public class DislikeServiceItegrationTest {
 		assertNotNull(dislikeServ);
 	}
 	
+	/**
+	 * Tests the save method of the dislike service.
+	 */
 	@Test
 	public void saveDislikeTest() {
 		
@@ -82,12 +108,20 @@ public class DislikeServiceItegrationTest {
 		assertThat(dees.get(0)).isEqualTo(dis);
 	}
 	
+	/**
+	 * Tests the get method of the dislike service. getDislikes should return 
+	 * all dislikes in the database with a user id matching the id passed.
+	 */
 	@Test
 	public void getDislikesTest() {
 		List<Dislike> dees = dislikeServ.getDislikes(10);
 		assertThat(dees).size().isEqualTo(3);
 	}
 
+	/**
+	 * Test the delete function of the Dislike Service. The dislike with the matching id's passed
+	 * (userId and AffectedId) should be deleted from the database.
+	 */
 	@Test
 	public void deleteDislikeTest() {
 		dislikeServ.deleteDislike(10,21);
