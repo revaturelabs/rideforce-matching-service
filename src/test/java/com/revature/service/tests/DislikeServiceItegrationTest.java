@@ -18,6 +18,8 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.revature.rideshare.matching.Application;
@@ -29,7 +31,8 @@ import com.revature.rideshare.matching.services.DislikeService;
 @SpringBootTest(classes=Application.class)
 @RunWith(SpringRunner.class)
 @DataJpaTest
-@AutoConfigureTestDatabase(replace= Replace.NONE) //do i need this?
+@AutoConfigureTestDatabase(replace= Replace.NONE)
+@DirtiesContext(classMode= ClassMode.AFTER_CLASS)
 public class DislikeServiceItegrationTest {
 	
 	@TestConfiguration
