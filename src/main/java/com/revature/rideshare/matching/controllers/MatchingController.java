@@ -43,7 +43,7 @@ public class MatchingController {
 		if (rider == null) {
 			LOGGER.trace(NULL);
 		} else {
-			LOGGER.trace(MSG, id, rider.getFirstName());
+			LOGGER.info(MSG, id, rider.getFirstName());
 		}
 		return matchService.findMatches(rider).stream()
 				.map(driver -> UriComponentsBuilder.fromPath("/users/{id}").buildAndExpand(driver.getId()).toString())
@@ -57,7 +57,7 @@ public class MatchingController {
 		if (rider == null) {
 			LOGGER.trace(NULL);
 		} else {
-			LOGGER.trace(MSG, id, rider.getFirstName());
+			LOGGER.info(MSG, id, rider.getFirstName());
 		}
 		return matchService.findMatchesByAffects(rider).stream()
 				.map(driver -> UriComponentsBuilder.fromPath("/users/{id}").buildAndExpand(driver.getId()).toString())
@@ -70,7 +70,7 @@ public class MatchingController {
 		if (rider == null) {
 			LOGGER.trace(NULL);
 		} else {
-			LOGGER.trace(MSG, id, rider.getFirstName());
+			LOGGER.info(MSG, id, rider.getFirstName());
 		}
 		return matchService.findMatchesByDistance(rider).stream()
 				.map(driver -> UriComponentsBuilder.fromPath("/users/{id}").buildAndExpand(driver.getId()).toString())
@@ -84,7 +84,7 @@ public class MatchingController {
 		if (rider == null) {
 			LOGGER.trace(NULL);
 		} else {
-			LOGGER.trace(MSG, id, rider.getFirstName());
+			LOGGER.info(MSG, id, rider.getFirstName());
 		}
 		return matchService.findMatchesByBatchEnd(rider).stream()
 				.map(driver -> UriComponentsBuilder.fromPath("/users/{id}").buildAndExpand(driver.getId()).toString())
@@ -101,7 +101,7 @@ public class MatchingController {
 		if (likes.isEmpty()) {
 			LOGGER.trace("Mapping process did not return any URIs associated with this user id: %d", id);
 		} else {
-			LOGGER.trace("likeService.getLikes called with id: %d which is then mapped to create a list of uri's that contain a path to "
+			LOGGER.info("likeService.getLikes called with id: %d which is then mapped to create a list of uri's that contain a path to "
 					+ "to get the users (drivers) that they have liked.", id);
 		}
 		
@@ -110,13 +110,13 @@ public class MatchingController {
 
 	@RequestMapping(value = "/likes/{id}/{liked}", method = RequestMethod.PUT)
 	public void addLiked(@PathVariable("id") int id, @PathVariable("liked") int liked) {
-		LOGGER.trace("Like service called to save a like for the userId %d and affected userId %d.", id, liked);
+		LOGGER.info("Like service called to save a like for the userId %d and affected userId %d.", id, liked);
 		likeService.saveLike(id, liked);
 	}
 
 	@RequestMapping(value = "/likes/{id}/{liked}", method = RequestMethod.DELETE)
 	public void deleteLiked(@PathVariable("id") int id, @PathVariable("liked") int liked) {
-		LOGGER.trace("Like service called to delete a like for the userId %d and affected userId %d.", id, liked);
+		LOGGER.info("Like service called to delete a like for the userId %d and affected userId %d.", id, liked);
 		likeService.deleteLike(id, liked);
 	}
 
@@ -130,7 +130,7 @@ public class MatchingController {
 		if (dislikes.isEmpty()) {
 			LOGGER.trace("Mapping process did not return any URIs associated with this user id: %d ", id);
 		} else {
-			LOGGER.trace("dislikeService.getDislikes called with id: %d which was then mapped to create a list of uri's that contain a path to "
+			LOGGER.info("dislikeService.getDislikes called with id: %d which was then mapped to create a list of uri's that contain a path to "
 					+ "to get the users (drivers) that they have liked.", id);
 		}
 		
@@ -140,13 +140,13 @@ public class MatchingController {
 	@RequestMapping(value = "/dislikes/{id}/{disliked}", method = RequestMethod.PUT)
 	public void addDisliked(@PathVariable("id") int id, @PathVariable("disliked") int disliked) {
 		dislikeService.saveDislike(id, disliked);
-		LOGGER.trace("Dislike service called to save a dislike for the userId %d and affected userId %d.", id, disliked);
+		LOGGER.info("Dislike service called to save a dislike for the userId %d and affected userId %d.", id, disliked);
 	}
 
 	@RequestMapping(value = "/dislikes/{id}/{disliked}", method = RequestMethod.DELETE)
 	public void deletedisLiked(@PathVariable("id") int id, @PathVariable("disliked") int disliked) {
 		
 		dislikeService.deleteDislike(id, disliked);
-		LOGGER.trace("Dislike service called to delete a dislike for the userId %d and affected userId %d.", id, disliked);
+		LOGGER.info("Dislike service called to delete a dislike for the userId %d and affected userId %d.", id, disliked);
 	}
 }
