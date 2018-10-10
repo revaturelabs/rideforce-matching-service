@@ -20,7 +20,7 @@
 		to create custom info or warn messages -->
 	<appender name="InfoFile"
 		class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<file>${LOGS}/infologger.log</file>
+		<file>${LOGS}/info-logger.log</file>
 		<encoder
 			class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
 			<Pattern>%d %p %C{1.} [%t] %m%n</Pattern>
@@ -28,7 +28,7 @@
 		<rollingPolicy
 			class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
 			<!-- rollover daily and when the file reaches 10 MegaBytes -->
-			<fileNamePattern>${LOGS}/archived/infologger-%d{yyyy-MM-dd}.%i.log
+			<fileNamePattern>${LOGS}/archived/info-logger-%d{yyyy-MM-dd}.%i.log
 			</fileNamePattern>
 			<timeBasedFileNamingAndTriggeringPolicy
 				class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
