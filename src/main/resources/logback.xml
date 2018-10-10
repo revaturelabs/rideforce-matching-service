@@ -37,10 +37,10 @@
 		</rollingPolicy>
 	</appender>
 
-	<!-- This configuration is for tracking DEBUG messgaes from the operations 
-		of SpringBoot as well as any debug messages we add. If you want to add to 
-		the DEBUG output use: 
+	<!-- This configuration is for tracking DEBUG messgaes we add. 
+	If you want to add to the DEBUG output use: 
 		logger.debug("A DEBUG Message"); 
+		logger.trace("A TRACE Message");
 		to create custom DEBUG 
 		messages -->
 	<appender name="DebugFile"
@@ -63,86 +63,18 @@
 		</rollingPolicy>
 	</appender>
 
-	<!-- This configuration is for tracking ERROR and WARN messgaes from the 
-		operations of SpringBoot as well as any ERROR or WARN messages we add. If 
-		you want to add to the ERROR or WARN output use: 
-		logger.warn("A WARN Message"); 
-		logger.error("An ERROR Message"); 
-		to create custom ERROR and WARN messages -->
-	<appender name="ProblemsFile"
-		class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<file>${LOGS}/problems-logger.log</file>
-		<encoder
-			class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-			<Pattern>%d %p %C{1.} [%t] %m%n</Pattern>
-		</encoder>
-
-		<rollingPolicy
-			class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-			<!-- rollover daily and when the file reaches 10 MegaBytes -->
-			<fileNamePattern>${LOGS}/archived/problems-logger-%d{yyyy-MM-dd}.%i.log
-			</fileNamePattern>
-			<timeBasedFileNamingAndTriggeringPolicy
-				class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
-				<maxFileSize>10MB</maxFileSize>
-			</timeBasedFileNamingAndTriggeringPolicy>
-		</rollingPolicy>
-	</appender>
-
-	<!-- This configuration is for tracing new code and debugging it with out 
-		seeing Spring info and debug logging. Use: 
-		logger.trace("A TRACE Message"); 
-		to create a trace message for tracking the flow of your code, user tracking, 
-		or anything that we are concerned with that can be separated from the flow 
-		of SpringBoot. -->
-	<appender name="TraceFile"
-		class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<file>${LOGS}/trace-logger.log</file>
-		<encoder
-			class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-			<Pattern>%d %p %C{1.} [%t] %m%n</Pattern>
-		</encoder>
-
-		<rollingPolicy
-			class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-			<!-- rollover daily and when the file reaches 10 MegaBytes -->
-			<fileNamePattern>${LOGS}/archived/trace-logger-%d{yyyy-MM-dd}.%i.log
-			</fileNamePattern>
-			<timeBasedFileNamingAndTriggeringPolicy
-				class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
-				<maxFileSize>10MB</maxFileSize>
-			</timeBasedFileNamingAndTriggeringPolicy>
-		</rollingPolicy>
-	</appender>
-
 	<!-- Logging has been moved to a file to clean up the console so it isn't 
-		flooded with messages -->
-	<!-- LOG everything at INFO and WARN level -->
+		 flooded with messages.
+		 LOG everything at INFO level for Spring Boot. Change the root level to see
+		 SpringBoot debugging-->
 	<root level="info">
 		<appender-ref ref="InfoFile" />
 		<!-- <appender-ref ref="Console" /> -->
 	</root>
-	<logger name="com.revature" level="warn" additivity="false">
-		<appender-ref ref="InfoFile" />
-	</logger>
-	
-	<!-- LOG "com.revature*" at DEBUG level -->
-	<root level="debug">
-		<appender-ref ref="DebugFile" />
-	</root>
 
-	<!-- LOG "com.revature*" at TRACE level -->
+	<!-- LOG "com.revature*" at TRACE level (error, warn, debug, trace) for our logging purposes; debugging and errors-->
 	<logger name="com.revature" level="trace" additivity="false">
-		<appender-ref ref="TraceFile" />
-		<appender-ref ref="Console" />
-	</logger>
-	<!-- LOG "com.revature*" at ERROR & WARN level -->
-	<logger name="com.revature" level="error" additivity="false">
-		<appender-ref ref="ProblemsFile" />
-		<appender-ref ref="Console" />
-	</logger>
-	<logger name="com.revature" level="warn" additivity="false">
-		<appender-ref ref="ProblemsFile" />
+		<appender-ref ref="DebugFile" />
 		<appender-ref ref="Console" />
 	</logger>
 
