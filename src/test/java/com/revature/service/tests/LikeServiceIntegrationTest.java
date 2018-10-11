@@ -1,6 +1,7 @@
 package com.revature.service.tests;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.CoreMatchers.containsString;
 import static org.junit.Assert.assertNotNull;
 
 import java.util.List;
@@ -42,7 +43,12 @@ public class LikeServiceIntegrationTest {
 	 */
 	@TestConfiguration
 	static class LikeServiceImplTestContextConfiguration {
-
+		
+		/**
+		 * Like service.
+		 *
+		 * @return the like service
+		 */
 		@Bean
 		public LikeService likeService() {
 			return new LikeService();
@@ -64,8 +70,6 @@ public class LikeServiceIntegrationTest {
 	/** The thrown. */
 	@Rule
     public ExpectedException thrown = ExpectedException.none();
-
-	
 	
 	/**
 	 * Validate.
@@ -73,8 +77,6 @@ public class LikeServiceIntegrationTest {
 	@Before
 	public void validate() {
 		assertNotNull(testEntityManager);
-		
-		
 		
 		testEntityManager.persist(new Like(new Pair(1, 2)));
 		testEntityManager.persist(new Like(new Pair(2, 3)));
@@ -110,6 +112,5 @@ public class LikeServiceIntegrationTest {
 	public void testDeleteLike() {
 		likeService.deleteLike(4, 5);
 		assertThat(likeService.getLikes(4)).hasSize(0);
-			
 	}
 }
