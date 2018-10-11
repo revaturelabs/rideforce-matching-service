@@ -23,7 +23,7 @@ import com.revature.rideshare.matching.services.MatchService;
 @RestController
 @RequestMapping("matches")
 public class MatchingController {
-	
+
 	/** The user client. */
 	@Autowired
 	UserClient userClient;
@@ -31,20 +31,21 @@ public class MatchingController {
 	/** The match service. */
 	@Autowired
 	MatchService matchService;
-	
+
 	/** The like service. */
 	@Autowired
 	LikeService likeService;
-	
+
 	/** The dislike service. */
 	@Autowired
 	DislikeService dislikeService;
 
 	/**
-	 * Gets all matched drivers to riders using rider's id as input and driver's id to get.
+	 * Gets all matched drivers to riders using rider's ID as input and driver's ID
+	 * to get drivers.
 	 *
-	 * @param id the rider's id
-	 * @return list of matched drivers by their ids
+	 * @param id the rider's ID
+	 * @return list of matched drivers by their IDs
 	 */
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<String> getAll(@PathVariable int id) {
@@ -53,11 +54,13 @@ public class MatchingController {
 				.map(driver -> UriComponentsBuilder.fromPath("/users/{id}").buildAndExpand(driver.getId()).toString())
 				.collect(Collectors.toList());
 	}
-	
+
 	/**
-	 *
-	 * @param id the id
-	 * @return the all minus affects
+	 * Gets matched drivers to riders taking rider ID as input and explicitly
+	 * excluding liked and disliked drivers, gotten by driver ID.
+	 * 
+	 * @param id the rider id
+	 * @return matched drivers minus liked and disliked drivers
 	 */
 	@RequestMapping(value = "/likes-dislikes/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<String> getAllMinusAffects(@PathVariable int id) {
@@ -66,12 +69,13 @@ public class MatchingController {
 				.map(driver -> UriComponentsBuilder.fromPath("/users/{id}").buildAndExpand(driver.getId()).toString())
 				.collect(Collectors.toList());
 	}
-	
+
 	/**
-	 * Gets the by distance.
+	 * Gets matched drivers to riders by distance, taking rider ID as input and
+	 * using driver ID to get drivers.
 	 *
-	 * @param id the id
-	 * @return the by distance
+	 * @param id the rider ID
+	 * @return list of matched drivers by distance to rider
 	 */
 	@RequestMapping(value = "/distance/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<String> getByDistance(@PathVariable int id) {
@@ -79,88 +83,80 @@ public class MatchingController {
 		return matchService.findMatchesByDistance(rider).stream()
 				.map(driver -> UriComponentsBuilder.fromPath("/users/{id}").buildAndExpand(driver.getId()).toString())
 				.collect(Collectors.toList());
-
 	}
-	
+
 	/**
-	 * Gets the by batch end.
+	 * Gets matched drivers to riders by batch end date, taking rider ID as input
+	 * and using driver ID to get drivers.
 	 *
-	 * @param id the id
-	 * @return the by batch end
+	 * @param id the rider id
+	 * @return list of matched drivers by batch end date same as or after rider's
 	 */
 	@RequestMapping(value = "/batch-end/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<String> getByBatchEnd(@PathVariable int id){
-        User rider = userClient.findById(id);
-        return matchService.findMatchesByBatchEnd(rider).stream()
-                .map(driver -> UriComponentsBuilder.fromPath("/users/{id}").buildAndExpand(driver.getId()).toString())
-                .collect(Collectors.toList());
-    }
+	public List<String> getByBatchEnd(@PathVariable int id) {
+		User rider = userClient.findById(id);
+		return matchService.findMatchesByBatchEnd(rider).stream()
+				.map(driver -> UriComponentsBuilder.fromPath("/users/{id}").buildAndExpand(driver.getId()).toString())
+				.collect(Collectors.toList());
+	}
 
 	/**
-	 * Gets the liked.
+	 * Gets matched drivers by liked affect, using the rider ID as input and the
+	 * drivers' IDs to get drivers.
 	 *
-	 * @param id the id
-	 * @return the liked
+	 * @param id the rider ID
+	 * @return list of matched drivers who have been liked by rider
 	 */
 	@RequestMapping(value = "/likes/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<String> getLiked(@PathVariable("id") int id) {
 		List<String> likes = null;
-		//TODO: Uncomment to test with real users!
-		likes = likeService.getLikes(id).stream()
-				.map(like -> UriComponentsBuilder.fromPath("/users/{id}").buildAndExpand(like.getPair().getAffectedId()).toString())
-				.collect(Collectors.toList());
-//		likes = likeService.getLikes(id).stream()
-//				.map(like -> like.toString())
-//				.collect(Collectors.toList());
+
+		likes = likeService.getLikes(id).stream().map(like -> UriComponentsBuilder.fromPath("/users/{id}")
+				.buildAndExpand(like.getPair().getAffectedId()).toString()).collect(Collectors.toList());
 		return likes;
 	}
 
 	/**
-	 * Adds the liked.
+	 * Saves like affect to a user, taking the ID of the liker as input.
 	 *
-	 * @param id the id
-	 * @param liked the liked
+	 * @param id    the ID of user taking the action of liking
+	 * @param liked the ID of the liked user
 	 */
 	@RequestMapping(value = "/likes/{id}/{liked}", method = RequestMethod.PUT)
 	public void addLiked(@PathVariable("id") int id, @PathVariable("liked") int liked) {
-		likeService.saveLike(id,liked);
+		likeService.saveLike(id, liked);
 	}
 
 	/**
-	 * Delete liked.
+	 * Deletes like affect from a user, taking the ID of the liker as input.
 	 *
-	 * @param id the id
-	 * @param liked the liked
+	 * @param id    the ID of the user taking the action of deleting like
+	 * @param liked the ID of liked user
 	 */
 	@RequestMapping(value = "/likes/{id}/{liked}", method = RequestMethod.DELETE)
 	public void deleteLiked(@PathVariable("id") int id, @PathVariable("liked") int liked) {
-		likeService.deleteLike(id,liked);
+		likeService.deleteLike(id, liked);
 	}
 
 	/**
-	 * Gets the disliked.
+	 * Gets matched users by dislike affect, taking ID of the disliker as input.
 	 *
-	 * @param id the id
-	 * @return the disliked
+	 * @param id the ID of the user taking the action of disliking
+	 * @return list of disliked users associated with input user ID
 	 */
 	@RequestMapping(value = "dislikes/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<String> getDisliked(@PathVariable("id") int id) {
 		List<String> dislikes = null;
-		//TODO: Uncomment to test with real users!
-		dislikes = dislikeService.getDislikes(id).stream()
-				.map(dislike -> UriComponentsBuilder.fromPath("/users/{id}").buildAndExpand(dislike.getPair().getAffectedId()).toString())
-				.collect(Collectors.toList());
-//		dislikes = dislikeService.getDislikes(id).stream()
-//				.map(dislike -> dislike.toString())
-//				.collect(Collectors.toList());
+		dislikes = dislikeService.getDislikes(id).stream().map(dislike -> UriComponentsBuilder.fromPath("/users/{id}")
+				.buildAndExpand(dislike.getPair().getAffectedId()).toString()).collect(Collectors.toList());
 		return dislikes;
 	}
 
 	/**
-	 * Adds the disliked.
+	 * Adds disliked affect to a user, taking ID of the disliker as input.
 	 *
-	 * @param id the id
-	 * @param disliked the disliked
+	 * @param id       the ID of user taking the action of disliking
+	 * @param disliked the ID of the disliked user
 	 */
 	@RequestMapping(value = "/dislikes/{id}/{disliked}", method = RequestMethod.PUT)
 	public void addDisliked(@PathVariable("id") int id, @PathVariable("disliked") int disliked) {
@@ -168,10 +164,10 @@ public class MatchingController {
 	}
 
 	/**
-	 * Deletedis liked.
+	 * Deletes dislike affect from affected user, taking disliker ID as input.
 	 *
-	 * @param id the id
-	 * @param disliked the disliked
+	 * @param id       the ID of user taking action of deleting dislike
+	 * @param disliked the ID of the disliked user
 	 */
 	@RequestMapping(value = "/dislikes/{id}/{disliked}", method = RequestMethod.DELETE)
 	public void deletedisLiked(@PathVariable("id") int id, @PathVariable("disliked") int disliked) {

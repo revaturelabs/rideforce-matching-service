@@ -6,7 +6,6 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class Application. Sets project up as a Spring Boot application.
  */

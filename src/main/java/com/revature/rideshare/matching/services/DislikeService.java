@@ -47,11 +47,11 @@ public class DislikeService {
 	/**
 	 * Deletes dislike by the user id of both users associated by the dislike.
 	 *
-	 * @param Userid the AffectedId
-	 * @param disliked the disliked
+	 * @param userId the user taking action of deleting dislike
+	 * @param disliked the disliked user
 	 */
-	public void deleteDislike(int id, int disliked) {
-		Dislike dislike = new Dislike(new Pair(id,disliked));
+	public void deleteDislike(int userId, int disliked) {
+		Dislike dislike = new Dislike(new Pair(userId, disliked));
 		dislikeRepository.delete(dislike);
 	}
 
