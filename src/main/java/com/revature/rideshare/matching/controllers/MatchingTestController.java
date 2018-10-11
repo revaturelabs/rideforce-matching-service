@@ -14,6 +14,6 @@ public class MatchingTestController {
 
 	@RequestMapping(value = "/test", method = RequestMethod.GET)
 	public String test() {
-		return userClient.findByOfficeAndRole(1, "DRIVER").toString();
+		return userClient.findByOfficeAndRole(1, "ADMIN").toString();
 	}
 }

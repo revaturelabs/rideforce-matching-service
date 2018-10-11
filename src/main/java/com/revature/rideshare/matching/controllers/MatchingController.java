@@ -23,7 +23,7 @@ import com.revature.rideshare.matching.services.MatchService;
 @RequestMapping("matches")
 public class MatchingController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(MatchingController.class);
-	private static final String MSG = "Get request made to matching controller. UserId : %d passed. userClient called to find user by that id. userClient returned the user: %d";
+	private static final String MSG = "Get request to matching controller made with UserId : %d passed. userClient called to find user by that id. userClient returned the user: %d";
 	private static final String NULL = "userClient return a null user object.";
 	@Autowired
 	UserClient userClient;
