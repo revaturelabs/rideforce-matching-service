@@ -93,7 +93,6 @@ public class PairBeanTest {
 	public void testAffectedIdSetter() {
 		Pair p = new Pair(1, 1);
 		p.setAffectedId(200);
-		System.out.println("What? " + p.getAffectedId());
 		
 		assertTrue("Setter did not work: affectedId did not change as expected", p.getAffectedId() == 200);
 		
