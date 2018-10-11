@@ -8,8 +8,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.revature.rideshare.matching.beans.Route;
 
 /**
- * A Feign client for accessing the maps service.
+ * A Feign client for accessing the Maps Service.
  */
+
 @FeignClient("maps-service")
 public interface MapsClient {
 	/**

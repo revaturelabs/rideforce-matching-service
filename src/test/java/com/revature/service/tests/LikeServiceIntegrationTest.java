@@ -1,7 +1,6 @@
 package com.revature.service.tests;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.CoreMatchers.containsString;
 import static org.junit.Assert.assertNotNull;
 
 import java.util.List;
@@ -19,6 +18,8 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.revature.rideshare.matching.Application;
@@ -27,7 +28,6 @@ import com.revature.rideshare.matching.beans.Pair;
 import com.revature.rideshare.matching.repositories.LikeRepository;
 import com.revature.rideshare.matching.services.LikeService;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class LikeServiceIntegrationTest.
  */
@@ -35,6 +35,7 @@ import com.revature.rideshare.matching.services.LikeService;
 @RunWith(SpringRunner.class)
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = Replace.NONE)
+@DirtiesContext(classMode= ClassMode.AFTER_CLASS)
 public class LikeServiceIntegrationTest {
 	
 	/**
@@ -69,7 +70,6 @@ public class LikeServiceIntegrationTest {
 	/** The thrown. */
 	@Rule
     public ExpectedException thrown = ExpectedException.none();
-
 	
 	/**
 	 * Validate.
@@ -112,7 +112,5 @@ public class LikeServiceIntegrationTest {
 	public void testDeleteLike() {
 		likeService.deleteLike(4, 5);
 		assertThat(likeService.getLikes(4)).hasSize(0);
-			
 	}
-
 }

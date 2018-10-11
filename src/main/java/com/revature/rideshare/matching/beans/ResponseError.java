@@ -25,11 +25,13 @@ import org.springframework.http.ResponseEntity;
  * </pre>
  */
 public class ResponseError {
+	
 	/**
 	 * The primary message describing the error.
 	 */
 	@NotEmpty
 	private String message;
+	
 	/**
 	 * Any additional details that may be relevant to the error (can be empty).
 	 */
@@ -93,7 +95,7 @@ public class ResponseError {
 	
 	/**
 	 * Sets the string message describing the error that occurred.
-	 * @param message - A string describing the error. 
+	 * @param message  a string describing the error. 
 	 */
 	public void setMessage(String message) {
 		this.message = message;

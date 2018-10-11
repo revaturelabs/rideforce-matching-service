@@ -5,8 +5,6 @@ import static org.junit.Assert.*;
 
 import java.util.List;
 
-import org.assertj.core.api.Assertions;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,7 +21,6 @@ import com.revature.rideshare.matching.beans.Like;
 import com.revature.rideshare.matching.beans.Pair;
 import com.revature.rideshare.matching.repositories.LikeRepository;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class LikeRepositoryRegressionTest. Repo regression tests are done only to check that
  * repo is empty and on custom repo methods.

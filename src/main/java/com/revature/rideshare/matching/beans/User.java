@@ -9,12 +9,13 @@ import javax.validation.constraints.NotNull;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class User. 
+ * The Class User. Used by UserClient, a FeignClient for accessing the User
+ * Service. Used in MatchService to match User rider to User driver.
  */
+
 public class User {
-	
+
 	/** The id. */
 	private int id;
 
@@ -40,19 +41,22 @@ public class User {
 	/** The active. */
 	private boolean active;
 
-	/** The role. */
+	/** The role. Indicates whether associate, trainer, or admin */
 	@NotEmpty
 	private String role;
 
-	/** The office. */
+	/** The office. Indicates user's Revature training site */
 	@NotEmpty
 	private String office;
 
-	/** The address. */
+	/** The address. Indicates user's address */
 	@NotEmpty
 	private String address;
 
-	/** The batch end. */
+	/**
+	 * The batch end. Indicates when user will complete Revature training and no
+	 * longer need Rideshare services
+	 */
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "UTC")
 	@NotNull
 	private Date batchEnd;
@@ -64,7 +68,10 @@ public class User {
 	/** The venmo. */
 	private String venmo;
 
-	/** The contact info. */
+	/**
+	 * The contact info. Indicates user's preferred means and methods of being
+	 * contacted
+	 */
 	@NotNull
 	private Set<String> contactInfo;
 
@@ -74,24 +81,24 @@ public class User {
 	public User() {
 		super();
 	}
-	
+
 	/**
 	 * Instantiates a new user.
 	 *
-	 * @param id the id
-	 * @param firstName the first name
-	 * @param lastName the last name
-	 * @param email the email
-	 * @param password the password
-	 * @param photoUrl the photo url
-	 * @param active the active
-	 * @param role the role
-	 * @param office the office
-	 * @param address the address
-	 * @param batchEnd the batch end
-	 * @param cars the cars
-	 * @param venmo the venmo
-	 * @param contactInfo the contact info
+	 * @param id          user's id
+	 * @param firstName   user's first name
+	 * @param lastName    user's last name
+	 * @param email       user's email
+	 * @param password    user's password
+	 * @param photoUrl    user's photo url
+	 * @param active      active status
+	 * @param role        user, trainer, admin
+	 * @param office      user's Revature worksite
+	 * @param address     user's home address
+	 * @param batchEnd    predicted end of service for user
+	 * @param cars        user's cars
+	 * @param venmo       user's venmo
+	 * @param contactInfo user's contact info
 	 */
 	public User(int id, @NotEmpty String firstName, @NotEmpty String lastName, @NotEmpty String email, String password,
 			String photoUrl, boolean active, @NotEmpty String role, @NotEmpty String office, @NotEmpty String address,
@@ -116,16 +123,16 @@ public class User {
 	/**
 	 * Instantiates a new user.
 	 *
-	 * @param id the id
-	 * @param firstName the first name
-	 * @param lastName the last name
-	 * @param email the email
-	 * @param role the role
-	 * @param office the office
-	 * @param address the address
-	 * @param batchEnd the batch end
-	 * @param cars the cars
-	 * @param contactInfo the contact info
+	 * @param id          user's id
+	 * @param firstName   user's first name
+	 * @param lastName    user's last name
+	 * @param email       user's email
+	 * @param role        user, trainer, admin
+	 * @param office      user's Revature worksite
+	 * @param address     user's address
+	 * @param batchEnd    predicted end of service for user
+	 * @param cars        user's cars
+	 * @param contactInfo user's contact info
 	 */
 	public User(int id, @NotEmpty String firstName, @NotEmpty String lastName, @NotEmpty String email,
 			@NotEmpty String role, @NotEmpty String office, @NotEmpty String address, @NotNull Date batchEnd,
@@ -395,7 +402,9 @@ public class User {
 		this.contactInfo = contactInfo;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
@@ -406,7 +415,9 @@ public class User {
 				+ ", venmo=" + venmo + ", contactInfo=" + contactInfo + "]";
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
@@ -430,7 +441,9 @@ public class User {
 		return result;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override
@@ -537,6 +550,5 @@ public class User {
 		}
 		return true;
 	}
-	
-	
+
 }
