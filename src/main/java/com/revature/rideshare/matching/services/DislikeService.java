@@ -28,7 +28,7 @@ public class DislikeService {
 	 */
 	public void saveDislike(int userId, int disliked) {
 		Dislike newDislike = new Dislike(new Pair(userId,disliked));
-		newDislike = dislikeRepository.save(newDislike);
+		dislikeRepository.save(newDislike);
 	}
 	
 	/**

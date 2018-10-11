@@ -35,7 +35,7 @@ import com.revature.rideshare.matching.services.LikeService;
 @RunWith(SpringRunner.class)
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = Replace.NONE)
-@DirtiesContext(classMode = ClassMode.AFTER_CLASS)
+@DirtiesContext(classMode= ClassMode.AFTER_CLASS)
 public class LikeServiceIntegrationTest {
 	
 	/**
@@ -70,7 +70,6 @@ public class LikeServiceIntegrationTest {
 	/** The thrown. */
 	@Rule
     public ExpectedException thrown = ExpectedException.none();
-
 	
 	/**
 	 * Validate.
@@ -113,7 +112,5 @@ public class LikeServiceIntegrationTest {
 	public void testDeleteLike() {
 		likeService.deleteLike(4, 5);
 		assertThat(likeService.getLikes(4)).hasSize(0);
-			
 	}
-
 }

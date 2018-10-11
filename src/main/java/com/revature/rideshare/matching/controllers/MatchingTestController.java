@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.revature.rideshare.matching.clients.UserClient;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class MatchingTestController.
  */
@@ -25,6 +24,6 @@ public class MatchingTestController {
 	 */
 	@RequestMapping(value = "/test", method = RequestMethod.GET)
 	public String test() {
-		return userClient.findByOfficeAndRole(1, "DRIVER").toString();
+		return userClient.findByOfficeAndRole(1, "ADMIN").toString();
 	}
 }

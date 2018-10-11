@@ -9,7 +9,6 @@ import com.revature.rideshare.matching.beans.Like;
 import com.revature.rideshare.matching.beans.Pair;
 import com.revature.rideshare.matching.repositories.LikeRepository;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class LikeService.
  */
