@@ -1,17 +1,26 @@
 package com.revature.rideshare.matching.clients;
 
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
+import com.revature.rideshare.matching.beans.User;
+
 /** This class is the fallback implementation for when a service cannot 
- * make a successful connection with a MapClient. The general behavior
+ * make a successful connection with a UserClient. The general behavior
  * is to give a ResponseError stating that a connection could not be 
  * made. */
 @Component
-public class MapsClientFallback implements MapsClient {
+public class UserClientFallback implements UserClient {
 
 	@Override
-	public ResponseEntity<?> getRoute(String start, String end) {
+	public List<User> findByOfficeAndRole(int officeId, String role) {
+		return null;
+	}
+
+	@Override
+	public User findById(int id) {
 		return null;
 	}
 

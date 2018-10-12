@@ -151,15 +151,5 @@ public class MatchingController {
 		LOGGER.info("Dislike service called to delete a dislike for the userId %d and affected userId %d.", id, disliked);
 	}
 	
-	
-	@RequestMapping(value = "/route", method = RequestMethod.POST)
-	public Route testRoute() {
-//		Route route = matchService.testMatchRoute();
-//		System.out.println(route);
-//		Route route = matchService.testMatchRoute();
-		throw new RuntimeException("AWSERZXCVSDZFSDFAFSDADSFSDF");
-//		return null;
-	}
-	
 }
 

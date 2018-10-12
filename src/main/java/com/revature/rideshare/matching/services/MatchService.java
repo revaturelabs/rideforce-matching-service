@@ -197,49 +197,11 @@ public class MatchService {
 	private double rankByDistance(User rider, User driver) {
 		// Right now, this only takes distance into consideration.
 		//TODO: This could be null based on the MapClient service. 
-		ResponseEntity<?> responseEntity = mapsClient.getRoute(rider.getAddress(), driver.getAddress());
-		if (responseEntity == null) {
-			System.out.println("Null");
-			return 0.0;
-		} else if (responseEntity.getBody() instanceof ResponseError) {
-			System.out.println(responseEntity.getBody());
-			return 0.0;
-		} else if (responseEntity.getBody() instanceof Route) {
-			Route riderToDriver = (Route) responseEntity.getBody();
-			return 1 / ((double) riderToDriver.getDistance() + 1);
-		}
-		else {
-			System.out.println("Something Else: " + responseEntity.getBody());
-		}
-		
-//		Route riderToDriver = mapsClient.getRoute(rider.getAddress(), driver.getAddress());
-//		return 1 / ((double) riderToDriver.getDistance() + 1);
-		return 0.0;
+		Route riderToDriver = (Route) mapsClient.getRoute(
+				rider.getAddress(), driver.getAddress()).getBody();
+		return 1 / ((double) riderToDriver.getDistance() + 1);
 	}
 	
-	public Route testMatchRoute() {
-		ResponseEntity<?> responseEntity = mapsClient.getRoute("2200 Astoria Circle, Herndon, VA, 20170"
-				, "11730 Plaza America Drive, Reston, VA 20190");
-		if (responseEntity == null) {
-			System.out.println("Null");
-			return null;
-		} else if (responseEntity.getBody() instanceof ResponseError) {
-			System.out.println("Is a ResposneError");
-			System.out.println(responseEntity.getBody());
-			return null;
-		} else if (responseEntity.getBody() instanceof Route) {
-			System.out.println("Is a route");
-			Route riderToDriver = (Route) responseEntity.getBody();
-			System.out.println(riderToDriver);
-			return riderToDriver;
-		}
-		else {
-			System.out.println("Something Else: " + responseEntity.getBody());
-		}
-//		return (Route) mapsClient.getRoute("2200 Astoria Circle, Herndon, VA, 20170"
-//								, "11730 Plaza America Drive, Reston, VA 20190").getBody();
-		return null;
-	}
 	
 	
 	/**
