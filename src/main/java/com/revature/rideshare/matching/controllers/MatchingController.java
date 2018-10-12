@@ -8,11 +8,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.revature.rideshare.matching.beans.Filter;
 import com.revature.rideshare.matching.beans.User;
 import com.revature.rideshare.matching.clients.UserClient;
 import com.revature.rideshare.matching.services.DislikeService;
@@ -48,6 +50,12 @@ public class MatchingController {
 		return matchService.findMatches(rider).stream()
 				.map(driver -> UriComponentsBuilder.fromPath("/users/{id}").buildAndExpand(driver.getId()).toString())
 				.collect(Collectors.toList());
+	}
+	
+	//TODO: Implement endpoint
+	@RequestMapping(value = "/filtered", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<String> getAllFiltered(@RequestBody Filter filter, @RequestBody int id) {
+		return null;
 	}
 
 	@RequestMapping(value = "/likes-dislikes/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
