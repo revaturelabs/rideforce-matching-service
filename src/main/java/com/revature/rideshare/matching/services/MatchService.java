@@ -1,9 +1,12 @@
+
 package com.revature.rideshare.matching.services;
 
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -20,6 +23,7 @@ import com.revature.rideshare.matching.clients.UserClient;
  */
 @Service
 public class MatchService {
+	private static final Logger LOGGER = LoggerFactory.getLogger(MatchService.class);
 	/**
 	 * The maximum number of matches to find.
 	 */
@@ -75,11 +79,19 @@ public class MatchService {
 	 * @return the drivers who match the given rider (up to {@link #MAX_MATCHES})
 	 */
 	public List<User> findMatchesByDistance(User rider) {
+		if(rider != null) {
+			LOGGER.debug("Getting potential drivers for user: %s at office: %s.", rider.getFirstName(), rider.getOffice());
+		}else {
+			LOGGER.error("Recieved null in findMatchesByDistance");
+			//TODO add error handling for null
+		}
 		int officeId = officeLinkToId(rider.getOffice());
 		// Here, we find all potential drivers. We associate each with a
 		// ranking, and then sort by ranking (descending). We take the first
 		// MAX_MATCHES matches, discard the ranking, and collect the results in
 		// a list.
+		
+		
 		return userClient.findByOfficeAndRole(officeId, DRIVER_ROLE).stream()
 				.map(driver -> new RankedUser(driver, rankByDistance(rider, driver))).sorted(Comparator.reverseOrder())
 				.limit(MAX_MATCHES).map(rankedUser -> rankedUser.user).collect(Collectors.toList());
@@ -229,6 +241,7 @@ public class MatchService {
 		return null;
 	}
 	
+	
 	/**
 	 * Ranks a driver based on whether they have been liked or disliked
 	 * 
@@ -313,3 +326,4 @@ public class MatchService {
 				.map(dislike -> dislike.getPair().getAffectedId()).collect(Collectors.toList());
 	}
 }
+
