@@ -9,6 +9,13 @@ import com.revature.rideshare.matching.beans.User;
 import com.revature.rideshare.matching.exceptions.DuplicateRankingCriteriaException;
 import com.revature.rideshare.matching.exceptions.NoRankingCriteriaException;
 
+/**
+ * Class used to build a complex ranking algorithm. Allows for different ranking
+ * criteria to be added to the ranking equation dynamically
+ * 
+ * @author Ray
+ *
+ */
 public class AggregateRankingBuilder {
 
 	/**
@@ -34,24 +41,32 @@ public class AggregateRankingBuilder {
 	 */
 	public void addCriterion(RankingCriterion criterion) {
 		boolean insertionSuccessful = this.criteria.add(criterion);
-		if(insertionSuccessful) {
+		if (insertionSuccessful) {
 			this.scaleVariable += criterion.getWeight();
 		} else {
-			throw new DuplicateRankingCriteriaException("An instance of " + criterion.getClass().getName() + " has already been added to the builder");
+			throw new DuplicateRankingCriteriaException(
+					"An instance of " + criterion.getClass().getName() + " has already been added to the builder");
 		}
 	}
 
-	// TODO: Implement ranking algorithm
+	/**
+	 * Ranks a rider and driver pair using the criteria stored in the class
+	 * 
+	 * @param rider  the rider for whom we are finding a match
+	 * @param driver the candidate driver for the match
+	 * @return
+	 */
 	public double rankMatch(User rider, User driver) {
-		if(rider == null || driver == null) {
+		if (rider == null || driver == null) {
 			throw new IllegalArgumentException("rider and driver must not be null");
 		}
-		if(this.criteria.size() == 0) {
+		if (this.criteria.size() == 0) {
 			throw new NoRankingCriteriaException("At least one criterion required to run algorithm");
 		}
 		double totalWeightedRank = 0;
-		List<Double> weightedRanks = this.criteria.stream().map(criteria -> criteria.getWeightedRank(rider, driver)).collect(Collectors.toList());
-		for(Double weightedRank: weightedRanks) {
+		List<Double> weightedRanks = this.criteria.stream().map(criteria -> criteria.getWeightedRank(rider, driver))
+				.collect(Collectors.toList());
+		for (Double weightedRank : weightedRanks) {
 			totalWeightedRank += weightedRank;
 		}
 		return totalWeightedRank / scaleVariable;

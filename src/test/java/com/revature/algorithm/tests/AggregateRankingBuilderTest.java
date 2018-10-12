@@ -11,36 +11,45 @@ import com.revature.rideshare.matching.exceptions.NoRankingCriteriaException;
 
 public class AggregateRankingBuilderTest {
 
-	private static final double CRITERIA_A_RESULT = 0.25;
-	private static final double CRITERIA_B_RESULT = 0.33;
-	private static final double CRITERIA_C_RESULT = 0.1;
-	private static final double CRITERIA_A_WEIGHT = 1;
-	private static final double CRITERIA_B_WEIGHT = 2;
-	private static final double CRITERIA_C_WEIGHT = 3;
+	private static final double CRITERION_A_RESULT = 0.25;
+	private static final double CRITERION_B_RESULT = 0.33;
+	private static final double CRITERION_C_RESULT = 0.1;
+	private static final double CRITERION_A_WEIGHT = 1;
+	private static final double CRITERION_B_WEIGHT = 2;
+	private static final double CRITERION_C_WEIGHT = 3;
 
+	/**
+	 * Test class 1 for testing the AggregateRankingBuilder
+	 */
 	private class TestRankingCriteriaA extends RankingCriterion {
 
 		@Override
 		protected double rank(User rider, User driver) {
-			return CRITERIA_A_RESULT;
+			return CRITERION_A_RESULT;
 		}
 
 	}
-
+	
+	/**
+	 * Test class 2 for testing the AggregateRankingBuilder
+	 */
 	private class TestRankingCriteriaB extends RankingCriterion {
 
 		@Override
 		protected double rank(User rider, User driver) {
-			return CRITERIA_B_RESULT;
+			return CRITERION_B_RESULT;
 		}
 
 	}
 
+	/**
+	 * Test class 3 for testing the AggregateRankingBuilder
+	 */
 	private class TestRankingCriteriaC extends RankingCriterion {
 
 		@Override
 		protected double rank(User rider, User driver) {
-			return CRITERIA_C_RESULT;
+			return CRITERION_C_RESULT;
 		}
 
 	}
@@ -105,7 +114,7 @@ public class AggregateRankingBuilderTest {
 		RankingCriterion testCriterionA = new TestRankingCriteriaA();
 		arb.addCriterion(testCriterionA);
 		double result = arb.rankMatch(rider, driver);
-		Assertions.assertThat(result).isEqualTo(CRITERIA_A_RESULT);
+		Assertions.assertThat(result).isEqualTo(CRITERION_A_RESULT);
 	}
 
 	@Test
@@ -119,7 +128,7 @@ public class AggregateRankingBuilderTest {
 		arb.addCriterion(testCriterionB);
 		double result = arb.rankMatch(rider, driver);
 
-		double expectedResult = (CRITERIA_A_RESULT + CRITERIA_B_RESULT) / 2;
+		double expectedResult = (CRITERION_A_RESULT + CRITERION_B_RESULT) / 2;
 		Assertions.assertThat(result).isEqualTo(expectedResult);
 	}
 
@@ -130,22 +139,20 @@ public class AggregateRankingBuilderTest {
 		User driver = new User();
 		RankingCriterion testCriterionA = new TestRankingCriteriaA();
 		RankingCriterion testCriterionB = new TestRankingCriteriaB();
-		testCriterionA.setWeight(CRITERIA_A_WEIGHT);
-		testCriterionB.setWeight(CRITERIA_B_WEIGHT);
+		testCriterionA.setWeight(CRITERION_A_WEIGHT);
+		testCriterionB.setWeight(CRITERION_B_WEIGHT);
 		arb.addCriterion(testCriterionA);
 		arb.addCriterion(testCriterionB);
 		double result = arb.rankMatch(rider, driver);
 
-		double expectedResult = (CRITERIA_A_WEIGHT * CRITERIA_A_RESULT + CRITERIA_B_WEIGHT * CRITERIA_B_RESULT)
-				/ (CRITERIA_A_WEIGHT + CRITERIA_B_WEIGHT);
+		double expectedResult = (CRITERION_A_WEIGHT * CRITERION_A_RESULT + CRITERION_B_WEIGHT * CRITERION_B_RESULT)
+				/ (CRITERION_A_WEIGHT + CRITERION_B_WEIGHT);
 		Assertions.assertThat(result).isEqualTo(expectedResult);
 	}
 
 	@Test
 	public void rankMatch_whenTwoDuplicateCriteriaAdded_throwsDuplicateRankingCriteriaException() {
 		AggregateRankingBuilder arb = new AggregateRankingBuilder();
-		User rider = new User();
-		User driver = new User();
 		RankingCriterion testCriterionA_1 = new TestRankingCriteriaA();
 		RankingCriterion testCriterionA_2 = new TestRankingCriteriaA();		
 		arb.addCriterion(testCriterionA_1);
@@ -171,7 +178,7 @@ public class AggregateRankingBuilderTest {
 		arb.addCriterion(testCriterionC);
 		double result = arb.rankMatch(rider, driver);
 
-		double expectedResult = (CRITERIA_A_RESULT + CRITERIA_B_RESULT + CRITERIA_C_RESULT) / 3;
+		double expectedResult = (CRITERION_A_RESULT + CRITERION_B_RESULT + CRITERION_C_RESULT) / 3;
 		Assertions.assertThat(result).isEqualTo(expectedResult);
 	}
 	
@@ -183,19 +190,19 @@ public class AggregateRankingBuilderTest {
 		RankingCriterion testCriterionA = new TestRankingCriteriaA();
 		RankingCriterion testCriterionB = new TestRankingCriteriaB();
 		RankingCriterion testCriterionC = new TestRankingCriteriaC();
-		testCriterionA.setWeight(CRITERIA_A_WEIGHT);
-		testCriterionB.setWeight(CRITERIA_B_WEIGHT);
-		testCriterionC.setWeight(CRITERIA_C_WEIGHT);
+		testCriterionA.setWeight(CRITERION_A_WEIGHT);
+		testCriterionB.setWeight(CRITERION_B_WEIGHT);
+		testCriterionC.setWeight(CRITERION_C_WEIGHT);
 		arb.addCriterion(testCriterionA);
 		arb.addCriterion(testCriterionB);
 		arb.addCriterion(testCriterionC);
 		double result = arb.rankMatch(rider, driver);
 
 		double expectedResult = (
-				CRITERIA_A_WEIGHT * CRITERIA_A_RESULT + 
-				CRITERIA_B_WEIGHT * CRITERIA_B_RESULT + 
-				CRITERIA_C_WEIGHT * CRITERIA_C_RESULT)
-				/ (CRITERIA_A_WEIGHT + CRITERIA_B_WEIGHT + CRITERIA_C_WEIGHT);
+				CRITERION_A_WEIGHT * CRITERION_A_RESULT + 
+				CRITERION_B_WEIGHT * CRITERION_B_RESULT + 
+				CRITERION_C_WEIGHT * CRITERION_C_RESULT)
+				/ (CRITERION_A_WEIGHT + CRITERION_B_WEIGHT + CRITERION_C_WEIGHT);
 		Assertions.assertThat(result).isEqualTo(expectedResult);
 	}
 
