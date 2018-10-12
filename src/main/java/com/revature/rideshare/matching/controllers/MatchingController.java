@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.revature.rideshare.matching.beans.Route;
 import com.revature.rideshare.matching.beans.User;
 import com.revature.rideshare.matching.clients.UserClient;
 import com.revature.rideshare.matching.services.DislikeService;
@@ -60,7 +61,6 @@ public class MatchingController {
 		} else {
 			LOGGER.info(MSG, id, rider.getFirstName());
 		}
-
 		return matchService.findMatches(rider).stream()
 				.map(driver -> UriComponentsBuilder.fromPath("/users/{id}").buildAndExpand(driver.getId()).toString())
 				.collect(Collectors.toList());
@@ -81,7 +81,6 @@ public class MatchingController {
 		} else {
 			LOGGER.info(MSG, id, rider.getFirstName());
 		}
-
 		return matchService.findMatchesByAffects(rider).stream()
 				.map(driver -> UriComponentsBuilder.fromPath("/users/{id}").buildAndExpand(driver.getId()).toString())
 				.collect(Collectors.toList());
@@ -123,7 +122,6 @@ public class MatchingController {
 		} else {
 			LOGGER.info(MSG, id, rider.getFirstName());
 		}
-
 		return matchService.findMatchesByBatchEnd(rider).stream()
 				.map(driver -> UriComponentsBuilder.fromPath("/users/{id}").buildAndExpand(driver.getId()).toString())
 				.collect(Collectors.toList());
