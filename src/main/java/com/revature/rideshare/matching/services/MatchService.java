@@ -184,7 +184,7 @@ public class MatchService {
 	private double rankByDistance(User rider, User driver) {
 
 		// TODO: This could be null based on the MapClient service.
-		Route riderToDriver = mapsClient.getRoute(rider.getAddress(), driver.getAddress());
+		Route riderToDriver = (Route) mapsClient.getRoute(rider.getAddress(), driver.getAddress()).getBody();
 		return 1 / ((double) riderToDriver.getDistance() + 1);
 	}
 
