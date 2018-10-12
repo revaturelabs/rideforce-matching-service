@@ -7,8 +7,8 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;;
 // TODO: Auto-generated Javadoc
 /**
- * The Class Dislike. It is used to represent the relationship between a user and an other
- * user that they have marked as not liking.
+ * The Class Dislike. Represents the dislike affect of 
+ * the relationship between a user and the affected user.
  */
 @Entity
 @Table(name="DISLIKES")
@@ -94,8 +94,5 @@ public class Dislike {
 			return false;
 		}
 		return true;
-	}
-	
-	
-	
+	}	
 }

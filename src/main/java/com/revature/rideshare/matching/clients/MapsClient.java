@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 /**
- * A Feign client for accessing the maps service.
+ * A Feign client for accessing the Maps Service.
  */
 @FeignClient(name="maps-service", fallback=MapsClientFallback.class)
 public interface MapsClient {

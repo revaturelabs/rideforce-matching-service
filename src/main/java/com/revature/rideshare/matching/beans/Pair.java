@@ -8,34 +8,35 @@ import javax.validation.constraints.Min;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Class Pair. This holds the id's of two user's representing a user and another user that has an 
- * associated affect mapped from the first user to the second.
+ * The Class Pair. Holds the IDs of two users, representing a user and an affected
+ * user; maps affect of second user as set by the first user.
  */
 @Embeddable
 public class Pair implements Serializable {
-	
+
 	/** The Constant serialVersionUID. */
 	private static final long serialVersionUID = 3070299328660926894L;
 
-	/** The user id. Can not be a value below 1*/
-	@Min(value=1)
+	/** The user id. Cannot be a value below 1 */
+	@Min(value = 1)
 	@Column
 	private int userId;
-	
-	/** The affected id. Can not be a value below 1*/
-	@Min(value=1)
+
+	/** The affected id. Cannot be a value below 1 */
+	@Min(value = 1)
 	@Column
 	private int affectedId;
-	
+
 	/**
 	 * Instantiates a new pair.
 	 */
-	public Pair() {}
-	
+	public Pair() {
+	}
+
 	/**
 	 * Instantiates a new pair.
 	 *
-	 * @param userId the user id
+	 * @param userId     the user id
 	 * @param affectedId the affected id
 	 */
 	public Pair(int userId, int affectedId) {
@@ -79,7 +80,9 @@ public class Pair implements Serializable {
 		this.affectedId = affectedId;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
@@ -91,7 +94,9 @@ public class Pair implements Serializable {
 		return result;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override
@@ -110,7 +115,9 @@ public class Pair implements Serializable {
 		return true;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
@@ -118,4 +125,3 @@ public class Pair implements Serializable {
 		return "userId=" + userId + ", affectedId=" + affectedId;
 	}
 }
-
