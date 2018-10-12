@@ -1,6 +1,10 @@
 package com.revature.service.tests;
 
 import static org.assertj.core.api.Assertions.assertThat;
+<<<<<<< HEAD
+=======
+import static org.hamcrest.CoreMatchers.containsString;
+>>>>>>> dev
 import static org.junit.Assert.assertNotNull;
 
 import java.util.List;
@@ -28,6 +32,7 @@ import com.revature.rideshare.matching.beans.Like;
 import com.revature.rideshare.matching.beans.Pair;
 import com.revature.rideshare.matching.repositories.LikeRepository;
 import com.revature.rideshare.matching.services.LikeService;
+
 /**
  * The Class LikeServiceIntegrationTest.
  */

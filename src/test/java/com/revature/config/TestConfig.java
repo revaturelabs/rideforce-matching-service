@@ -13,7 +13,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
  * @see SpringBootTestContextBootstrapper
  */
 
-//add esclude filter if it is determined to be neeed : escludefilters=@...
 @Configuration
 @EnableJpaRepositories("com.revature.rideshare.matching.repositories")
 @EnableTransactionManagement
