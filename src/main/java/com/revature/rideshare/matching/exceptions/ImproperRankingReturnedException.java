@@ -1,6 +1,6 @@
 package com.revature.rideshare.matching.exceptions;
 
-public class ImproperRankingReturnedException extends Exception {
+public class ImproperRankingReturnedException extends RuntimeException {
 	
 	//TODO: Add exception description
 	

@@ -9,7 +9,7 @@ public abstract class RankingCriterion {
 	
 	protected abstract double rank(User rider, User driver);
 	
-	public double getWeghtedRank(User rider, User driver) throws IllegalArgumentException, ImproperRankingReturnedException {
+	public double getWeightedRank(User rider, User driver) {
 		if(rider == null || driver == null) {
 			throw new IllegalArgumentException("rider and driver must not be null");
 		}
