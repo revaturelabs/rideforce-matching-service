@@ -149,13 +149,54 @@ public class AggregateRankingBuilderTest {
 		RankingCriterion testCriterionA_1 = new TestRankingCriteriaA();
 		RankingCriterion testCriterionA_2 = new TestRankingCriteriaA();		
 		arb.addCriterion(testCriterionA_1);
-		arb.addCriterion(testCriterionA_2);
 		try {
-			arb.rankMatch(rider, driver);
+			arb.addCriterion(testCriterionA_2);
 		} catch (DuplicateRankingCriteriaException drce) {
 			return;
 		}
 		
 		Assertions.failBecauseExceptionWasNotThrown(DuplicateRankingCriteriaException.class);
 	}
+
+	@Test
+	public void rankMatch_whenThreeUniqueUnweightedCriteriaAdded_returnsExpectedValue() {
+		AggregateRankingBuilder arb = new AggregateRankingBuilder();
+		User rider = new User();
+		User driver = new User();
+		RankingCriterion testCriterionA = new TestRankingCriteriaA();
+		RankingCriterion testCriterionB = new TestRankingCriteriaB();
+		RankingCriterion testCriterionC = new TestRankingCriteriaC();
+		arb.addCriterion(testCriterionA);
+		arb.addCriterion(testCriterionB);
+		arb.addCriterion(testCriterionC);
+		double result = arb.rankMatch(rider, driver);
+
+		double expectedResult = (CRITERIA_A_RESULT + CRITERIA_B_RESULT + CRITERIA_C_RESULT) / 3;
+		Assertions.assertThat(result).isEqualTo(expectedResult);
+	}
+	
+	@Test
+	public void rankMatch_whenThreeUniqueWeightedCriteriaAdded_returnsExpectedValue() {
+		AggregateRankingBuilder arb = new AggregateRankingBuilder();
+		User rider = new User();
+		User driver = new User();
+		RankingCriterion testCriterionA = new TestRankingCriteriaA();
+		RankingCriterion testCriterionB = new TestRankingCriteriaB();
+		RankingCriterion testCriterionC = new TestRankingCriteriaC();
+		testCriterionA.setWeight(CRITERIA_A_WEIGHT);
+		testCriterionB.setWeight(CRITERIA_B_WEIGHT);
+		testCriterionC.setWeight(CRITERIA_C_WEIGHT);
+		arb.addCriterion(testCriterionA);
+		arb.addCriterion(testCriterionB);
+		arb.addCriterion(testCriterionC);
+		double result = arb.rankMatch(rider, driver);
+
+		double expectedResult = (
+				CRITERIA_A_WEIGHT * CRITERIA_A_RESULT + 
+				CRITERIA_B_WEIGHT * CRITERIA_B_RESULT + 
+				CRITERIA_C_WEIGHT * CRITERIA_C_RESULT)
+				/ (CRITERIA_A_WEIGHT + CRITERIA_B_WEIGHT + CRITERIA_C_WEIGHT);
+		Assertions.assertThat(result).isEqualTo(expectedResult);
+	}
+
 }

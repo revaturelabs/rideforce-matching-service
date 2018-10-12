@@ -6,6 +6,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.revature.rideshare.matching.beans.User;
+import com.revature.rideshare.matching.exceptions.DuplicateRankingCriteriaException;
 import com.revature.rideshare.matching.exceptions.NoRankingCriteriaException;
 
 public class AggregateRankingBuilder {
@@ -32,8 +33,12 @@ public class AggregateRankingBuilder {
 	 * @param criterion criterion to be added into the algorithm
 	 */
 	public void addCriterion(RankingCriterion criterion) {
-		this.criteria.add(criterion);
-		this.scaleVariable += criterion.getWeight();
+		boolean insertionSuccessful = this.criteria.add(criterion);
+		if(insertionSuccessful) {
+			this.scaleVariable += criterion.getWeight();
+		} else {
+			throw new DuplicateRankingCriteriaException("An instance of " + criterion.getClass().getName() + " has already been added to the builder");
+		}
 	}
 
 	// TODO: Implement ranking algorithm
