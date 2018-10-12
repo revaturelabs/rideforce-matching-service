@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.revature.rideshare.matching.beans.Route;
 import com.revature.rideshare.matching.beans.User;
 import com.revature.rideshare.matching.clients.UserClient;
 import com.revature.rideshare.matching.services.DislikeService;
@@ -109,5 +110,14 @@ public class MatchingController {
 	@RequestMapping(value = "/dislikes/{id}/{disliked}", method = RequestMethod.DELETE)
 	public void deletedisLiked(@PathVariable("id") int id, @PathVariable("disliked") int disliked) {
 		dislikeService.deleteDislike(id, disliked);
+	}
+	
+	@RequestMapping(value = "/route", method = RequestMethod.POST)
+	public Route testRoute() {
+//		Route route = matchService.testMatchRoute();
+//		System.out.println(route);
+//		Route route = matchService.testMatchRoute();
+		throw new RuntimeException("AWSERZXCVSDZFSDFAFSDADSFSDF");
+//		return null;
 	}
 }

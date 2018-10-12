@@ -5,9 +5,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.AntPathMatcher;
 
+import com.revature.rideshare.matching.beans.ResponseError;
 import com.revature.rideshare.matching.beans.Route;
 import com.revature.rideshare.matching.beans.User;
 import com.revature.rideshare.matching.clients.MapsClient;
@@ -183,10 +185,49 @@ public class MatchService {
 	private double rankByDistance(User rider, User driver) {
 		// Right now, this only takes distance into consideration.
 		//TODO: This could be null based on the MapClient service. 
-		Route riderToDriver = mapsClient.getRoute(rider.getAddress(), driver.getAddress());
-		return 1 / ((double) riderToDriver.getDistance() + 1);
+		ResponseEntity<?> responseEntity = mapsClient.getRoute(rider.getAddress(), driver.getAddress());
+		if (responseEntity == null) {
+			System.out.println("Null");
+			return 0.0;
+		} else if (responseEntity.getBody() instanceof ResponseError) {
+			System.out.println(responseEntity.getBody());
+			return 0.0;
+		} else if (responseEntity.getBody() instanceof Route) {
+			Route riderToDriver = (Route) responseEntity.getBody();
+			return 1 / ((double) riderToDriver.getDistance() + 1);
+		}
+		else {
+			System.out.println("Something Else: " + responseEntity.getBody());
+		}
+		
+//		Route riderToDriver = mapsClient.getRoute(rider.getAddress(), driver.getAddress());
+//		return 1 / ((double) riderToDriver.getDistance() + 1);
+		return 0.0;
 	}
 	
+	public Route testMatchRoute() {
+		ResponseEntity<?> responseEntity = mapsClient.getRoute("2200 Astoria Circle, Herndon, VA, 20170"
+				, "11730 Plaza America Drive, Reston, VA 20190");
+		if (responseEntity == null) {
+			System.out.println("Null");
+			return null;
+		} else if (responseEntity.getBody() instanceof ResponseError) {
+			System.out.println("Is a ResposneError");
+			System.out.println(responseEntity.getBody());
+			return null;
+		} else if (responseEntity.getBody() instanceof Route) {
+			System.out.println("Is a route");
+			Route riderToDriver = (Route) responseEntity.getBody();
+			System.out.println(riderToDriver);
+			return riderToDriver;
+		}
+		else {
+			System.out.println("Something Else: " + responseEntity.getBody());
+		}
+//		return (Route) mapsClient.getRoute("2200 Astoria Circle, Herndon, VA, 20170"
+//								, "11730 Plaza America Drive, Reston, VA 20190").getBody();
+		return null;
+	}
 	
 	/**
 	 * Ranks a driver based on whether they have been liked or disliked
