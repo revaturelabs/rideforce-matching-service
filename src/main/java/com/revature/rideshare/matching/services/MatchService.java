@@ -14,7 +14,6 @@ import com.revature.rideshare.matching.beans.Route;
 import com.revature.rideshare.matching.beans.User;
 import com.revature.rideshare.matching.clients.MapsClient;
 import com.revature.rideshare.matching.clients.UserClient;
-import com.revature.rideshare.matching.controllers.MatchingController;
 
 /**
  * The main service class for finding drivers who match a given rider.
