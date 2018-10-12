@@ -19,6 +19,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.revature.rideshare.matching.Application;
@@ -34,6 +35,7 @@ import com.revature.rideshare.matching.services.MatchService;
 @RunWith(SpringRunner.class)
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = Replace.NONE)
+@EnableAsync
 public class MatchServiceTest {
 	
 	@Autowired
@@ -47,17 +49,16 @@ public class MatchServiceTest {
 	
 	private MatchService matchService = new MatchService();
 	
-	private static final String DRIVER_ROLE = "DRIVER";
 	
 	User rider = new User();
 	User driver1 = new User();
 	User driver2 = new User();
 	User driver3 = new User();
 	User driver4 = new User();
-	List<Like> likes = new ArrayList();
-	List<Dislike> dislikes = new ArrayList();
-	List<Integer> likedIds = new ArrayList();
-	List<Integer> dislikedIds = new ArrayList();
+	List<Like> likes = new ArrayList<>();
+	List<Dislike> dislikes = new ArrayList<>();
+	List<Integer> likedIds = new ArrayList<>();
+	List<Integer> dislikedIds = new ArrayList<>();
 	
 	{
 		rider.setId(1);
