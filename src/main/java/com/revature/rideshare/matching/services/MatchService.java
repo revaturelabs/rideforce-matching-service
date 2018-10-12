@@ -213,7 +213,8 @@ public class MatchService {
 	private double rankByDistance(User rider, User driver) {
 		// Right now, this only takes distance into consideration.
 		//TODO: This could be null based on the MapClient service. 
-		Route riderToDriver = mapsClient.getRoute(rider.getAddress(), driver.getAddress());
+		Route riderToDriver = (Route) mapsClient.getRoute(
+				rider.getAddress(), driver.getAddress()).getBody();
 		return 1 / ((double) riderToDriver.getDistance() + 1);
 	}
 	
@@ -302,3 +303,4 @@ public class MatchService {
 				.map(dislike -> dislike.getPair().getAffectedId()).collect(Collectors.toList());
 	}
 }
+
