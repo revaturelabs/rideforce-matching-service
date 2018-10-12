@@ -2,6 +2,8 @@ package com.revature.rideshare.matching.clients;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,7 +15,7 @@ import com.revature.rideshare.matching.beans.User;
 /**
  * A Feign client for accessing the user service.
  */
-@FeignClient("user-service")
+@FeignClient(name="user-service", fallback=UserClientFallback.class)
 public interface UserClient {
 	/**
 	 * Finds all the users who work at the given office and have the given role.
