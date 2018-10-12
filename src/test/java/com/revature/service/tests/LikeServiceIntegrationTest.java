@@ -18,6 +18,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -36,6 +37,7 @@ import com.revature.rideshare.matching.services.LikeService;
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = Replace.NONE)
 @DirtiesContext(classMode= ClassMode.AFTER_CLASS)
+@EnableAsync
 public class LikeServiceIntegrationTest {
 	
 	/**
@@ -43,8 +45,8 @@ public class LikeServiceIntegrationTest {
 	 */
 	@TestConfiguration
 	static class LikeServiceImplTestContextConfiguration {
-		
-		/**
+
+    /**
 		 * Like service.
 		 *
 		 * @return the like service
@@ -70,6 +72,8 @@ public class LikeServiceIntegrationTest {
 	/** The thrown. */
 	@Rule
     public ExpectedException thrown = ExpectedException.none();
+
+	
 	
 	/**
 	 * Validate.
@@ -112,5 +116,6 @@ public class LikeServiceIntegrationTest {
 	public void testDeleteLike() {
 		likeService.deleteLike(4, 5);
 		assertThat(likeService.getLikes(4)).hasSize(0);
+			
 	}
 }

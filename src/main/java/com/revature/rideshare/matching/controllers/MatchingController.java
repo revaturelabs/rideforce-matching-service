@@ -5,6 +5,8 @@ import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.revature.rideshare.matching.beans.Route;
 import com.revature.rideshare.matching.beans.User;
 import com.revature.rideshare.matching.clients.UserClient;
 import com.revature.rideshare.matching.services.DislikeService;
@@ -60,7 +63,6 @@ public class MatchingController {
 		} else {
 			LOGGER.info(MSG, id, rider.getFirstName());
 		}
-
 		return matchService.findMatches(rider).stream()
 				.map(driver -> UriComponentsBuilder.fromPath("/users/{id}").buildAndExpand(driver.getId()).toString())
 				.collect(Collectors.toList());
@@ -75,13 +77,13 @@ public class MatchingController {
 	 */
 	@RequestMapping(value = "/likes-dislikes/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<String> getAllMinusAffects(@PathVariable int id) {
+		
 		User rider = userClient.findById(id);
 		if (rider == null) {
 			LOGGER.trace(NULL);
 		} else {
 			LOGGER.info(MSG, id, rider.getFirstName());
 		}
-
 		return matchService.findMatchesByAffects(rider).stream()
 				.map(driver -> UriComponentsBuilder.fromPath("/users/{id}").buildAndExpand(driver.getId()).toString())
 				.collect(Collectors.toList());
@@ -102,7 +104,6 @@ public class MatchingController {
 		} else {
 			LOGGER.info(MSG, id, rider.getFirstName());
 		}
-
 		return matchService.findMatchesByDistance(rider).stream()
 				.map(driver -> UriComponentsBuilder.fromPath("/users/{id}").buildAndExpand(driver.getId()).toString())
 				.collect(Collectors.toList());
@@ -123,7 +124,6 @@ public class MatchingController {
 		} else {
 			LOGGER.info(MSG, id, rider.getFirstName());
 		}
-
 		return matchService.findMatchesByBatchEnd(rider).stream()
 				.map(driver -> UriComponentsBuilder.fromPath("/users/{id}").buildAndExpand(driver.getId()).toString())
 				.collect(Collectors.toList());
@@ -142,14 +142,14 @@ public class MatchingController {
 
 		likes = likeService.getLikes(id).stream().map(like -> UriComponentsBuilder.fromPath("/users/{id}")
 				.buildAndExpand(like.getPair().getAffectedId()).toString()).collect(Collectors.toList());
+
 		if (likes.isEmpty()) {
 			LOGGER.trace("Mapping process did not return any URIs associated with this user id: %d", id);
 		} else {
-			LOGGER.info(
-					"likeService.getLikes called with id: %d which is then mapped to create a list of uri's that contain a path to "
-							+ "to get the users (drivers) that they have liked.",
-					id);
+			LOGGER.info("likeService.getLikes called with id: %d which is then mapped to create a list of uri's that contain a path to "
+					+ "to get the users (drivers) that they have liked.", id);
 		}
+		
 		return likes;
 	}
 
@@ -186,17 +186,17 @@ public class MatchingController {
 	@RequestMapping(value = "dislikes/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<String> getDisliked(@PathVariable("id") int id) {
 		List<String> dislikes = null;
+		
 		dislikes = dislikeService.getDislikes(id).stream().map(dislike -> UriComponentsBuilder.fromPath("/users/{id}")
 				.buildAndExpand(dislike.getPair().getAffectedId()).toString()).collect(Collectors.toList());
+
 		if (dislikes.isEmpty()) {
 			LOGGER.trace("Mapping process did not return any URIs associated with this user id: %d ", id);
 		} else {
-			LOGGER.info(
-					"dislikeService.getDislikes called with id: %d which was then mapped to create a list of uri's that contain a path to "
-							+ "to get the users (drivers) that they have liked.",
-					id);
+			LOGGER.info("dislikeService.getDislikes called with id: %d which was then mapped to create a list of uri's that contain a path to "
+					+ "to get the users (drivers) that they have liked.", id);
 		}
-
+		
 		return dislikes;
 	}
 
@@ -210,6 +210,7 @@ public class MatchingController {
 	public void addDisliked(@PathVariable("id") int id, @PathVariable("disliked") int disliked) {
 		LOGGER.info("Dislike service called to save a dislike for the userId %d and affected userId %d.", id, disliked);
 		dislikeService.saveDislike(id, disliked);
+		LOGGER.info("Dislike service called to save a dislike for the userId %d and affected userId %d.", id, disliked);
 	}
 
 	/**
@@ -222,5 +223,8 @@ public class MatchingController {
 	public void deletedisLiked(@PathVariable("id") int id, @PathVariable("disliked") int disliked) {
 		LOGGER.info("Dislike service called to delete a dislike for the userId %d and affected userId %d.", id, disliked);
 		dislikeService.deleteDislike(id, disliked);
+		LOGGER.info("Dislike service called to delete a dislike for the userId %d and affected userId %d.", id, disliked);
 	}
+	
 }
+

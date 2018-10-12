@@ -4,6 +4,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.AntPathMatcher;
@@ -18,6 +20,7 @@ import com.revature.rideshare.matching.clients.UserClient;
  */
 @Service
 public class MatchService {
+	private static final Logger LOGGER = LoggerFactory.getLogger(MatchService.class);
 	/**
 	 * The maximum number of matches to find.
 	 */
@@ -66,6 +69,7 @@ public class MatchService {
 
 		@Override
 		public int compareTo(RankedUser o) {
+			LOGGER.debug("comparing the rank: %d to user %s of rank: %d passed for comparison.", rank, o.user.getFirstName(), o.rank);
 			return Double.compare(rank, o.rank);
 		}
 	}
@@ -79,8 +83,19 @@ public class MatchService {
 	 *         order (up to {@link #MAX_MATCHES})
 	 */
 	public List<User> findMatchesByDistance(User rider) {
+		if(rider != null) {
+			LOGGER.debug("Getting potential drivers for user: %s at office: %s. by distance", rider.getFirstName(), rider.getOffice());
+		}else {
+			LOGGER.error("Recieved null in findMatchesByDistance");
+			//TODO add error handling for null : nothing should be processed without checking for null
+		}
 		int officeId = officeLinkToId(rider.getOffice());
-
+		// Here, we find all potential drivers. We associate each with a
+		// ranking, and then sort by ranking (descending). We take the first
+		// MAX_MATCHES matches, discard the ranking, and collect the results in
+		// a list.
+		
+		
 		return userClient.findByOfficeAndRole(officeId, DRIVER_ROLE).stream()
 				.map(driver -> new RankedUser(driver, rankByDistance(rider, driver))).sorted(Comparator.reverseOrder())
 				.limit(MAX_MATCHES).map(rankedUser -> rankedUser.user).collect(Collectors.toList());
@@ -95,6 +110,12 @@ public class MatchService {
 	 *         {@link #MAX_MATCHES})
 	 */
 	public List<User> findMatchesByAffects(User rider) {
+		if(rider != null) {
+			LOGGER.debug("Getting potential drivers for user: %s at office: %s. by affect", rider.getFirstName(), rider.getOffice());
+		}else {
+			LOGGER.error("Recieved null in findMatchesByAffects");
+			//TODO add error handling for null : nothing should be processed without checking for null
+		}
 		int officeId = officeLinkToId(rider.getOffice());
 		List<User> drivers = null;
 
@@ -116,14 +137,24 @@ public class MatchService {
 	 * @return unranked list of matched drivers, sorted by batch end date in
 	 *         descending order
 	 */
-	public List<User> findMatchesByBatchEnd(User rider) {
-		int officeId = officeLinkToId(rider.getOffice());
-
-		return userClient.findByOfficeAndRole(officeId, DRIVER_ROLE).stream()
-				.map(driver -> new RankedUser(driver, rankByBatchEnd(rider, driver))).sorted(Comparator.reverseOrder())
-				.limit(MAX_MATCHES).map(rankedUser -> rankedUser.user).collect(Collectors.toList());
-	}
-
+	public List<User> findMatchesByBatchEnd(User rider){
+		if(rider != null) {
+			LOGGER.debug("Getting potential drivers for user: %s at office: %s. by batchend", rider.getFirstName(), rider.getOffice());
+		}else {
+			LOGGER.error("Recieved null in findMatchesByBatchEnd");
+			//TODO add error handling for null : nothing should be processed without checking for null
+		}
+        int officeId = officeLinkToId(rider.getOffice());
+        // Here, we find all potential drivers. We associate each with a
+        // ranking, and then sort by ranking (descending). We take the first
+        // MAX_MATCHES matches, discard the ranking, and collect the results in
+        // a list.
+        
+        return userClient.findByOfficeAndRole(officeId, DRIVER_ROLE).stream()
+                .map(driver -> new RankedUser(driver, rankByBatchEnd(rider, driver))).sorted(Comparator.reverseOrder())
+                .limit(MAX_MATCHES).map(rankedUser -> rankedUser.user).collect(Collectors.toList());
+    }
+	
 	/**
 	 * Finds matched drivers for rider based on a weighted rank from both distance
 	 * and batch end, filtering out liked and disliked drivers (affected drivers).
@@ -133,6 +164,12 @@ public class MatchService {
 	 *         end date in descending order (up to {@link #MAX_MATCHES})
 	 */
 	public List<User> findMatches(User rider) {
+		if(rider != null) {
+			LOGGER.debug("Getting potential drivers for user: %s at office: %s.", rider.getFirstName(), rider.getOffice());
+		}else {
+			LOGGER.error("Recieved null in findMatches");
+			//TODO add error handling for null : nothing should be processed without checking for null
+		}
 		int officeId = officeLinkToId(rider.getOffice());
 		List<User> drivers = null;
 
@@ -161,7 +198,12 @@ public class MatchService {
 	 * @return double showing ranking of the driver, based on all ranking functions
 	 */
 	private double rankMatch(User rider, User driver, List<Integer> likes, List<Integer> dislikes) {
-
+		/** These are the weights given to each individual category. */
+		final double distanceCoefficient = 1;
+		final double batchEndCoefficient = 4;
+		final double affectCoefficient = 1;
+		
+		// Compute the individual rank metrics. 
 		double distanceRank = rankByDistance(rider, driver);
 		double batchEndRank = rankByBatchEnd(rider, driver);
 		double affectRank = rankByAffect(rider, driver, likes, dislikes);
@@ -270,3 +312,4 @@ public class MatchService {
 				.collect(Collectors.toList());
 	}
 }
+
