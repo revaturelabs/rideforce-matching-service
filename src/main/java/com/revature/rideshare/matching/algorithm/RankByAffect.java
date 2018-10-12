@@ -20,15 +20,18 @@ public class RankByAffect extends RankingCriterion {
 	private List<Integer> likedIds;
 	private List<Integer> dislikedIds;
 	
-	public RankByAffect(int userId) {
-		likedIds = likeService.getLikes(userId).stream()
+	public void initializeAffects(User rider) {
+		likedIds = likeService.getLikes(rider.getId()).stream()
 				.map(like -> like.getPair().getAffectedId()).collect(Collectors.toList());
-		dislikedIds = dislikeService.getDislikes(userId).stream()
+		dislikedIds = dislikeService.getDislikes(rider.getId()).stream()
 				.map(dislike -> dislike.getPair().getAffectedId()).collect(Collectors.toList());;
 	}
 
 	@Override
-	public double rank(User rider, User driver) {
+	protected double rank(User rider, User driver) {
+		if(likedIds == null || dislikedIds == null) {
+			initializeAffects(rider);
+		}
 		if(dislikedIds.stream().anyMatch(id -> id.equals(driver.getId()))) {
 			return 0.0;
 		} else if(likedIds.stream().anyMatch(id -> id.equals(driver.getId()))) {

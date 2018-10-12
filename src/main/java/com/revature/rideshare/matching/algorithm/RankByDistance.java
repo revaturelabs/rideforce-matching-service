@@ -12,7 +12,7 @@ public class RankByDistance extends RankingCriterion {
 	MapsClient mapsClient;
 
 	@Override
-	public double rank(User rider, User driver) {
+	protected double rank(User rider, User driver) {
 		Route riderToDriver = mapsClient.getRoute(rider.getAddress(), driver.getAddress());
 		return 1 / ((double) riderToDriver.getDistance() + 1);
 	}
