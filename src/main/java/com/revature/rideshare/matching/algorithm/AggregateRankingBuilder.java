@@ -1,16 +1,12 @@
 package com.revature.rideshare.matching.algorithm;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.hibernate.criterion.Criterion;
-import org.springframework.web.servlet.mvc.condition.ConsumesRequestCondition;
-
 import com.revature.rideshare.matching.beans.User;
 import com.revature.rideshare.matching.exceptions.NoRankingCriteriaException;
-
-import io.netty.util.internal.shaded.org.jctools.queues.MessagePassingQueue.Consumer;
 
 public class AggregateRankingBuilder {
 
@@ -26,6 +22,7 @@ public class AggregateRankingBuilder {
 	private double scaleVariable;
 
 	public AggregateRankingBuilder() {
+		this.criteria = new HashSet<>();
 	}
 
 	/**
@@ -52,7 +49,7 @@ public class AggregateRankingBuilder {
 		for(Double weightedRank: weightedRanks) {
 			totalWeightedRank += weightedRank;
 		}
-		return totalWeightedRank;
+		return totalWeightedRank / scaleVariable;
 	}
 
 }

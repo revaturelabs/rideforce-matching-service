@@ -5,7 +5,7 @@ import com.revature.rideshare.matching.exceptions.ImproperRankingReturnedExcepti
 
 public abstract class RankingCriterion {
 
-	private double weight;
+	private double weight = 1;
 	
 	protected abstract double rank(User rider, User driver);
 	
