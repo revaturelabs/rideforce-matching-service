@@ -14,7 +14,6 @@ import com.revature.rideshare.matching.beans.Route;
 import com.revature.rideshare.matching.beans.User;
 import com.revature.rideshare.matching.clients.MapsClient;
 import com.revature.rideshare.matching.clients.UserClient;
-import com.revature.rideshare.matching.controllers.MatchingController;
 
 /**
  * The main service class for finding drivers who match a given rider.
@@ -66,6 +65,7 @@ public class MatchService {
 
 		@Override
 		public int compareTo(RankedUser o) {
+			LOGGER.debug("comparing the rank: %d to user %s of rank: %d passed for comparison.", rank, o.user.getFirstName(), o.rank);
 			return Double.compare(rank, o.rank);
 		}
 	}
@@ -78,10 +78,10 @@ public class MatchService {
 	 */
 	public List<User> findMatchesByDistance(User rider) {
 		if(rider != null) {
-			LOGGER.debug("Getting potential drivers for user: %s at office: %s.", rider.getFirstName(), rider.getOffice());
+			LOGGER.debug("Getting potential drivers for user: %s at office: %s. by distance", rider.getFirstName(), rider.getOffice());
 		}else {
 			LOGGER.error("Recieved null in findMatchesByDistance");
-			//TODO add error handling for null
+			//TODO add error handling for null : nothing should be processed without checking for null
 		}
 		int officeId = officeLinkToId(rider.getOffice());
 		// Here, we find all potential drivers. We associate each with a
@@ -103,6 +103,12 @@ public class MatchService {
 	 * @return the list if drivers who match the given rider, minus affected (up to {@link #MAX_MATCHES})
 	 */
 	public List<User> findMatchesByAffects(User rider) {
+		if(rider != null) {
+			LOGGER.debug("Getting potential drivers for user: %s at office: %s. by affect", rider.getFirstName(), rider.getOffice());
+		}else {
+			LOGGER.error("Recieved null in findMatchesByAffects");
+			//TODO add error handling for null : nothing should be processed without checking for null
+		}
 		int officeId = officeLinkToId(rider.getOffice());
 		List<User> drivers = null;
 		
@@ -124,6 +130,12 @@ public class MatchService {
 	 * @return the drivers who fit our matching criteria, sorted by rank
 	 */
 	public List<User> findMatchesByBatchEnd(User rider){
+		if(rider != null) {
+			LOGGER.debug("Getting potential drivers for user: %s at office: %s. by batchend", rider.getFirstName(), rider.getOffice());
+		}else {
+			LOGGER.error("Recieved null in findMatchesByBatchEnd");
+			//TODO add error handling for null : nothing should be processed without checking for null
+		}
         int officeId = officeLinkToId(rider.getOffice());
         // Here, we find all potential drivers. We associate each with a
         // ranking, and then sort by ranking (descending). We take the first
@@ -142,6 +154,12 @@ public class MatchService {
 	 * @return	the drivers who match the given rider (up to {@link #MAX_MATCHES})
 	 */
 	public List<User> findMatches(User rider) {
+		if(rider != null) {
+			LOGGER.debug("Getting potential drivers for user: %s at office: %s.", rider.getFirstName(), rider.getOffice());
+		}else {
+			LOGGER.error("Recieved null in findMatches");
+			//TODO add error handling for null : nothing should be processed without checking for null
+		}
 		int officeId = officeLinkToId(rider.getOffice());
 		List<User> drivers = null;
 		
@@ -168,7 +186,7 @@ public class MatchService {
 	 * @return
 	 */
 	private double rankMatch(User rider, User driver, List<Integer> likes, List<Integer> dislikes) {
-		// These are the weights given to each individual category. 
+		/** These are the weights given to each individual category. */
 		final double distanceCoefficient = 1;
 		final double batchEndCoefficient = 4;
 		final double affectCoefficient = 1;
