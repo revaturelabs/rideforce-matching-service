@@ -28,7 +28,6 @@ import com.revature.rideshare.matching.repositories.LikeRepository;
 @RunWith(SpringRunner.class)
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = Replace.NONE)
-
 public class LikeRepositoryIntegrationTest {
 	
 	/** The entity manager. */

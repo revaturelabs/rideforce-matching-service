@@ -1,4 +1,5 @@
 package com.revature.bean.tests;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Set;
@@ -74,5 +75,19 @@ public class LikeBeanTest {
 		Validator validator = localValidatorFactory.getValidator();
 		Set<ConstraintViolation<Like>> violations = validator.validate(like);
 		Assertions.assertThat(violations.size()).isEqualTo(1);		
+	}
+	
+	@Test
+	public void testLikeEquals() {
+		Pair pair = new Pair(100, 200);
+		Pair pairEq = new Pair(100, 200);
+		Pair pairNotEq = new Pair(200, 300);
+		
+		Like like = new Like(pair);
+		Like likeEq = new Like(pairEq);
+		Like likeNotEq = new Like(pairNotEq);
+		
+		assertTrue("Like equals override not functioning properly; should be true", like.equals(likeEq));
+		assertFalse("Like equals override not functioning properly; should be false", like.equals(likeNotEq));
 	}
 }

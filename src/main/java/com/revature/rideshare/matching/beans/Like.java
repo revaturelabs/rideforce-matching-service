@@ -7,7 +7,7 @@ import javax.validation.constraints.NotNull;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Class Like. This class represents the like affect of 
+ * The Class Like. Represents the like affect of 
  * the relationship between a user and the affected user.
  */
 
@@ -96,5 +96,4 @@ public class Like {
 		}
 		return true;
 	}
-
 }
