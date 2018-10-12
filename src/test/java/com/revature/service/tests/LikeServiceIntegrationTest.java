@@ -1,10 +1,6 @@
 package com.revature.service.tests;
 
 import static org.assertj.core.api.Assertions.assertThat;
-<<<<<<< HEAD
-=======
-import static org.hamcrest.CoreMatchers.containsString;
->>>>>>> dev
 import static org.junit.Assert.assertNotNull;
 
 import java.util.List;
