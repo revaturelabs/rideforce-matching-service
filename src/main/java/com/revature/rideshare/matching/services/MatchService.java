@@ -184,7 +184,8 @@ public class MatchService {
 	 */
 	private double rankByDistance(User rider, User driver) {
 		// TODO: This could be null based on the MapClient service.
-//		Route riderToDriver = (Route) mapsClient.getRoute(rider.getAddress(), driver.getAddress()).getBody();
+		// This is a patch job as even though a Route is sent from the Map Service, it is received as a LinkedHashMap. 
+		// TODO: Proper handling of error conditions can be done Monday
 		LinkedHashMap routeMap = (LinkedHashMap) mapsClient.getRoute(rider.getAddress(), driver.getAddress()).getBody();
 		Route riderToDriver = new Route((Long)routeMap.get("distance"), (Long)routeMap.get("duration"));
 		return 1 / ((double) riderToDriver.getDistance() + 1);
