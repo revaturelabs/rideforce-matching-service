@@ -1,6 +1,7 @@
 package com.revature.rideshare.matching.services;
 
 import java.util.Comparator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -182,11 +183,21 @@ public class MatchService {
 	 * @return a double as ranking value; higher is better
 	 */
 	private double rankByDistance(User rider, User driver) {
-
 		// TODO: This could be null based on the MapClient service.
-		Route riderToDriver = (Route) mapsClient.getRoute(rider.getAddress(), driver.getAddress()).getBody();
+//		Route riderToDriver = (Route) mapsClient.getRoute(rider.getAddress(), driver.getAddress()).getBody();
+		LinkedHashMap routeMap = (LinkedHashMap) mapsClient.getRoute(rider.getAddress(), driver.getAddress()).getBody();
+		Route riderToDriver = new Route((Long)routeMap.get("distance"), (Long)routeMap.get("duration"));
 		return 1 / ((double) riderToDriver.getDistance() + 1);
 	}
+	
+	
+//	public void testRoute() {
+//		LinkedHashMap routeMap = (LinkedHashMap) mapsClient.getRoute("1234 asdf", " 1234 qwer").getBody();
+//		Route riderToDriver = new Route((long)(int)routeMap.get("distance"), (long)(int)routeMap.get("duration"));
+////		Route riderToDriver = new Route((Long)((LinkedHashMap) o).get("distance"), (Long)((LinkedHashMap) o).get("duration"));
+//		System.out.println(riderToDriver);
+//	}
+	
 
 	/**
 	 * Ranks a driver by whether they have been liked or disliked by rider.
