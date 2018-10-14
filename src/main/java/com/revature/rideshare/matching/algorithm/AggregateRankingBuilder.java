@@ -25,7 +25,7 @@ public class AggregateRankingBuilder {
 	private Set<RankingCriterion> criteria;
 
 	/**
-	 * This variable is used to rescale the ranking to between 0 and 1
+	 * This variable is used to re-scale the ranking to between 0 and 1
 	 */
 	private double scaleVariable;
 
@@ -60,11 +60,11 @@ public class AggregateRankingBuilder {
 		if (rider == null || driver == null) {
 			throw new IllegalArgumentException("rider and driver must not be null");
 		}
-		if (this.criteria.size() == 0) {
+		if (this.criteria.isEmpty()) {
 			throw new NoRankingCriteriaException("At least one criterion required to run algorithm");
 		}
 		double totalWeightedRank = 0;
-		List<Double> weightedRanks = this.criteria.stream().map(criteria -> criteria.getWeightedRank(rider, driver))
+		List<Double> weightedRanks = this.criteria.stream().map(criterion -> criterion.getWeightedRank(rider, driver))
 				.collect(Collectors.toList());
 		for (Double weightedRank : weightedRanks) {
 			totalWeightedRank += weightedRank;
