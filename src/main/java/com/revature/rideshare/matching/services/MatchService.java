@@ -87,11 +87,11 @@ public class MatchService {
 	}
 
 	/**
-	 * Finds matched drivers for given rider by office location only, explicitly
-	 * excluding liked and disliked drivers (affected drivers).
+	 * Finds matched drivers for given rider by office location only, based on if
+	 * they are liked or disliked drivers (affected drivers).
 	 * 
 	 * @param rider the user looking for a ride
-	 * @return unranked list of matched drivers, minus affected (up to
+	 * @return list of matched drivers (up to
 	 *         {@link #MAX_MATCHES})
 	 */
 	public List<User> findMatchesByAffects(User rider) {
@@ -125,8 +125,8 @@ public class MatchService {
 	}
 
 	/**
-	 * Finds matched drivers for rider based on a weighted rank from both distance
-	 * and batch end, filtering out liked and disliked drivers (affected drivers).
+	 * Finds matched drivers for rider based on a weighted rank from distance
+	 * batch end, and whether they are liked or disliked drivers (affected drivers).
 	 * 
 	 * @param rider the user for whom to find a driver
 	 * @return list of matched drivers, sorted by nearest distance and closest batch
@@ -247,10 +247,10 @@ public class MatchService {
 	}
 
 	/**
-	 * Gets list of liked driver IDs. Used to reduce the number of calls for
-	 * this functionality in the ranking mechanism.
+	 * Gets list of liked driver IDs. Used to reduce the number of calls for this
+	 * functionality in the ranking mechanism.
 	 * 
-	 * @param rider the user who performed like action 
+	 * @param rider the user who performed like action
 	 * @return unranked list of liked driver IDs corresponding to rider
 	 */
 	private List<Integer> getLikedIds(User rider) {
@@ -259,10 +259,10 @@ public class MatchService {
 	}
 
 	/**
-	 * Gets list of disliked driver IDs. Used to reduce the number of calls for
-	 * this functionality in the ranking mechanism.
+	 * Gets list of disliked driver IDs. Used to reduce the number of calls for this
+	 * functionality in the ranking mechanism.
 	 * 
-	 * @param rider the user who performed dislike action 
+	 * @param rider the user who performed dislike action
 	 * @return unranked list of liked driver IDs corresponding to rider
 	 */
 	private List<Integer> getDislikedIds(User rider) {
