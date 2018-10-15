@@ -1,9 +1,11 @@
 package com.revature.repo.tests;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.*;
+import static org.junit.Assert.*;
 
 import java.util.List;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +21,6 @@ import com.revature.rideshare.matching.beans.Like;
 import com.revature.rideshare.matching.beans.Pair;
 import com.revature.rideshare.matching.repositories.LikeRepository;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class LikeRepositoryRegressionTest. Repo regression tests are done only to check that
  * repo is empty and on custom repo methods.
@@ -27,24 +28,32 @@ import com.revature.rideshare.matching.repositories.LikeRepository;
 @SpringBootTest(classes = Application.class)
 @RunWith(SpringRunner.class)
 @DataJpaTest
+//@ContextConfiguration(classes = TestConfig.class)
 @AutoConfigureTestDatabase(replace = Replace.NONE)
+
 public class LikeRepositoryIntegrationTest {
 	
 	/** The entity manager. */
 	@Autowired
-	TestEntityManager entityManager;
+	TestEntityManager testEntityManager;
 	
 	/** The like repository. */
 	@Autowired
 	private LikeRepository likeRepo;
+	
+	@Before
+	public void validate() {
+		assertNotNull(testEntityManager);	
+		testEntityManager.persist(new Like(new Pair(1, 2)));
+	}
 
 	/**
-	 * Should be empty.
+	 * Should be not be empty.
 	 */
 	@Test
-	public void shouldBeEmpty() {
+	public void shouldNotBeEmpty() {
 		List<Like> likes = likeRepo.findAll();
-		assertThat(likes).hasSize(0);
+		assertThat(likes).hasSize(1);
 	}
 	
 	/**
@@ -52,9 +61,7 @@ public class LikeRepositoryIntegrationTest {
 	 */
 	@Test
 	public void testFindPairByUserId() {
-		entityManager.persist(new Like(new Pair(1, 2)));
 		List<Like> likes = likeRepo.findByPairUserId(1);
-		
 		assertThat(likes).size().isEqualTo(1);
 	}
 
