@@ -2,55 +2,40 @@ package com.revature.algorithm.tests;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.time.LocalDate;
-import java.util.ArrayList;
+import java.time.Instant;
 import java.util.Date;
-import java.util.List;
 
 import org.assertj.core.api.Assertions;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.revature.rideshare.matching.algorithm.RankByBatchEnd;
-import com.revature.rideshare.matching.beans.Dislike;
-import com.revature.rideshare.matching.beans.Like;
 import com.revature.rideshare.matching.beans.User;
 
 public class RankByBatchEndTest {
 
 	RankByBatchEnd rankByBatchEnd = new RankByBatchEnd();
 
-	User rider = new User();
-	User driver1 = new User();
-	User driver2 = new User();
-	User driver3 = new User();
-	User driver4 = new User();
-	List<Like> likes = new ArrayList<>();
-	List<Dislike> dislikes = new ArrayList<>();
-	List<Integer> likedIds = new ArrayList<>();
-	List<Integer> dislikedIds = new ArrayList<>();
+	static User rider = new User();
+	static User driver1 = new User();
+	static User driver2 = new User();
+	static User driver3 = new User();
+	static User driver4 = new User();
 
-	{
+	@BeforeClass
+	public static void setup()	{
 		rider.setId(1);
 		driver1.setId(2);
 		driver2.setId(3);
 		driver3.setId(4);
 		driver4.setId(5);
 
-		//TODO: Figure out how to do this without deprecated constructors
-//		rider.setBatchEnd(new Date(LocalDate.of(2018, 10, 19).toEpochDay()));
-//		driver1.setBatchEnd(new Date(LocalDate.of(2018, 10, 19).toEpochDay()));
-//		driver2.setBatchEnd(new Date(LocalDate.of(2018, 11, 1).toEpochDay()));
-//		driver3.setBatchEnd(new Date(LocalDate.of(2018, 10, 12).toEpochDay()));
-//		driver4.setBatchEnd(new Date(LocalDate.of(2018, 10, 5).toEpochDay()));
-		
-		rider.setBatchEnd(new Date(2018,10,19));
-		driver1.setBatchEnd(new Date(2018,10,19));
-		driver2.setBatchEnd(new Date(2018,11,1));
-		driver3.setBatchEnd(new Date(2018,10,12));
-		driver4.setBatchEnd(new Date(2018,10,5));
-		
-		System.out.println("Driver3 batchEnd: " + driver3.getBatchEnd());
-		System.out.println("Driver4 batchEnd: " + driver4.getBatchEnd());
+		rider.setBatchEnd(new Date(Instant.parse("2018-10-19T00:00:00Z").toEpochMilli()));
+		driver1.setBatchEnd(new Date(Instant.parse("2018-10-19T00:00:00Z").toEpochMilli()));
+		driver2.setBatchEnd(new Date(Instant.parse("2018-11-01T00:00:00Z").toEpochMilli()));
+		driver3.setBatchEnd(new Date(Instant.parse("2018-10-12T00:00:00Z").toEpochMilli()));
+		driver4.setBatchEnd(new Date(Instant.parse("2018-10-05T00:00:00Z").toEpochMilli()));
+				
 	}
 
 	@Test
