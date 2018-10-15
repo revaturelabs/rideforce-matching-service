@@ -1,9 +1,12 @@
 package com.revature.rideshare.matching.services;
 
 import java.util.Comparator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.AntPathMatcher;
@@ -91,7 +94,7 @@ public class MatchService {
 	 * they are liked or disliked drivers (affected drivers).
 	 * 
 	 * @param rider the user looking for a ride
-	 * @return list of matched drivers (up to
+	 * @return unranked list of matched drivers, minus affected (up to
 	 *         {@link #MAX_MATCHES})
 	 */
 	public List<User> findMatchesByAffects(User rider) {
@@ -180,11 +183,22 @@ public class MatchService {
 	 * @return a double as ranking value; higher is better
 	 */
 	private double rankByDistance(User rider, User driver) {
-
 		// TODO: This could be null based on the MapClient service.
-		Route riderToDriver = (Route) mapsClient.getRoute(rider.getAddress(), driver.getAddress()).getBody();
+		// This is a patch job as even though a Route is sent from the Map Service, it is received as a LinkedHashMap. 
+		// TODO: Proper handling of error conditions can be done Monday
+		LinkedHashMap routeMap = (LinkedHashMap) mapsClient.getRoute(rider.getAddress(), driver.getAddress()).getBody();
+		Route riderToDriver = new Route((Long)routeMap.get("distance"), (Long)routeMap.get("duration"));
 		return 1 / ((double) riderToDriver.getDistance() + 1);
 	}
+	
+	
+//	public void testRoute() {
+//		LinkedHashMap routeMap = (LinkedHashMap) mapsClient.getRoute("1234 asdf", " 1234 qwer").getBody();
+//		Route riderToDriver = new Route((long)(int)routeMap.get("distance"), (long)(int)routeMap.get("duration"));
+////		Route riderToDriver = new Route((Long)((LinkedHashMap) o).get("distance"), (Long)((LinkedHashMap) o).get("duration"));
+//		System.out.println(riderToDriver);
+//	}
+	
 
 	/**
 	 * Ranks a driver by whether they have been liked or disliked by rider.
@@ -247,10 +261,10 @@ public class MatchService {
 	}
 
 	/**
-	 * Gets list of liked driver IDs. Used to reduce the number of calls for this
-	 * functionality in the ranking mechanism.
+	 * Gets list of liked driver IDs. Used to reduce the number of calls for
+	 * this functionality in the ranking mechanism.
 	 * 
-	 * @param rider the user who performed like action
+	 * @param rider the user who performed like action 
 	 * @return unranked list of liked driver IDs corresponding to rider
 	 */
 	private List<Integer> getLikedIds(User rider) {
@@ -259,10 +273,10 @@ public class MatchService {
 	}
 
 	/**
-	 * Gets list of disliked driver IDs. Used to reduce the number of calls for this
-	 * functionality in the ranking mechanism.
+	 * Gets list of disliked driver IDs. Used to reduce the number of calls for
+	 * this functionality in the ranking mechanism.
 	 * 
-	 * @param rider the user who performed dislike action
+	 * @param rider the user who performed dislike action 
 	 * @return unranked list of liked driver IDs corresponding to rider
 	 */
 	private List<Integer> getDislikedIds(User rider) {
