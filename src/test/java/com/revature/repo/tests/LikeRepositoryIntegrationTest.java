@@ -1,7 +1,7 @@
 package com.revature.repo.tests;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertNotNull;
 
 import java.util.List;
 
@@ -14,6 +14,8 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.revature.rideshare.matching.Application;
@@ -41,9 +43,14 @@ public class LikeRepositoryIntegrationTest {
 	private LikeRepository likeRepo;
 	
 	@Before
-	public void validate() {
-		assertNotNull(testEntityManager);	
+	public void setUp() {
+		
 		testEntityManager.persist(new Like(new Pair(1, 2)));
+	}
+	@Test
+	public void validate() {
+		assertNotNull(testEntityManager);
+		assertNotNull(likeRepo);
 	}
 
 	/**
