@@ -37,7 +37,7 @@ public abstract class RankingCriterion {
 	 */
 	public double getWeightedRank(User rider, User driver) {
 		if (rider == null || driver == null) {
-			throw new IllegalArgumentException("rider and driver must not be null");
+			throw new IllegalArgumentException("Rider and driver must not be null");
 		}
 		double driverRanking = rank(rider, driver);
 		if (driverRanking < 0 || driverRanking > 1) {
