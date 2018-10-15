@@ -2,7 +2,6 @@ package com.revature.rideshare.matching.clients;
 
 import java.util.List;
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 import com.revature.rideshare.matching.beans.User;
