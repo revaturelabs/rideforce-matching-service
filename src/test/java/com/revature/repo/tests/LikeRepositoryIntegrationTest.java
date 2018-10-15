@@ -44,7 +44,7 @@ public class LikeRepositoryIntegrationTest {
 	
 	@Before
 	public void setUp() {
-		
+		likeRepo.deleteAll();
 		testEntityManager.persist(new Like(new Pair(1, 2)));
 	}
 	@Test
