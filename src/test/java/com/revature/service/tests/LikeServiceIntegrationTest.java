@@ -77,12 +77,18 @@ public class LikeServiceIntegrationTest {
 	 * Validate.
 	 */
 	@Before
-	public void validate() {
-		assertNotNull(testEntityManager);
+	public void setUp() {
 		
+		likeRepo.deleteAll();
 		testEntityManager.persist(new Like(new Pair(1, 2)));
 		testEntityManager.persist(new Like(new Pair(2, 3)));
 		testEntityManager.persist(new Like(new Pair(3, 4)));
+	}
+	@Test
+	public void validate() {
+		assertNotNull(testEntityManager);
+		assertNotNull(likeRepo);
+		assertNotNull(likeService);
 	}
 	
 	/**
