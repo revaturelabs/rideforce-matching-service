@@ -5,7 +5,6 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class Like. Represents the like affect of 
  * the relationship between a user and the affected user.

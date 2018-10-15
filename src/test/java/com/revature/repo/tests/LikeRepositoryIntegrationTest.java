@@ -6,6 +6,7 @@ import static org.junit.Assert.*;
 import java.util.List;
 
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +29,6 @@ import com.revature.rideshare.matching.repositories.LikeRepository;
 @SpringBootTest(classes = Application.class)
 @RunWith(SpringRunner.class)
 @DataJpaTest
-//@ContextConfiguration(classes = TestConfig.class)
 @AutoConfigureTestDatabase(replace = Replace.NONE)
 
 public class LikeRepositoryIntegrationTest {
@@ -63,6 +63,15 @@ public class LikeRepositoryIntegrationTest {
 	public void testFindPairByUserId() {
 		List<Like> likes = likeRepo.findByPairUserId(1);
 		assertThat(likes).size().isEqualTo(1);
+	}
+	
+	/**
+	 * Test empty pair by user id. If given a nonviable user id, returns empty value.
+	 */
+	@Test
+	public void testEmptyPairByUserId() {
+		List<Like> likes = likeRepo.findByPairUserId(0);
+		assertThat(likes).isEmpty();
 	}
 
 }

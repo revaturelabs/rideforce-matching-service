@@ -22,6 +22,11 @@ public class MatchService {
 	 * The maximum number of matches to find.
 	 */
 	private static final int MAX_MATCHES = 10;
+	
+	/**
+	 * The coefficients used to weight importance of matching features.
+	 */
+	
 	private static final double DISTANCE_COEFFICIENT = 1;
 	private static final double BATCH_END_COEFFICIENT = 4;
 	private static final double AFFECT_COEFFICENT = 1;
@@ -102,7 +107,7 @@ public class MatchService {
 		List<Integer> dislikes = getDislikedIds(rider);
 
 		drivers = userClient.findByOfficeAndRole(officeId, DRIVER_ROLE).stream()
-				.map(driver -> new RankedUser(driver, rankByAffect(rider, driver, likes, dislikes)))
+				.map(driver -> new RankedUser(driver, rankByAffect(driver, likes, dislikes)))
 				.sorted(Comparator.reverseOrder()).limit(MAX_MATCHES).map(rankedUser -> rankedUser.user)
 				.collect(Collectors.toList());
 		return drivers;
@@ -164,7 +169,7 @@ public class MatchService {
 
 		double distanceRank = rankByDistance(rider, driver);
 		double batchEndRank = rankByBatchEnd(rider, driver);
-		double affectRank = rankByAffect(rider, driver, likes, dislikes);
+		double affectRank = rankByAffect(driver, likes, dislikes);
 		// double startTimeRank = rankByStartTime(rider, driver);
 
 		// TODO: add START_TIME_COEFFICIENT, startTimeRank)
@@ -187,9 +192,8 @@ public class MatchService {
 	}
 
 	/**
-	 * Ranks a driver by whether they have been liked or disliked by rider.
+	 * Ranks a driver by whether they have been liked or disliked by a particular rider.
 	 * 
-	 * @param rider    the user looking for a ride
 	 * @param driver   the potential driver being ranked
 	 * @param likes    a list of IDs for drivers whom the rider has liked. Consult
 	 *                 the getLikedIds() function below
@@ -197,7 +201,7 @@ public class MatchService {
 	 *                 Consult the getDislikedIds() function below
 	 * @return a double as a rank
 	 */
-	private double rankByAffect(User rider, User driver, List<Integer> likes, List<Integer> dislikes) {
+	private double rankByAffect(User driver, List<Integer> likes, List<Integer> dislikes) {
 		// Determines whether the user has a good affect, and ranks them accordingly
 		if (dislikes.stream().anyMatch(id -> id.equals(driver.getId()))) {
 			return 0.0;
