@@ -24,6 +24,11 @@ public class MatchService {
 	 * The maximum number of matches to find.
 	 */
 	private static final int MAX_MATCHES = 10;
+	
+	/**
+	 * The coefficients used to weight importance of matching features.
+	 */
+	
 	private static final double DISTANCE_COEFFICIENT = 1;
 	private static final double BATCH_END_COEFFICIENT = 4;
 	private static final double AFFECT_COEFFICENT = 1;

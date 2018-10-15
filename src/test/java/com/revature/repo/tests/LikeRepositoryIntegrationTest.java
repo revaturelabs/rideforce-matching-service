@@ -1,7 +1,7 @@
 package com.revature.repo.tests;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertNotNull;
+import static org.assertj.core.api.Assertions.*;
+import static org.junit.Assert.*;
 
 import java.util.List;
 
@@ -14,8 +14,6 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.revature.rideshare.matching.Application;
@@ -31,7 +29,7 @@ import com.revature.rideshare.matching.repositories.LikeRepository;
 @RunWith(SpringRunner.class)
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = Replace.NONE)
-@DirtiesContext(classMode = ClassMode.AFTER_CLASS)
+
 public class LikeRepositoryIntegrationTest {
 	
 	/** The entity manager. */
@@ -47,6 +45,7 @@ public class LikeRepositoryIntegrationTest {
 		likeRepo.deleteAll();
 		testEntityManager.persist(new Like(new Pair(1, 2)));
 	}
+	
 	@Test
 	public void validate() {
 		assertNotNull(testEntityManager);
@@ -69,6 +68,15 @@ public class LikeRepositoryIntegrationTest {
 	public void testFindPairByUserId() {
 		List<Like> likes = likeRepo.findByPairUserId(1);
 		assertThat(likes).size().isEqualTo(1);
+	}
+	
+	/**
+	 * Test empty pair by user id. If given a nonviable user id, returns empty value.
+	 */
+	@Test
+	public void testEmptyPairByUserId() {
+		List<Like> likes = likeRepo.findByPairUserId(0);
+		assertThat(likes).isEmpty();
 	}
 
 }
