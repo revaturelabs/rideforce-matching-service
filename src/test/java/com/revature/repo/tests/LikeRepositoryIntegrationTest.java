@@ -6,7 +6,6 @@ import static org.junit.Assert.*;
 import java.util.List;
 
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,9 +41,15 @@ public class LikeRepositoryIntegrationTest {
 	private LikeRepository likeRepo;
 	
 	@Before
-	public void validate() {
-		assertNotNull(testEntityManager);	
+	public void setUp() {
+		likeRepo.deleteAll();
 		testEntityManager.persist(new Like(new Pair(1, 2)));
+	}
+	
+	@Test
+	public void validate() {
+		assertNotNull(testEntityManager);
+		assertNotNull(likeRepo);
 	}
 
 	/**

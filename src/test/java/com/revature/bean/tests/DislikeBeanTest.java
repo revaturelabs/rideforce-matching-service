@@ -9,7 +9,6 @@ import java.util.Set;
 import javax.validation.ConstraintViolation;
 
 import org.hibernate.validator.HibernateValidator;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;

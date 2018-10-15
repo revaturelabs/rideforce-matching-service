@@ -45,7 +45,7 @@ public class DislikeIntegrationRepoTest {
 
 	@Before
 	public void setup() {
-
+		dislikeRepo.deleteAll();
 		entityManager.persist(new Dislike(new Pair(1, 2)));
 		entityManager.persist(new Dislike(new Pair(1, 4)));
 		entityManager.persist(new Dislike(new Pair(10, 2)));
