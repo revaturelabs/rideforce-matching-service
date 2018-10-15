@@ -28,7 +28,7 @@
 	</scm>
 	<properties>
 		<!-- temp setting, set to tomcat home path for production -->
-		<release.javadoc.root.path>./webapps/api-documentation/
+		<release.javadoc.root.path>C:/Users/jeremiah/git/api-documentation/
 		</release.javadoc.root.path>
 	</properties>
 
