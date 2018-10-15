@@ -11,6 +11,28 @@
 		<version>2.0.4.RELEASE</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
+	<!-- javadoc stuff -->
+	<distributionManagement>
+		<repository>
+			<uniqueVersion>false</uniqueVersion>
+			<id>home1</id>
+			<name>Home Repository</name>
+			<url>file:./rideshare-matching-service/</url>
+			<layout>default</layout>
+		</repository>
+	</distributionManagement>
+	<scm>
+       <connection>scm:git:file:https://github.com/revaturelabs/rideshare-matching-service.git</connection>
+       <developerConnection>scm:git:file://https://github.com/revaturelabs/rideshare-matching-service.git</developerConnection>
+       <tag>HEAD</tag>
+    </scm>
+	<properties>
+<!-- 	temp setting, set to tomcat home path for production -->
+	<release.javadoc.root.path>./webapps/api-documentation/
+	</release.javadoc.root.path>
+	</properties>
+
+	<!-- end Javadoc stuff -->
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
@@ -131,6 +153,82 @@
 		<finalName>rideshare-matching-service</finalName>
 		<pluginManagement>
 			<plugins>
+				<!-- Javadocs auto creation stuff -->
+
+
+
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>build-helper-maven-plugin</artifactId>
+					<version>1.8</version>
+					<executions>
+						<execution>
+							<phase>pre-site</phase>
+							<id>regex-property</id>
+							<goals>
+								<goal>regex-property</goal>
+							</goals>
+							<configuration>
+								<name>release_version</name>
+								<value>2.0</value>
+								<regex>-SNAPSHOT</regex>
+								<replacement />
+								<failIfNoMatch>false</failIfNoMatch>
+							</configuration>
+						</execution>
+					</executions>
+				</plugin>
+				<!-- JavaDoc generation. JavaDoc is generated during pre-site phase. -->
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-javadoc-plugin</artifactId>
+					<version>2.9.1</version>
+					<executions>
+						<execution>
+							<phase>pre-site</phase>
+							<goals>
+								<goal>javadoc</goal>
+							</goals>
+						</execution>
+					</executions>
+					<configuration>
+						<show>private</show>
+					</configuration>
+				</plugin>
+				<!-- Copy JavaDoc to publish directory. Performed during the site phase. 
+					If changing the phase, make sure that copying the documentation is performed 
+					after having generated the JavaDoc. -->
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-resources-plugin</artifactId>
+					<version>2.6</version>
+					<executions>
+						<execution>
+							<id>copy-resources</id>
+							<phase>site</phase>
+							<goals>
+								<goal>copy-resources</goal>
+							</goals>
+							<configuration>
+								<generateProjectInfo>false</generateProjectInfo>
+								<generateReports>false</generateReports>
+								<outputDirectory>${release.javadoc.root.path}${project.artifactId}-${release_version}/</outputDirectory>
+								<resources>
+									<resource>
+										<directory>${project.build.directory}/site/</directory>
+										<filtering>true</filtering>
+									</resource>
+								</resources>
+							</configuration>
+						</execution>
+					</executions>
+				</plugin>
+
+
+
+
+
+				<!-- end javadocs stuff -->
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-compiler-plugin</artifactId>
