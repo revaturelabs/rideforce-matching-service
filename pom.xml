@@ -20,8 +20,8 @@
 		</repository>
 	</distributionManagement>
 	<scm>
-		<connection>scm:git:file://localhost/C:/Users/jeremiah/git/Project3/rideshare-matching-service</connection>
-		<developerConnection>scm:git:file://localhost/C:/Users/jeremiah/git/Project3/rideshare-matching-service</developerConnection>
+		<connection>scm:git:https://github.com/revaturelabs/rideshare-matching-service.git</connection>
+		<developerConnection>scm:git:[fetch=]https://github.com/revaturelabs/rideshare-matching-service.git[push=]https://github.com/revaturelabs/rideshare-matching-service.git</developerConnection>
 		<tag>rideshare</tag>
 	</scm>
 	<properties>
