@@ -90,8 +90,8 @@ public class MatchService {
 	}
 
 	/**
-	 * Finds matched drivers for given rider by office location only, explicitly
-	 * excluding liked and disliked drivers (affected drivers).
+	 * Finds matched drivers for given rider by office location only, based on if
+	 * they are liked or disliked drivers (affected drivers).
 	 * 
 	 * @param rider the user looking for a ride
 	 * @return unranked list of matched drivers, minus affected (up to
@@ -128,8 +128,8 @@ public class MatchService {
 	}
 
 	/**
-	 * Finds matched drivers for rider based on a weighted rank from both distance
-	 * and batch end, filtering out liked and disliked drivers (affected drivers).
+	 * Finds matched drivers for rider based on a weighted rank from distance
+	 * batch end, and whether they are liked or disliked drivers (affected drivers).
 	 * 
 	 * @param rider the user for whom to find a driver
 	 * @return list of matched drivers, sorted by nearest distance and closest batch
@@ -187,7 +187,7 @@ public class MatchService {
 		// This is a patch job as even though a Route is sent from the Map Service, it is received as a LinkedHashMap. 
 		// TODO: Proper handling of error conditions can be done Monday
 		LinkedHashMap routeMap = (LinkedHashMap) mapsClient.getRoute(rider.getAddress(), driver.getAddress()).getBody();
-		Route riderToDriver = new Route((Long)routeMap.get("distance"), (Long)routeMap.get("duration"));
+		Route riderToDriver = new Route((long)(int)routeMap.get("distance"), (long)(int)routeMap.get("duration"));
 		return 1 / ((double) riderToDriver.getDistance() + 1);
 	}
 	
