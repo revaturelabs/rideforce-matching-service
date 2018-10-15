@@ -15,13 +15,13 @@
 			<uniqueVersion>false</uniqueVersion>
 			<id>home1</id>
 			<name>Home Repository</name>
-			<url>file:./rideshare-matching-service/</url>
+			<url>file:C:/Users/jeremiah/git/api-documentation/</url>
 			<layout>default</layout>
 		</repository>
 	</distributionManagement>
 	<scm>
-		<connection>scm:git:https://github.com/revaturelabs/rideshare-matching-service.git</connection>
-		<developerConnection>scm:git:[fetch=]https://github.com/revaturelabs/rideshare-matching-service.git[push=]https://github.com/revaturelabs/rideshare-matching-service.git</developerConnection>
+		<connection>scm:git:https://github.com/revaturelabs/rideshare-matching-service-documentation.git</connection>
+		<developerConnection>scm:git:[fetch=]https://github.com/revaturelabs/rideshare-matching-service-documentation.git[push=]https://github.com/revaturelabs/rideshare-matching-service-documentation.git</developerConnection>
 		<tag>rideshare</tag>
 	</scm>
 	<properties>
@@ -157,9 +157,6 @@
 		<pluginManagement>
 			<plugins>
 				<!-- Javadocs auto creation stuff -->
-
-
-
 				<plugin>
 					<groupId>org.codehaus.mojo</groupId>
 					<artifactId>build-helper-maven-plugin</artifactId>
