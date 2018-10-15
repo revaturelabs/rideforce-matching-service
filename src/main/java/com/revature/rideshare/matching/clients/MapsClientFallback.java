@@ -1,7 +1,8 @@
 package com.revature.rideshare.matching.clients;
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+
+import com.revature.rideshare.matching.beans.Route;
 
 /** This class is the fallback implementation for when a service cannot 
  * make a successful connection with a MapClient. The general behavior
@@ -11,7 +12,7 @@ import org.springframework.stereotype.Component;
 public class MapsClientFallback implements MapsClient {
 
 	@Override
-	public ResponseEntity<?> getRoute(String start, String end) {
+	public Route getRoute(String start, String end) {
 		return null;
 	}
 
