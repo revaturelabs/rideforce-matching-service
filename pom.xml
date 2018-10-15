@@ -20,9 +20,9 @@
 		</repository>
 	</distributionManagement>
 	<scm>
-       <connection>scm:git:file:https://github.com/revaturelabs/rideshare-matching-service.git</connection>
-       <developerConnection>scm:git:file://https://github.com/revaturelabs/rideshare-matching-service.git</developerConnection>
-       <tag>testingjavadocs</tag>
+       <connection>scm:git:file://localhost/C:/Users/jeremiah/git/Project3/rideshare-matching-service</connection>
+       <developerConnection>scm:git:file://localhost/C:/Users/jeremiah/git/Project3/rideshare-matching-service</developerConnection>
+       <tag>HEAD</tag>
     </scm>
 	<properties>
 <!-- 	temp setting, set to tomcat home path for production -->
