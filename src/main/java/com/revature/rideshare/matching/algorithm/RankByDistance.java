@@ -17,8 +17,16 @@ public class RankByDistance extends RankingCriterion {
 	/**
 	 * The feign client used to connect to our maps service
 	 */
-	@Autowired
 	MapsClient mapsClient;
+
+	/**
+	 * A constructor that allows the MapsClient to be passed in explicitly. May be
+	 * helpful for testing
+	 */
+	@Autowired
+	public RankByDistance(MapsClient client) {
+		mapsClient = client;
+	}
 
 	/**
 	 * Ranks how well the given driver matches the given rider.
@@ -29,7 +37,7 @@ public class RankByDistance extends RankingCriterion {
 	 */
 	@Override
 	protected double rank(User rider, User driver) {
-		Route riderToDriver = (Route) mapsClient.getRoute(rider.getAddress(), driver.getAddress()).getBody();
+		Route riderToDriver = mapsClient.getRoute(rider.getAddress(), driver.getAddress());
 		return 1 / ((double) riderToDriver.getDistance() + 1);
 	}
 

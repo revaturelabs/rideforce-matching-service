@@ -21,6 +21,9 @@ public class RankByBatchEnd extends RankingCriterion {
 	 */
 	@Override
 	protected double rank(User rider, User driver) {
+		if(rider == null || driver == null) {
+			throw new IllegalArgumentException("Rider and driver should not be null");
+		}
         long diffInMilli;
         long diff;
 
