@@ -20,7 +20,7 @@
 		</repository>
 	</distributionManagement>
 	<scm>
-		<connection>scm:git:file://C:/Users/jeremiah/git/Project3/rideshare_matching/api-documentation/</connection>
+		<connection>scm:git:file://C:/Users/jeremiah/git/Project3/rideshare_matching/apidocumentation/rideshare-matching-service-documentation</connection>
 <!-- 		<developerConnection>scm:git:https://github.com/revaturelabs/rideshare-matching-service-documentation.git</developerConnection> -->
 		<tag>rideshare</tag>
 	</scm>
