@@ -1,7 +1,7 @@
 package com.revature.repo.tests;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertNotNull;
+import static org.assertj.core.api.Assertions.*;
+import static org.junit.Assert.*;
 
 import java.util.List;
 
@@ -47,6 +47,7 @@ public class LikeRepositoryIntegrationTest {
 		likeRepo.deleteAll();
 		testEntityManager.persist(new Like(new Pair(1, 2)));
 	}
+	
 	@Test
 	public void validate() {
 		assertNotNull(testEntityManager);
@@ -69,6 +70,15 @@ public class LikeRepositoryIntegrationTest {
 	public void testFindPairByUserId() {
 		List<Like> likes = likeRepo.findByPairUserId(1);
 		assertThat(likes).size().isEqualTo(1);
+	}
+	
+	/**
+	 * Test empty pair by user id. If given an invalid user id, returns empty value.
+	 */
+	@Test
+	public void testEmptyPairWithInvalidUserId() {
+		List<Like> likes = likeRepo.findByPairUserId(0);
+		assertThat(likes).isEmpty();
 	}
 
 }

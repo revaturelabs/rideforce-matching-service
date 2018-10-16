@@ -42,7 +42,7 @@ public class UserBeanTest {
 	@Test
 	public void testUserValid() {
 		user = new User(100, "firstName", "lastName", "email@email.com", "password", "pic-url.com", true, "role",
-				"office", "home", new Date(2018), new HashSet<String>(), "venmo", new HashSet<String>());
+				"office", "home", new Date(2018), new HashSet<String>(), "venmo", new HashSet<String>(), 8.5f);
 
 		Set<ConstraintViolation<User>> violations = localValidatorFactory.validate(user);
 		int counter = 0;
@@ -61,7 +61,7 @@ public class UserBeanTest {
 	@Test
 	public void testUserFirstNameEmpty() {
 		user = new User(100, "", "lastName", "email@email.com", "password", "pic-url.com", true, "role", "office",
-				"home", new Date(2018), new HashSet<String>(), "venmo", new HashSet<String>());
+				"home", new Date(2018), new HashSet<String>(), "venmo", new HashSet<String>(), 8.5f);
 
 		Set<ConstraintViolation<User>> violations = localValidatorFactory.validate(user);
 		int counter = 0;
@@ -80,7 +80,7 @@ public class UserBeanTest {
 	@Test
 	public void testUserFirstNameNull() {
 		user = new User(100, null, "lastName", "email@email.com", "password", "pic-url.com", true, "role", "office",
-				"home", new Date(2018), new HashSet<String>(), "venmo", new HashSet<String>());
+				"home", new Date(2018), new HashSet<String>(), "venmo", new HashSet<String>(), 8.5f);
 
 		Set<ConstraintViolation<User>> violations = localValidatorFactory.validate(user);
 		int counter = 0;
@@ -100,7 +100,7 @@ public class UserBeanTest {
 	@Test
 	public void testUserLastNameEmpty() {
 		user = new User(100, "firstName", "", "email@email.com", "password", "pic-url.com", true, "role", "office",
-				"home", new Date(2018), new HashSet<String>(), "venmo", new HashSet<String>());
+				"home", new Date(2018), new HashSet<String>(), "venmo", new HashSet<String>(), 8.5f);
 
 		Set<ConstraintViolation<User>> violations = localValidatorFactory.validate(user);
 		int counter = 0;
@@ -119,7 +119,7 @@ public class UserBeanTest {
 	@Test
 	public void testUserLastNameNull() {
 		user = new User(100, "firstName", null, "email@email.com", "password", "pic-url.com", true, "role", "office",
-				"home", new Date(2018), new HashSet<String>(), "venmo", new HashSet<String>());
+				"home", new Date(2018), new HashSet<String>(), "venmo", new HashSet<String>(), 8.5f);
 
 		Set<ConstraintViolation<User>> violations = localValidatorFactory.validate(user);
 		int counter = 0;
@@ -138,7 +138,7 @@ public class UserBeanTest {
 	@Test
 	public void testUserEmailEmpty() {
 		user = new User(100, "firstName", "lastName", "", "password", "pic-url.com", true, "role", "office", "home",
-				new Date(2018), new HashSet<String>(), "venmo", new HashSet<String>());
+				new Date(2018), new HashSet<String>(), "venmo", new HashSet<String>(), 8.5f);
 
 		Set<ConstraintViolation<User>> violations = localValidatorFactory.validate(user);
 		int counter = 0;
@@ -157,7 +157,7 @@ public class UserBeanTest {
 	@Test
 	public void testUserEmailNull() {
 		user = new User(100, "firstName", "lastName", null, "password", "pic-url.com", true, "role", "office", "home",
-				new Date(2018), new HashSet<String>(), "venmo", new HashSet<String>());
+				new Date(2018), new HashSet<String>(), "venmo", new HashSet<String>(), 8.5f);
 
 		Set<ConstraintViolation<User>> violations = localValidatorFactory.validate(user);
 		int counter = 0;
@@ -177,7 +177,7 @@ public class UserBeanTest {
 	@Test
 	public void testUserRoleEmpty() {
 		user = new User(100, "firstName", "lastName", "email@email.com", "password", "pic-url.com", true, "", "office",
-				"home", new Date(2018), new HashSet<String>(), "venmo", new HashSet<String>());
+				"home", new Date(2018), new HashSet<String>(), "venmo", new HashSet<String>(), 8.5f);
 
 		Set<ConstraintViolation<User>> violations = localValidatorFactory.validate(user);
 		int counter = 0;
@@ -196,7 +196,7 @@ public class UserBeanTest {
 	@Test
 	public void testUserRoleNull() {
 		user = new User(100, "firstName", "lastName", "email@email.com", "password", "pic-url.com", true, null, "office",
-				"home", new Date(2018), new HashSet<String>(), "venmo", new HashSet<String>());
+				"home", new Date(2018), new HashSet<String>(), "venmo", new HashSet<String>(), 8.5f);
 
 		Set<ConstraintViolation<User>> violations = localValidatorFactory.validate(user);
 		int counter = 0;
@@ -215,7 +215,7 @@ public class UserBeanTest {
 	@Test
 	public void testUserOfficeEmpty() {
 		user = new User(100, "firstName", "lastName", "email@email.com", "password", "pic-url.com", true, "role", "",
-				"home", new Date(2018), new HashSet<String>(), "venmo", new HashSet<String>());
+				"home", new Date(2018), new HashSet<String>(), "venmo", new HashSet<String>(), 8.5f);
 
 		Set<ConstraintViolation<User>> violations = localValidatorFactory.validate(user);
 		int counter = 0;
@@ -234,7 +234,7 @@ public class UserBeanTest {
 	@Test
 	public void testUserOfficeNull() {
 		user = new User(100, "firstName", "lastName", "email@email.com", "password", "pic-url.com", true, "role", null,
-				"home", new Date(2018), new HashSet<String>(), "venmo", new HashSet<String>());
+				"home", new Date(2018), new HashSet<String>(), "venmo", new HashSet<String>(), 8.5f);
 
 		Set<ConstraintViolation<User>> violations = localValidatorFactory.validate(user);
 		int counter = 0;
@@ -254,7 +254,7 @@ public class UserBeanTest {
 	@Test
 	public void testUserAddressEmpty() {
 		user = new User(100, "firstName", "lastName", "email@email.com", "password", "pic-url.com", true, "role",
-				"office", "", new Date(2018), new HashSet<String>(), "venmo", new HashSet<String>());
+				"office", "", new Date(2018), new HashSet<String>(), "venmo", new HashSet<String>(), 8.5f);
 
 		Set<ConstraintViolation<User>> violations = localValidatorFactory.validate(user);
 		int counter = 0;
@@ -273,7 +273,7 @@ public class UserBeanTest {
 	@Test
 	public void testUserAddressNull() {
 		user = new User(100, "firstName", "lastName", "email@email.com", "password", "pic-url.com", true, "role",
-				"office", null, new Date(2018), new HashSet<String>(), "venmo", new HashSet<String>());
+				"office", null, new Date(2018), new HashSet<String>(), "venmo", new HashSet<String>(), 8.5f);
 
 		Set<ConstraintViolation<User>> violations = localValidatorFactory.validate(user);
 		int counter = 0;
@@ -293,7 +293,7 @@ public class UserBeanTest {
 	@Test
 	public void testUserDateNull() {
 		user = new User(100, "firstName", "lastName", "email@email.com", "password", "pic-url.com", true, "role",
-				"office", "home", null, new HashSet<String>(), "venmo", new HashSet<String>());
+				"office", "home", null, new HashSet<String>(), "venmo", new HashSet<String>(), 8.5f);
 
 		Set<ConstraintViolation<User>> violations = localValidatorFactory.validate(user);
 		int counter = 0;
@@ -312,7 +312,7 @@ public class UserBeanTest {
 	@Test
 	public void testUserCarsSetNull() {
 		user = new User(100, "firstName", "lastName", "email@email.com", "password", "pic-url.com", true, "role",
-				"office", "home", new Date(2018), null, "venmo", new HashSet<String>());
+				"office", "home", new Date(2018), null, "venmo", new HashSet<String>(), 8.5f);
 
 		Set<ConstraintViolation<User>> violations = localValidatorFactory.validate(user);
 		int counter = 0;
@@ -331,7 +331,7 @@ public class UserBeanTest {
 	@Test
 	public void testUserContactInfoSetNull() {
 		user = new User(100, "firstName", "lastName", "email@email.com", "password", "pic-url.com", true, "role",
-				"office", "home", new Date(2018), new HashSet<String>(), "venmo", null);
+				"office", "home", new Date(2018), new HashSet<String>(), "venmo", null, 8.5f);
 
 		Set<ConstraintViolation<User>> violations = localValidatorFactory.validate(user);
 		int counter = 0;
@@ -343,5 +343,4 @@ public class UserBeanTest {
 		}
 		Assertions.assertThat(counter).isEqualTo(1);		
 	}
-
 }

@@ -16,64 +16,71 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class User {
 
-	/** The id. */
+	/** User's id. */
 	private int id;
 
-	/** The first name. */
+	/** User's first name. */
 	@NotEmpty
 	private String firstName;
 
-	/** The last name. */
+	/** User's last name. */
 	@NotEmpty
 	private String lastName;
 
-	/** The email. */
+	/** User's email. */
 	@NotEmpty
 	private String email;
 
-	/** The password. */
+	/** User's password. */
 	@JsonIgnore
 	private String password;
 
-	/** The photo url. */
+	/** User's photo url. */
 	private String photoUrl;
 
-	/** The active. */
+	/**
+	 * User's active status. Indicates whether rider is searching for ride or driver
+	 * is available to give ride
+	 */
 	private boolean active;
 
-	/** The role. Indicates whether associate, trainer, or admin */
+	/** User's role. Indicates whether associate, trainer, admin, driver, or rider */
 	@NotEmpty
 	private String role;
 
-	/** The office. Indicates user's Revature training site */
+	/** User's office. Indicates user's work site */
 	@NotEmpty
 	private String office;
 
-	/** The address. Indicates user's address */
+	/** User's address. Indicates user's home address */
 	@NotEmpty
 	private String address;
 
 	/**
-	 * The batch end. Indicates when user will complete Revature training and no
+	 * User's batch end. Indicates when user will complete Revature training and no
 	 * longer need Rideshare services
 	 */
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "UTC")
 	@NotNull
 	private Date batchEnd;
 
-	/** The cars. */
+	/** User's cars. */
 	@NotNull
 	private Set<String> cars;
 
-	/** The venmo. */
+	/** User's venmo. */
 	private String venmo;
 
 	/**
-	 * The contact info. Indicates user's preferred means and methods of being
+	 * User's contact info. Indicates user's preferred means and methods of being
 	 * contacted
 	 */
 	@NotNull
 	private Set<String> contactInfo;
+
+	/** User's start time. */
+	@NotEmpty
+	private float startTime;
 
 	/**
 	 * Instantiates a new user.
@@ -92,17 +99,19 @@ public class User {
 	 * @param password    user's password
 	 * @param photoUrl    user's photo url
 	 * @param active      active status
-	 * @param role        user, trainer, admin
+	 * @param role        user, trainer, admin, rider, driver
 	 * @param office      user's Revature worksite
 	 * @param address     user's home address
 	 * @param batchEnd    predicted end of service for user
 	 * @param cars        user's cars
 	 * @param venmo       user's venmo
 	 * @param contactInfo user's contact info
+	 * @param startTime   user's daily start time for training
 	 */
 	public User(int id, @NotEmpty String firstName, @NotEmpty String lastName, @NotEmpty String email, String password,
 			String photoUrl, boolean active, @NotEmpty String role, @NotEmpty String office, @NotEmpty String address,
-			@NotNull Date batchEnd, @NotNull Set<String> cars, String venmo, @NotNull Set<String> contactInfo) {
+			@NotNull Date batchEnd, @NotNull Set<String> cars, String venmo, @NotNull Set<String> contactInfo,
+			@NotEmpty float startTime) {
 		super();
 		this.id = id;
 		this.firstName = firstName;
@@ -118,25 +127,27 @@ public class User {
 		this.cars = cars;
 		this.venmo = venmo;
 		this.contactInfo = contactInfo;
+		this.startTime = startTime;
 	}
 
 	/**
-	 * Instantiates a new user.
+	 * Instantiates a new user using only required data.
 	 *
 	 * @param id          user's id
 	 * @param firstName   user's first name
 	 * @param lastName    user's last name
 	 * @param email       user's email
-	 * @param role        user, trainer, admin
+	 * @param role        user, trainer, admin, rider, driver
 	 * @param office      user's Revature worksite
 	 * @param address     user's address
 	 * @param batchEnd    predicted end of service for user
 	 * @param cars        user's cars
 	 * @param contactInfo user's contact info
+	 * @param startTime   user's start time
 	 */
 	public User(int id, @NotEmpty String firstName, @NotEmpty String lastName, @NotEmpty String email,
 			@NotEmpty String role, @NotEmpty String office, @NotEmpty String address, @NotNull Date batchEnd,
-			@NotNull Set<String> cars, @NotNull Set<String> contactInfo) {
+			@NotNull Set<String> cars, @NotNull Set<String> contactInfo, @NotEmpty float startTime) {
 		super();
 		this.id = id;
 		this.firstName = firstName;
@@ -148,19 +159,20 @@ public class User {
 		this.batchEnd = batchEnd;
 		this.cars = cars;
 		this.contactInfo = contactInfo;
+		this.startTime = startTime;
 	}
 
 	/**
-	 * Gets the id.
+	 * Gets user id.
 	 *
-	 * @return the id
+	 * @return user id
 	 */
 	public int getId() {
 		return id;
 	}
 
 	/**
-	 * Sets the id.
+	 * Sets user id.
 	 *
 	 * @param id the new id
 	 */
@@ -169,7 +181,7 @@ public class User {
 	}
 
 	/**
-	 * Gets the first name.
+	 * Gets user first name.
 	 *
 	 * @return the first name
 	 */
@@ -178,7 +190,7 @@ public class User {
 	}
 
 	/**
-	 * Sets the first name.
+	 * Sets user first name.
 	 *
 	 * @param firstName the new first name
 	 */
@@ -187,7 +199,7 @@ public class User {
 	}
 
 	/**
-	 * Gets the last name.
+	 * Gets user last name.
 	 *
 	 * @return the last name
 	 */
@@ -196,7 +208,7 @@ public class User {
 	}
 
 	/**
-	 * Sets the last name.
+	 * Sets user last name.
 	 *
 	 * @param lastName the new last name
 	 */
@@ -205,16 +217,16 @@ public class User {
 	}
 
 	/**
-	 * Gets the email.
+	 * Gets user email.
 	 *
-	 * @return the email
+	 * @return user email
 	 */
 	public String getEmail() {
 		return email;
 	}
 
 	/**
-	 * Sets the email.
+	 * Sets user email.
 	 *
 	 * @param email the new email
 	 */
@@ -223,16 +235,16 @@ public class User {
 	}
 
 	/**
-	 * Gets the password.
+	 * Gets user password.
 	 *
-	 * @return the password
+	 * @return user password
 	 */
 	public String getPassword() {
 		return password;
 	}
 
 	/**
-	 * Sets the password.
+	 * Sets user password.
 	 *
 	 * @param password the new password
 	 */
@@ -241,16 +253,16 @@ public class User {
 	}
 
 	/**
-	 * Gets the photo url.
+	 * Gets user photo url.
 	 *
-	 * @return the photo url
+	 * @return user photo url
 	 */
 	public String getPhotoUrl() {
 		return photoUrl;
 	}
 
 	/**
-	 * Sets the photo url.
+	 * Sets user photo url.
 	 *
 	 * @param photoUrl the new photo url
 	 */
@@ -259,25 +271,25 @@ public class User {
 	}
 
 	/**
-	 * Checks if is active.
+	 * Checks if user is active.
 	 *
-	 * @return true, if is active
+	 * @return true, if user is active
 	 */
 	public boolean isActive() {
 		return active;
 	}
 
 	/**
-	 * Sets the active.
+	 * Sets user status as active or inactive.
 	 *
-	 * @param active the new active
+	 * @param active the new status
 	 */
 	public void setActive(boolean active) {
 		this.active = active;
 	}
 
 	/**
-	 * Gets the role.
+	 * Gets user role.
 	 *
 	 * @return the role
 	 */
@@ -286,7 +298,7 @@ public class User {
 	}
 
 	/**
-	 * Sets the role.
+	 * Sets user role.
 	 *
 	 * @param role the new role
 	 */
@@ -295,16 +307,16 @@ public class User {
 	}
 
 	/**
-	 * Gets the office.
+	 * Gets user office.
 	 *
-	 * @return the office
+	 * @return user office
 	 */
 	public String getOffice() {
 		return office;
 	}
 
 	/**
-	 * Sets the office.
+	 * Sets user office.
 	 *
 	 * @param office the new office
 	 */
@@ -313,16 +325,16 @@ public class User {
 	}
 
 	/**
-	 * Gets the address.
+	 * Gets user address.
 	 *
-	 * @return the address
+	 * @return user address
 	 */
 	public String getAddress() {
 		return address;
 	}
 
 	/**
-	 * Sets the address.
+	 * Sets user address.
 	 *
 	 * @param address the new address
 	 */
@@ -331,16 +343,16 @@ public class User {
 	}
 
 	/**
-	 * Gets the batch end.
+	 * Gets user batch end.
 	 *
-	 * @return the batch end
+	 * @return user batch end
 	 */
 	public Date getBatchEnd() {
 		return batchEnd;
 	}
 
 	/**
-	 * Sets the batch end.
+	 * Sets user batch end.
 	 *
 	 * @param batchEnd the new batch end
 	 */
@@ -349,16 +361,16 @@ public class User {
 	}
 
 	/**
-	 * Gets the cars.
+	 * Gets user cars.
 	 *
-	 * @return the cars
+	 * @return user cars
 	 */
 	public Set<String> getCars() {
 		return cars;
 	}
 
 	/**
-	 * Sets the cars.
+	 * Sets user cars.
 	 *
 	 * @param cars the new cars
 	 */
@@ -367,16 +379,16 @@ public class User {
 	}
 
 	/**
-	 * Gets the venmo.
+	 * Gets user venmo.
 	 *
-	 * @return the venmo
+	 * @return user venmo
 	 */
 	public String getVenmo() {
 		return venmo;
 	}
 
 	/**
-	 * Sets the venmo.
+	 * Sets user venmo.
 	 *
 	 * @param venmo the new venmo
 	 */
@@ -385,16 +397,16 @@ public class User {
 	}
 
 	/**
-	 * Gets the contact info.
+	 * Gets user contact info.
 	 *
-	 * @return the contact info
+	 * @return user contact info
 	 */
 	public Set<String> getContactInfo() {
 		return contactInfo;
 	}
 
 	/**
-	 * Sets the contact info.
+	 * Sets user contact info.
 	 *
 	 * @param contactInfo the new contact info
 	 */
@@ -402,17 +414,22 @@ public class User {
 		this.contactInfo = contactInfo;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#toString()
+	/**
+	 * Gets user start time.
+	 *
+	 * @return user start time
 	 */
-	@Override
-	public String toString() {
-		return "User [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email
-				+ ", password=" + password + ", photoUrl=" + photoUrl + ", active=" + active + ", role=" + role
-				+ ", office=" + office + ", address=" + address + ", batchEnd=" + batchEnd + ", cars=" + cars
-				+ ", venmo=" + venmo + ", contactInfo=" + contactInfo + "]";
+	public float getStartTime() {
+		return startTime;
+	}
+
+	/**
+	 * Sets user start time.
+	 *
+	 * @param startTime the new start time
+	 */
+	public void setStartTime(float startTime) {
+		this.startTime = startTime;
 	}
 
 	/*
@@ -437,6 +454,7 @@ public class User {
 		result = prime * result + ((password == null) ? 0 : password.hashCode());
 		result = prime * result + ((photoUrl == null) ? 0 : photoUrl.hashCode());
 		result = prime * result + ((role == null) ? 0 : role.hashCode());
+		result = prime * result + Float.floatToIntBits(startTime);
 		result = prime * result + ((venmo == null) ? 0 : venmo.hashCode());
 		return result;
 	}
@@ -541,6 +559,9 @@ public class User {
 		} else if (!role.equals(other.role)) {
 			return false;
 		}
+		if (Float.floatToIntBits(startTime) != Float.floatToIntBits(other.startTime)) {
+			return false;
+		}
 		if (venmo == null) {
 			if (other.venmo != null) {
 				return false;
@@ -551,4 +572,16 @@ public class User {
 		return true;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "User [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email
+				+ ", password=" + password + ", photoUrl=" + photoUrl + ", active=" + active + ", role=" + role
+				+ ", office=" + office + ", address=" + address + ", batchEnd=" + batchEnd + ", cars=" + cars
+				+ ", venmo=" + venmo + ", contactInfo=" + contactInfo + ", startTime=" + startTime + "]";
+	}
 }

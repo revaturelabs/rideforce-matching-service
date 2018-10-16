@@ -50,6 +50,24 @@ public class AggregateRankingBuilder {
 	}
 
 	/**
+	 * Adds a new ranking criterion to the algorithm with it's associated weight. It
+	 * will accept only unique criterion, repeats will be ignored
+	 * 
+	 * @param criterion criterion to be added into the algorithm
+	 * @param weight the weight to be associated with the criterion
+	 */
+	public void addCriterion(RankingCriterion criterion, double weight) {
+		criterion.setWeight(weight);
+		boolean insertionSuccessful = this.criteria.add(criterion);
+		if (insertionSuccessful) {
+			this.scaleVariable += criterion.getWeight();
+		} else {
+			throw new DuplicateRankingCriteriaException(
+					"An instance of " + criterion.getClass().getName() + " has already been added to the builder");
+		}
+	}
+
+	/**
 	 * Ranks a rider and driver pair using the criteria stored in the class
 	 * 
 	 * @param rider  the rider for whom we are finding a match
