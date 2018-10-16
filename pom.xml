@@ -20,9 +20,10 @@
 		</repository>
 	</distributionManagement>
 	<scm>
-		<connection>scm:git:file://C:/Users/jeremiah/git/Project3/rideshare_matching/apidocumentation/rideshare-matching-service-documentation</connection>
-<!-- 		<developerConnection>scm:git:https://github.com/revaturelabs/rideshare-matching-service-documentation.git</developerConnection> -->
-		<tag>3</tag>
+	<connection>https://github.com/revaturelabs/rideshare-matching-service-documentation.git</connection>
+        <url>https://github.com/revaturelabs/rideshare-matching-service-documentation.git</url>
+        <!-- Do NOT specify developerConnection & tag here, as those are only used
+             by the maven-release-plugin, which we don't use here and in the db-*/pom.xml -->
 	</scm>
 	<properties>
 		<!-- temp setting, set to tomcat home path for production -->
