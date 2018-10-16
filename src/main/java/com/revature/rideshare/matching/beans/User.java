@@ -3,6 +3,7 @@ package com.revature.rideshare.matching.beans;
 import java.util.Date;
 import java.util.Set;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
@@ -17,6 +18,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public class User {
 
 	/** User's id. */
+	@Min(value = 0)
 	private int id;
 
 	/** User's first name. */
@@ -42,9 +44,11 @@ public class User {
 	 * User's active status. Indicates whether rider is searching for ride or driver
 	 * is available to give ride
 	 */
-	private boolean active;
+	private String active;
 
-	/** User's role. Indicates whether associate, trainer, admin, driver, or rider */
+	/**
+	 * User's role. Indicates whether associate, trainer, admin, driver, or rider
+	 */
 	@NotEmpty
 	private String role;
 
@@ -79,7 +83,7 @@ public class User {
 	private Set<String> contactInfo;
 
 	/** User's start time. */
-	@NotEmpty
+	@Min(value = 1)
 	private float startTime;
 
 	/**
@@ -109,9 +113,9 @@ public class User {
 	 * @param startTime   user's daily start time for training
 	 */
 	public User(int id, @NotEmpty String firstName, @NotEmpty String lastName, @NotEmpty String email, String password,
-			String photoUrl, boolean active, @NotEmpty String role, @NotEmpty String office, @NotEmpty String address,
+			String photoUrl, String active, @NotEmpty String role, @NotEmpty String office, @NotEmpty String address,
 			@NotNull Date batchEnd, @NotNull Set<String> cars, String venmo, @NotNull Set<String> contactInfo,
-			@NotEmpty float startTime) {
+			@Min(value = 1) float startTime) {
 		super();
 		this.id = id;
 		this.firstName = firstName;
@@ -147,7 +151,7 @@ public class User {
 	 */
 	public User(int id, @NotEmpty String firstName, @NotEmpty String lastName, @NotEmpty String email,
 			@NotEmpty String role, @NotEmpty String office, @NotEmpty String address, @NotNull Date batchEnd,
-			@NotNull Set<String> cars, @NotNull Set<String> contactInfo, @NotEmpty float startTime) {
+			@NotNull Set<String> cars, @NotNull Set<String> contactInfo, @Min(value = 1) float startTime) {
 		super();
 		this.id = id;
 		this.firstName = firstName;
@@ -275,7 +279,7 @@ public class User {
 	 *
 	 * @return true, if user is active
 	 */
-	public boolean isActive() {
+	public String isActive() {
 		return active;
 	}
 
@@ -284,7 +288,7 @@ public class User {
 	 *
 	 * @param active the new status
 	 */
-	public void setActive(boolean active) {
+	public void setActive(String active) {
 		this.active = active;
 	}
 
@@ -435,13 +439,26 @@ public class User {
 	/*
 	 * (non-Javadoc)
 	 * 
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "User [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email
+				+ ", password=" + password + ", photoUrl=" + photoUrl + ", active=" + active + ", role=" + role
+				+ ", office=" + office + ", address=" + address + ", batchEnd=" + batchEnd + ", cars=" + cars
+				+ ", venmo=" + venmo + ", contactInfo=" + contactInfo + ", startTime=" + startTime + "]";
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + (active ? 1231 : 1237);
+		result = prime * result + ((active == null) ? 0 : active.hashCode());
 		result = prime * result + ((address == null) ? 0 : address.hashCode());
 		result = prime * result + ((batchEnd == null) ? 0 : batchEnd.hashCode());
 		result = prime * result + ((cars == null) ? 0 : cars.hashCode());
@@ -459,11 +476,6 @@ public class User {
 		return result;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) {
@@ -476,7 +488,11 @@ public class User {
 			return false;
 		}
 		User other = (User) obj;
-		if (active != other.active) {
+		if (active == null) {
+			if (other.active != null) {
+				return false;
+			}
+		} else if (!active.equals(other.active)) {
 			return false;
 		}
 		if (address == null) {
@@ -570,18 +586,5 @@ public class User {
 			return false;
 		}
 		return true;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#toString()
-	 */
-	@Override
-	public String toString() {
-		return "User [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email
-				+ ", password=" + password + ", photoUrl=" + photoUrl + ", active=" + active + ", role=" + role
-				+ ", office=" + office + ", address=" + address + ", batchEnd=" + batchEnd + ", cars=" + cars
-				+ ", venmo=" + venmo + ", contactInfo=" + contactInfo + ", startTime=" + startTime + "]";
 	}
 }

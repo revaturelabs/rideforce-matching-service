@@ -1,12 +1,19 @@
 package com.revature.rideshare.matching.controllers;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,7 +37,13 @@ public class MatchingController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(MatchingController.class);
 	private static final String MSG = "Get request to matching controller made with UserId : %d passed. userClient called to find user by that id. userClient returned the user: %d";
 	private static final String NULL = "userClient return a null user object.";
-
+	private static final String USER_ID_URI = "/users/{id}";
+	
+	/** This boolean specifies if detailed debugging output should be sent to 
+	 * the client or not. True means that the debugging info will be sent. 
+	 * DON'T FORGET TO CHANGE TO FALSE BEFORE PUSH TO PRODUCTION! */
+	private static final boolean DEBUG = true;
+	
 	/** The user client. */
 	@Autowired
 	UserClient userClient;
@@ -63,7 +76,7 @@ public class MatchingController {
 			LOGGER.info(MSG, id, rider.getFirstName());
 		}
 		return matchService.findMatches(rider).stream()
-				.map(driver -> UriComponentsBuilder.fromPath("/users/{id}").buildAndExpand(driver.getId()).toString())
+				.map(driver -> UriComponentsBuilder.fromPath(USER_ID_URI).buildAndExpand(driver.getId()).toString())
 				.collect(Collectors.toList());
 	}
 	
@@ -89,7 +102,7 @@ public class MatchingController {
 			LOGGER.info(MSG, id, rider.getFirstName());
 		}
 		return matchService.findMatchesByAffects(rider).stream()
-				.map(driver -> UriComponentsBuilder.fromPath("/users/{id}").buildAndExpand(driver.getId()).toString())
+				.map(driver -> UriComponentsBuilder.fromPath(USER_ID_URI).buildAndExpand(driver.getId()).toString())
 				.collect(Collectors.toList());
 	}
 
@@ -110,7 +123,7 @@ public class MatchingController {
 		}
 
 		return matchService.findMatchesByDistance(rider).stream()
-				.map(driver -> UriComponentsBuilder.fromPath("/users/{id}").buildAndExpand(driver.getId()).toString())
+				.map(driver -> UriComponentsBuilder.fromPath(USER_ID_URI).buildAndExpand(driver.getId()).toString())
 				.collect(Collectors.toList());
 	}
 
@@ -130,9 +143,23 @@ public class MatchingController {
 			LOGGER.info(MSG, id, rider.getFirstName());
 		}
 		return matchService.findMatchesByBatchEnd(rider).stream()
-				.map(driver -> UriComponentsBuilder.fromPath("/users/{id}").buildAndExpand(driver.getId()).toString())
+				.map(driver -> UriComponentsBuilder.fromPath(USER_ID_URI).buildAndExpand(driver.getId()).toString())
 				.collect(Collectors.toList());
 	}
+	
+	@RequestMapping(value = "/start-time/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<String> getByStartTime(@PathVariable int id) {
+		User rider = userClient.findById(id);
+		if (rider == null) {
+			LOGGER.trace(NULL);
+		} else {
+			LOGGER.info(MSG, id, rider.getFirstName());
+		}
+		return matchService.findMatchesByStartTime(rider).stream()
+				.map(driver -> UriComponentsBuilder.fromPath(USER_ID_URI).buildAndExpand(driver.getId()).toString())
+				.collect(Collectors.toList());
+	}
+
 
 	/**
 	 * Gets matched drivers by liked affect, using the rider ID as input and the
@@ -145,7 +172,7 @@ public class MatchingController {
 	public List<String> getLiked(@PathVariable("id") int id) {
 		List<String> likes = null;
 
-		likes = likeService.getLikes(id).stream().map(like -> UriComponentsBuilder.fromPath("/users/{id}")
+		likes = likeService.getLikes(id).stream().map(like -> UriComponentsBuilder.fromPath(USER_ID_URI)
 				.buildAndExpand(like.getPair().getAffectedId()).toString()).collect(Collectors.toList());
 		if (likes.isEmpty()) {
 			LOGGER.trace("Mapping process did not return any URIs associated with this user id: %d", id);
@@ -191,7 +218,7 @@ public class MatchingController {
 	@RequestMapping(value = "dislikes/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<String> getDisliked(@PathVariable("id") int id) {
 		List<String> dislikes = null;
-		dislikes = dislikeService.getDislikes(id).stream().map(dislike -> UriComponentsBuilder.fromPath("/users/{id}")
+		dislikes = dislikeService.getDislikes(id).stream().map(dislike -> UriComponentsBuilder.fromPath(USER_ID_URI)
 				.buildAndExpand(dislike.getPair().getAffectedId()).toString()).collect(Collectors.toList());
 		if (dislikes.isEmpty()) {
 			LOGGER.trace("Mapping process did not return any URIs associated with this user id: %d ", id);
@@ -230,8 +257,62 @@ public class MatchingController {
 	}
 	
 	
-	@RequestMapping(value = "test", method = RequestMethod.GET)
-	public String test() {
-		return "Success";
+	
+	/**
+	 * This is the general exception handler. This handles any exceptions that 
+	 * may occur in this controller. 
+	 * @param request - The request associated with the exception.
+	 * @param ex - The exception that was thrown
+	 * @return - A ResponseEntity that has information about the exception. 
+	 */
+	@ExceptionHandler(Exception.class) 
+	public ResponseEntity<String> handleError(HttpServletRequest request, Exception ex) {
+		// Construct an error message to send back to log. 
+		String message = "Request: \"%s\" With Query Params: \"%s\" threw Exception: %s";
+		
+		// Log the error with the provided information. 
+		LOGGER.error(message, request.getRequestURL(), request.getQueryString(), ex);
+		LOGGER.error("Stack Trace: ", ex);
+		
+		// If debugging is enabled, return a detailed string message.
+		if (DEBUG) {
+			// Specify true for a web friendly stack trace. 
+			return new ResponseEntity<>(generateStackTrace(ex, false), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		// Otherwise, just send the status with no meaningful message. 
+		else {
+			return new ResponseEntity<>("An error occurred processing the request", HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	}
+	
+	/** 
+	 * This is a helper method that generates a stack trace as a string. 
+	 * @param t - the {@code throwable} that to get the trace of. 
+	 * @param webFriendly - Specifies that new line characters should be 
+	 * 						replaced line breaks if true. 
+	 * @return A single string representation of the stack trace. 
+	 */
+	private String generateStackTrace(Throwable t, boolean webFriendly) {
+		// Create writers that the throwable can write to. 
+		StringWriter stringWriter = new StringWriter();
+		PrintWriter printWriter = new PrintWriter(stringWriter);
+		
+		// Print the generated stack trace to a string
+		t.printStackTrace(printWriter);
+		printWriter.flush();
+		String stackTrace = stringWriter.toString();
+		
+		// Closing here is not necessary, but it is done out of good practice 
+		// anyway.
+		printWriter.close();
+		
+		// If we are using the webFriendly version, replace all the line 
+		// breaks with '<br>'. 
+		if (webFriendly) {
+			stackTrace = stackTrace.replaceAll("\n", "<br>");
+		}
+		
+		return stackTrace;
+	}
+	
 }
