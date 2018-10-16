@@ -1,0 +1,14 @@
+com.revature.algorithm.tests
+com.revature.bean.tests
+com.revature.config
+com.revature.controller.tests
+com.revature.repo.tests
+com.revature.rideshare.matching
+com.revature.rideshare.matching.algorithm
+com.revature.rideshare.matching.beans
+com.revature.rideshare.matching.clients
+com.revature.rideshare.matching.controllers
+com.revature.rideshare.matching.exceptions
+com.revature.rideshare.matching.repositories
+com.revature.rideshare.matching.services
+com.revature.service.tests

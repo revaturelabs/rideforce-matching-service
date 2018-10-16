@@ -124,3 +124,4 @@ public class Pair implements Serializable {
 		return "userId=" + userId + ", affectedId=" + affectedId;
 	}
 }
+
