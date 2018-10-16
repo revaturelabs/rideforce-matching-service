@@ -145,6 +145,20 @@ public class MatchingController {
 				.map(driver -> UriComponentsBuilder.fromPath("/users/{id}").buildAndExpand(driver.getId()).toString())
 				.collect(Collectors.toList());
 	}
+	
+	@RequestMapping(value = "/start-time/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<String> getByStartTime(@PathVariable int id) {
+		User rider = userClient.findById(id);
+		if (rider == null) {
+			LOGGER.trace(NULL);
+		} else {
+			LOGGER.info(MSG, id, rider.getFirstName());
+		}
+		return matchService.findMatchesByStartTime(rider).stream()
+				.map(driver -> UriComponentsBuilder.fromPath("/users/{id}").buildAndExpand(driver.getId()).toString())
+				.collect(Collectors.toList());
+	}
+
 
 	/**
 	 * Gets matched drivers by liked affect, using the rider ID as input and the
