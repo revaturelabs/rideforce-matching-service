@@ -190,14 +190,6 @@ public class MatchService {
 		return 1 / ((double) riderToDriver.getDistance() + 1);
 	}
 	
-	
-//	public void testRoute() {
-//		LinkedHashMap routeMap = (LinkedHashMap) mapsClient.getRoute("1234 asdf", " 1234 qwer").getBody();
-//		Route riderToDriver = new Route((long)(int)routeMap.get("distance"), (long)(int)routeMap.get("duration"));
-////		Route riderToDriver = new Route((Long)((LinkedHashMap) o).get("distance"), (Long)((LinkedHashMap) o).get("duration"));
-//		System.out.println(riderToDriver);
-//	}
-	
 
 	/**
 	 * Ranks a driver by whether they have been liked or disliked by a particular rider.
