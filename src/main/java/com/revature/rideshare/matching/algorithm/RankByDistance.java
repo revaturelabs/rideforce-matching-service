@@ -1,7 +1,5 @@
 package com.revature.rideshare.matching.algorithm;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.revature.rideshare.matching.beans.Route;
 import com.revature.rideshare.matching.beans.User;
 import com.revature.rideshare.matching.clients.MapsClient;
@@ -17,16 +15,7 @@ public class RankByDistance extends RankingCriterion {
 	/**
 	 * The feign client used to connect to our maps service
 	 */
-	MapsClient mapsClient;
-
-	/**
-	 * A constructor that allows the MapsClient to be passed in explicitly. May be
-	 * helpful for testing
-	 */
-	@Autowired
-	public RankByDistance(MapsClient client) {
-		mapsClient = client;
-	}
+	private MapsClient mapsClient;
 
 	/**
 	 * Ranks how well the given driver matches the given rider.

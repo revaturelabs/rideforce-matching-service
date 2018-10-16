@@ -1,5 +1,6 @@
 package com.revature.algorithm.tests;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
@@ -23,7 +24,7 @@ public class RankByDistanceTest {
 	private static Route route2 = new Route();
 	
 	@BeforeClass
-	public static void setup()	{
+	public static void setup() throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException	{
 		rider.setId(1);
 		driver.setId(2);
 		
@@ -31,7 +32,10 @@ public class RankByDistanceTest {
 		route2.setDistance(200);
 		
 		testMapsClient = new TestMapsClient();
-		rankByDistance = new RankByDistance(testMapsClient);
+		rankByDistance = new RankByDistance();
+		Field mapsClient = RankByDistance.class.getDeclaredField("mapsClient");
+		mapsClient.setAccessible(true);
+		mapsClient.set(rankByDistance, testMapsClient);
 	}
 	
 	@Test

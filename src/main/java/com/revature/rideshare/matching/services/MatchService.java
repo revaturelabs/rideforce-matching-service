@@ -41,6 +41,21 @@ public class MatchService {
 
 	@Autowired
 	private UserClient userClient;
+	
+	private static RankByAffect rankByAffect;
+	private static RankByBatchEnd rankByBatchEnd;
+	private static RankByDistance rankByDistance;
+	
+	{
+		rankByAffect = new RankByAffect();
+		rankByBatchEnd = new RankByBatchEnd();
+		rankByDistance = new RankByDistance();
+		
+		rankByAffect.setWeight(AFFECT_COEFFICENT);
+		rankByBatchEnd.setWeight(BATCH_END_COEFFICIENT);
+		rankByDistance.setWeight(DISTANCE_COEFFICIENT);
+		
+	}
 
 	/**
 	 * An association of a user with a rank.
@@ -67,7 +82,7 @@ public class MatchService {
 			return Double.compare(rank, o.rank);
 		}
 	}
-
+	
 	/**
 	 * Finds matched drivers for given riders by distance. Association formed
 	 * between driver and a ranking, with ranking discarded after sorting.
@@ -79,7 +94,7 @@ public class MatchService {
 	public List<User> findMatchesByDistance(User rider) {
 		int officeId = officeLinkToId(rider.getOffice());
 		AggregateRankingBuilder arb = new AggregateRankingBuilder();
-		arb.addCriterion(new RankByDistance(), DISTANCE_COEFFICIENT);
+		arb.addCriterion(rankByDistance);
 
 		return userClient.findByOfficeAndRole(officeId, DRIVER_ROLE).stream()
 				.map(driver -> new RankedUser(driver, arb.rankMatch(rider, driver)))
@@ -100,7 +115,7 @@ public class MatchService {
 	public List<User> findMatchesByAffects(User rider) {
 		int officeId = officeLinkToId(rider.getOffice());
 		AggregateRankingBuilder arb = new AggregateRankingBuilder();
-		arb.addCriterion(new RankByAffect(), AFFECT_COEFFICENT);
+		arb.addCriterion(rankByAffect);
 
 		return userClient.findByOfficeAndRole(officeId, DRIVER_ROLE).stream()
 				.map(driver -> new RankedUser(driver, arb.rankMatch(rider, driver)))
@@ -121,7 +136,7 @@ public class MatchService {
 	public List<User> findMatchesByBatchEnd(User rider) {
 		int officeId = officeLinkToId(rider.getOffice());
 		AggregateRankingBuilder arb = new AggregateRankingBuilder();
-		arb.addCriterion(new RankByBatchEnd(), BATCH_END_COEFFICIENT);
+		arb.addCriterion(rankByBatchEnd);
 
 		return userClient.findByOfficeAndRole(officeId, DRIVER_ROLE).stream()
 				.map(driver -> new RankedUser(driver, arb.rankMatch(rider, driver)))
@@ -142,9 +157,9 @@ public class MatchService {
 	public List<User> findMatches(User rider) {
 		int officeId = officeLinkToId(rider.getOffice());
 		AggregateRankingBuilder arb = new AggregateRankingBuilder();
-		arb.addCriterion(new RankByBatchEnd(), BATCH_END_COEFFICIENT);
-		arb.addCriterion(new RankByDistance(), DISTANCE_COEFFICIENT);
-		arb.addCriterion(new RankByAffect(), AFFECT_COEFFICENT);
+		arb.addCriterion(rankByAffect);
+		arb.addCriterion(rankByBatchEnd);
+		arb.addCriterion(rankByDistance);
 
 		return userClient.findByOfficeAndRole(officeId, DRIVER_ROLE).stream()
 				.map(driver -> new RankedUser(driver, arb.rankMatch(rider, driver)))
