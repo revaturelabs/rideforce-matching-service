@@ -22,8 +22,8 @@
 	<scm>
 	<connection>https://github.com/revaturelabs/rideshare-matching-service-documentation.git</connection>
         <url>https://github.com/revaturelabs/rideshare-matching-service-documentation.git</url>
-        <!-- Do NOT specify developerConnection & tag here, as those are only used
-             by the maven-release-plugin, which we don't use here and in the db-*/pom.xml -->
+        <developerConnection>scm:git:https://github.com/revaturelabs/rideshare-matching-service-documentation.git</developerConnection>
+        <tag>HEAD</tag>
 	</scm>
 	<properties>
 		<!-- temp setting, set to tomcat home path for production -->
