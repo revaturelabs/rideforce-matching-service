@@ -71,10 +71,10 @@ public class LikeRepositoryIntegrationTest {
 	}
 	
 	/**
-	 * Test empty pair by user id. If given a nonviable user id, returns empty value.
+	 * Test empty pair by user id. If given an invalid user id, returns empty value.
 	 */
 	@Test
-	public void testEmptyPairByUserId() {
+	public void testEmptyPairWithInvalidUserId() {
 		List<Like> likes = likeRepo.findByPairUserId(0);
 		assertThat(likes).isEmpty();
 	}
