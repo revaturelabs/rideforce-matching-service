@@ -216,7 +216,6 @@ public class MatchService {
 	 * @return a double as a rank
 	 */
 	private double rankByAffect(User driver, List<Integer> likes, List<Integer> dislikes) {
-		// Determines whether the user has a good affect, and ranks them accordingly
 		if (dislikes.stream().anyMatch(id -> id.equals(driver.getId()))) {
 			return 0.0;
 		} else if (likes.stream().anyMatch(id -> id.equals(driver.getId()))) {
