@@ -43,7 +43,7 @@ public class RankByAffect extends RankingCriterion {
 		likedIds = likeService.getLikes(rider.getId()).stream()
 				.map(like -> like.getPair().getAffectedId()).collect(Collectors.toList());
 		dislikedIds = dislikeService.getDislikes(rider.getId()).stream()
-				.map(dislike -> dislike.getPair().getAffectedId()).collect(Collectors.toList());;
+				.map(dislike -> dislike.getPair().getAffectedId()).collect(Collectors.toList());
 	}
 
 	/**

@@ -14,6 +14,7 @@ import com.revature.rideshare.matching.algorithm.AggregateRankingBuilder;
 import com.revature.rideshare.matching.algorithm.RankByAffect;
 import com.revature.rideshare.matching.algorithm.RankByBatchEnd;
 import com.revature.rideshare.matching.algorithm.RankByDistance;
+import com.revature.rideshare.matching.algorithm.RankByStartTime;
 import com.revature.rideshare.matching.beans.User;
 import com.revature.rideshare.matching.clients.UserClient;
 
@@ -39,9 +40,9 @@ public class MatchService {
 
 	/** The Constant AFFECT_COEFFICENT. */
 	private static final double AFFECT_COEFFICENT = 1;
-	/*
-	 * private static final double START_TIME_COEFFICIENT = 0;
-	 */
+	
+	private static final double START_TIME_COEFFICIENT = 0;
+	
 
 	/**
 	 * The role corresponding to a potential driver.
@@ -55,14 +56,19 @@ public class MatchService {
 	private static RankByAffect rankByAffect;
 	private static RankByBatchEnd rankByBatchEnd;
 	private static RankByDistance rankByDistance;
+	private static RankByStartTime rankByStartTime;
+	
 	{
 		rankByAffect = new RankByAffect();
 		rankByBatchEnd = new RankByBatchEnd();
 		rankByDistance = new RankByDistance();
-
+		rankByStartTime = new RankByStartTime();
+		
 		rankByAffect.setWeight(AFFECT_COEFFICENT);
 		rankByBatchEnd.setWeight(BATCH_END_COEFFICIENT);
 		rankByDistance.setWeight(DISTANCE_COEFFICIENT);
+		rankByStartTime.setWeight(START_TIME_COEFFICIENT);
+		
 	}
 
 	/**
@@ -174,29 +180,6 @@ public class MatchService {
 				.limit(MAX_MATCHES).map(rankedUser -> rankedUser.user).collect(Collectors.toList());
 	}
 
-	/**
-	 * Finds matched drivers for rider based on start time. Association formed
-	 * between driver and a ranking, with rank discarded after sorting.
-	 *
-	 * @param rider the user looking for a ride
-	 * @return unranked list of matched drivers, sorted by daily start time in
-	 *         descending order
-	 */
-	public List<User> findMatchesByStartTime(User rider) {
-		if (rider != null) {
-			LOGGER.debug("findMatchesByStartTime recieved user: %s", rider.getFirstName());
-		} else {
-			LOGGER.error("RECIEVED A NULL USER: findMatchesByStartTime in matchService.");
-			throw new NullPointerException();
-		}
-		int officeId = officeLinkToId(rider.getOffice());
-		AggregateRankingBuilder arb = new AggregateRankingBuilder();
-		arb.addCriterion(rankByDistance);
-
-		return userClient.findByOfficeAndRole(officeId, DRIVER_ROLE).stream()
-				.map(driver -> new RankedUser(driver, arb.rankMatch(rider, driver))).sorted(Comparator.reverseOrder())
-				.limit(MAX_MATCHES).map(rankedUser -> rankedUser.user).collect(Collectors.toList());
-	}
 
 	/**
 	 * Finds matched drivers for rider based on start time. Association formed
@@ -209,7 +192,7 @@ public class MatchService {
 	public List<User> findMatchesByStartTime(User rider) {
 		int officeId = officeLinkToId(rider.getOffice());
 		AggregateRankingBuilder arb = new AggregateRankingBuilder();
-		arb.addCriterion(rankByDistance);
+		arb.addCriterion(rankByStartTime);
 
 		return userClient.findByOfficeAndRole(officeId, DRIVER_ROLE).stream()
 				.map(driver -> new RankedUser(driver, arb.rankMatch(rider, driver))).sorted(Comparator.reverseOrder())
@@ -236,6 +219,7 @@ public class MatchService {
 		arb.addCriterion(rankByAffect);
 		arb.addCriterion(rankByBatchEnd);
 		arb.addCriterion(rankByDistance);
+		arb.addCriterion(rankByStartTime);
 
 		return userClient.findByOfficeAndRole(officeId, DRIVER_ROLE).stream()
 				.map(driver -> new RankedUser(driver, arb.rankMatch(rider, driver))).sorted(Comparator.reverseOrder())
