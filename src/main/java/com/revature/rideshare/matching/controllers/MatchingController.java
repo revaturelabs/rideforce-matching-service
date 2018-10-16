@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.revature.rideshare.matching.beans.Filter;
@@ -258,6 +256,7 @@ public class MatchingController {
 	}
 	
 	
+	
 	/**
 	 * This is the general exception handler. This handles any exceptions that 
 	 * may occur in this controller. 
@@ -276,7 +275,8 @@ public class MatchingController {
 		
 		// If debugging is enabled, return a detailed string message.
 		if (DEBUG) {
-			return new ResponseEntity<>(generateStackTrace(ex), HttpStatus.INTERNAL_SERVER_ERROR);
+			// Specify true for a web friendly stack trace. 
+			return new ResponseEntity<>(generateStackTrace(ex, false), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		// Otherwise, just send the status with no meaningful message. 
 		else {
@@ -287,9 +287,11 @@ public class MatchingController {
 	/** 
 	 * This is a helper method that generates a stack trace as a string. 
 	 * @param t - the {@code throwable} that to get the trace of. 
+	 * @param webFriendly - Specifies that new line characters should be 
+	 * 						replaced line breaks if true. 
 	 * @return A single string representation of the stack trace. 
 	 */
-	private String generateStackTrace(Throwable t) {
+	private String generateStackTrace(Throwable t, boolean webFriendly) {
 		// Create writers that the throwable can write to. 
 		StringWriter stringWriter = new StringWriter();
 		PrintWriter printWriter = new PrintWriter(stringWriter);
@@ -302,6 +304,12 @@ public class MatchingController {
 		// Closing here is not necessary, but it is done out of good practice 
 		// anyway.
 		printWriter.close();
+		
+		// If we are using the webFriendly version, replace all the line 
+		// breaks with '<br>'. 
+		if (webFriendly) {
+			stackTrace = stackTrace.replaceAll("\n", "<br>");
+		}
 		
 		return stackTrace;
 	}
