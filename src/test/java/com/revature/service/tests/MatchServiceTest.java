@@ -179,74 +179,74 @@ public class MatchServiceTest {
 
 	}
 	
-	@Test
-	public void testRankByAffect_withNeutralAffect_returnsOneHalf() {
-		Method rankByAffect = null;
-		double result = 0.;
-		try {
-			rankByAffect = MatchService.class.getDeclaredMethod("rankByAffect", User.class, User.class, List.class, List.class);
-			rankByAffect.setAccessible(true);
-			result = (double) rankByAffect.invoke(matchService, rider, driver4, likedIds, dislikedIds);
-		} catch (NoSuchMethodException e) {
-			e.printStackTrace();
-		} catch (SecurityException e) {
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		} catch (IllegalArgumentException e) {
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			e.printStackTrace();
-		}
-		
-		Assertions.assertThat(result).isEqualTo(0.5);
-	}
-	
-	@Test
-	public void testRankByAffect_withPositiveAffect_returnsOne() {
-		Method rankByAffect = null;
-		double result = 0.;
-		try {
-			rankByAffect = MatchService.class.getDeclaredMethod("rankByAffect", User.class, User.class, List.class, List.class);
-			rankByAffect.setAccessible(true);
-			result = (double) rankByAffect.invoke(matchService, rider, driver2, likedIds, dislikedIds);
-		} catch (NoSuchMethodException e) {
-			e.printStackTrace();
-		} catch (SecurityException e) {
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		} catch (IllegalArgumentException e) {
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			e.printStackTrace();
-		}
-		
-		Assertions.assertThat(result).isEqualTo(1.0);
-	}
-	
-	@Test
-	public void testRankByAffect_withNegativeAffect_returnsZero() {
-		Method rankByAffect = null;
-		double result = 0.;
-		try {
-			rankByAffect = MatchService.class.getDeclaredMethod("rankByAffect", User.class, User.class, List.class, List.class);
-			rankByAffect.setAccessible(true);
-			result = (double) rankByAffect.invoke(matchService, rider, driver3, likedIds, dislikedIds);
-		} catch (NoSuchMethodException e) {
-			e.printStackTrace();
-		} catch (SecurityException e) {
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		} catch (IllegalArgumentException e) {
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			e.printStackTrace();
-		}
-		
-		Assertions.assertThat(result).isEqualTo(0.0);
-	}
+//	@Test
+//	public void testRankByAffect_withNeutralAffect_returnsOneHalf() {
+//		Method rankByAffect = null;
+//		double result = 0.;
+//		try {
+//			rankByAffect = MatchService.class.getDeclaredMethod("rankByAffect", User.class, User.class, List.class, List.class);
+//			rankByAffect.setAccessible(true);
+//			result = (double) rankByAffect.invoke(matchService, rider, driver4, likedIds, dislikedIds);
+//		} catch (NoSuchMethodException e) {
+//			e.printStackTrace();
+//		} catch (SecurityException e) {
+//			e.printStackTrace();
+//		} catch (IllegalAccessException e) {
+//			e.printStackTrace();
+//		} catch (IllegalArgumentException e) {
+//			e.printStackTrace();
+//		} catch (InvocationTargetException e) {
+//			e.printStackTrace();
+//		}
+//		
+//		Assertions.assertThat(result).isEqualTo(0.5);
+//	}
+//	
+//	@Test
+//	public void testRankByAffect_withPositiveAffect_returnsOne() {
+//		Method rankByAffect = null;
+//		double result = 0.;
+//		try {
+//			rankByAffect = MatchService.class.getDeclaredMethod("rankByAffect", User.class, User.class, List.class, List.class);
+//			rankByAffect.setAccessible(true);
+//			result = (double) rankByAffect.invoke(matchService, rider, driver2, likedIds, dislikedIds);
+//		} catch (NoSuchMethodException e) {
+//			e.printStackTrace();
+//		} catch (SecurityException e) {
+//			e.printStackTrace();
+//		} catch (IllegalAccessException e) {
+//			e.printStackTrace();
+//		} catch (IllegalArgumentException e) {
+//			e.printStackTrace();
+//		} catch (InvocationTargetException e) {
+//			e.printStackTrace();
+//		}
+//		
+//		Assertions.assertThat(result).isEqualTo(1.0);
+//	}
+//	
+//	@Test
+//	public void testRankByAffect_withNegativeAffect_returnsZero() {
+//		Method rankByAffect = null;
+//		double result = 0.;
+//		try {
+//			rankByAffect = MatchService.class.getDeclaredMethod("rankByAffect", User.class, User.class, List.class, List.class);
+//			rankByAffect.setAccessible(true);
+//			result = (double) rankByAffect.invoke(matchService, rider, driver3, likedIds, dislikedIds);
+//		} catch (NoSuchMethodException e) {
+//			e.printStackTrace();
+//		} catch (SecurityException e) {
+//			e.printStackTrace();
+//		} catch (IllegalAccessException e) {
+//			e.printStackTrace();
+//		} catch (IllegalArgumentException e) {
+//			e.printStackTrace();
+//		} catch (InvocationTargetException e) {
+//			e.printStackTrace();
+//		}
+//		
+//		Assertions.assertThat(result).isEqualTo(0.0);
+//	}
 	
 	// TODO: The below tests throw a null pointer exception when trying to call the tested method. Fixing required.
 	/*

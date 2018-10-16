@@ -13,6 +13,7 @@ import com.revature.rideshare.matching.beans.User;
 import com.revature.rideshare.matching.clients.MapsClient;
 import com.revature.rideshare.matching.clients.UserClient;
 
+// TODO: Auto-generated Javadoc
 /**
  * The main service class for finding drivers who match a given rider.
  */
@@ -22,13 +23,17 @@ public class MatchService {
 	 * The maximum number of matches to find.
 	 */
 	private static final int MAX_MATCHES = 10;
-	
+
 	/**
 	 * The coefficients used to weight importance of matching features.
 	 */
-	
+
 	private static final double DISTANCE_COEFFICIENT = 1;
+
+	/** The Constant BATCH_END_COEFFICIENT. */
 	private static final double BATCH_END_COEFFICIENT = 4;
+
+	/** The Constant AFFECT_COEFFICENT. */
 	private static final double AFFECT_COEFFICENT = 1;
 	// private static final double START_TIME_COEFFICIENT = 0;
 
@@ -37,15 +42,19 @@ public class MatchService {
 	 */
 	private static final String DRIVER_ROLE = "DRIVER";
 
+	/** The maps client. */
 	@Autowired
 	private MapsClient mapsClient;
 
+	/** The user client. */
 	@Autowired
 	private UserClient userClient;
 
+	/** The like service. */
 	@Autowired
 	private LikeService likeService;
 
+	/** The dislike service. */
 	@Autowired
 	private DislikeService dislikeService;
 
@@ -64,11 +73,22 @@ public class MatchService {
 		 */
 		public double rank;
 
+		/**
+		 * Instantiates a new ranked user.
+		 *
+		 * @param user the user
+		 * @param rank the rank
+		 */
 		public RankedUser(User user, double rank) {
 			this.user = user;
 			this.rank = rank;
 		}
 
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see java.lang.Comparable#compareTo(java.lang.Object)
+		 */
 		@Override
 		public int compareTo(RankedUser o) {
 			return Double.compare(rank, o.rank);
@@ -130,8 +150,24 @@ public class MatchService {
 	}
 
 	/**
-	 * Finds matched drivers for rider based on a weighted rank from distance
-	 * batch end, and whether they are liked or disliked drivers (affected drivers).
+	 * Finds matched drivers for rider based on start time. Association formed
+	 * between driver and a ranking, with rank discarded after sorting.
+	 *
+	 * @param rider the user looking for a ride
+	 * @return unranked list of matched drivers, sorted by daily start time in
+	 *         descending order
+	 */
+	public List<User> findMatchesByStartTime(User rider) {
+		int officeId = officeLinkToId(rider.getOffice());
+
+		return userClient.findByOfficeAndRole(officeId, DRIVER_ROLE).stream()
+				.map(driver -> new RankedUser(driver, rankByStartTime(rider, driver))).sorted(Comparator.reverseOrder())
+				.limit(MAX_MATCHES).map(rankedUser -> rankedUser.user).collect(Collectors.toList());
+	}
+
+	/**
+	 * Finds matched drivers for rider based on a weighted rank from distance batch
+	 * end, and whether they are liked or disliked drivers (affected drivers).
 	 * 
 	 * @param rider the user for whom to find a driver
 	 * @return list of matched drivers, sorted by nearest distance and closest batch
@@ -150,9 +186,6 @@ public class MatchService {
 				.collect(Collectors.toList());
 		return drivers;
 	}
-
-	// TODO: Add in batch start time as a weighted value; add in method for
-	// getting batch start time
 
 	/**
 	 * Ranks drivers based on a weighted values from other ranking functions.
@@ -189,10 +222,10 @@ public class MatchService {
 		Route riderToDriver = mapsClient.getRoute(rider.getAddress(), driver.getAddress());
 		return 1 / ((double) riderToDriver.getDistance() + 1);
 	}
-	
 
 	/**
-	 * Ranks a driver by whether they have been liked or disliked by a particular rider.
+	 * Ranks a driver by whether they have been liked or disliked by a particular
+	 * rider.
 	 * 
 	 * @param driver   the potential driver being ranked
 	 * @param likes    a list of IDs for drivers whom the rider has liked. Consult
@@ -234,6 +267,24 @@ public class MatchService {
 	}
 
 	/**
+	 * Ranks a driver based on whether their start time is the same, earlier, or
+	 * later than rider's. It is ranked with weights in descending order from same,
+	 * earlier, or later. 
+	 *
+	 * @param rider  the user looking for a ride
+	 * @param driver the potential driver being ranked
+	 * @return a double as a ranking value; higher is better
+	 */
+	private double rankByStartTime(User rider, User driver) {
+		if (rider.getStartTime() < driver.getStartTime()) {
+			return 0.5;
+		} else if (rider.getStartTime() == driver.getStartTime()) {
+			return 1;
+		} else
+			return 0;
+	}
+
+	/**
 	 * Extracts the office ID from an office link.
 	 * 
 	 * @param link a link to an office (e.g. "/offices/2")
@@ -250,10 +301,10 @@ public class MatchService {
 	}
 
 	/**
-	 * Gets list of liked driver IDs. Used to reduce the number of calls for
-	 * this functionality in the ranking mechanism.
+	 * Gets list of liked driver IDs. Used to reduce the number of calls for this
+	 * functionality in the ranking mechanism.
 	 * 
-	 * @param rider the user who performed like action 
+	 * @param rider the user who performed like action
 	 * @return unranked list of liked driver IDs corresponding to rider
 	 */
 	private List<Integer> getLikedIds(User rider) {
@@ -262,10 +313,10 @@ public class MatchService {
 	}
 
 	/**
-	 * Gets list of disliked driver IDs. Used to reduce the number of calls for
-	 * this functionality in the ranking mechanism.
+	 * Gets list of disliked driver IDs. Used to reduce the number of calls for this
+	 * functionality in the ranking mechanism.
 	 * 
-	 * @param rider the user who performed dislike action 
+	 * @param rider the user who performed dislike action
 	 * @return unranked list of liked driver IDs corresponding to rider
 	 */
 	private List<Integer> getDislikedIds(User rider) {
