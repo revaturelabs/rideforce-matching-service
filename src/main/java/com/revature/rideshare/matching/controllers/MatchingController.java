@@ -228,4 +228,10 @@ public class MatchingController {
 		LOGGER.info("Dislike service called to delete a dislike for the userId %d and affected userId %d.", id, disliked);
 		dislikeService.deleteDislike(id, disliked);
 	}
+	
+	
+	@RequestMapping(value = "test", method = RequestMethod.GET)
+	public String test() {
+		return "Success";
+	}
 }
