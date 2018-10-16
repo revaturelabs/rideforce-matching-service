@@ -4,6 +4,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.AntPathMatcher;
@@ -20,6 +22,7 @@ import com.revature.rideshare.matching.clients.UserClient;
  */
 @Service
 public class MatchService {
+	private static final Logger LOGGER = LoggerFactory.getLogger(MatchService.class);
 	/**
 	 * The maximum number of matches to find.
 	 */
@@ -36,7 +39,9 @@ public class MatchService {
 
 	/** The Constant AFFECT_COEFFICENT. */
 	private static final double AFFECT_COEFFICENT = 1;
-	// private static final double START_TIME_COEFFICIENT = 0;
+	/*
+	 * private static final double START_TIME_COEFFICIENT = 0;
+	 */
 
 	/**
 	 * The role corresponding to a potential driver.
@@ -46,20 +51,18 @@ public class MatchService {
 	/** The maps client. */
 	@Autowired
 	private UserClient userClient;
-	
+
 	private static RankByAffect rankByAffect;
 	private static RankByBatchEnd rankByBatchEnd;
 	private static RankByDistance rankByDistance;
-	
 	{
 		rankByAffect = new RankByAffect();
 		rankByBatchEnd = new RankByBatchEnd();
 		rankByDistance = new RankByDistance();
-		
+
 		rankByAffect.setWeight(AFFECT_COEFFICENT);
 		rankByBatchEnd.setWeight(BATCH_END_COEFFICIENT);
 		rankByDistance.setWeight(DISTANCE_COEFFICIENT);
-		
 	}
 
 	/**
@@ -98,7 +101,7 @@ public class MatchService {
 			return Double.compare(rank, o.rank);
 		}
 	}
-	
+
 	/**
 	 * Finds matched drivers for given riders by distance. Association formed
 	 * between driver and a ranking, with ranking discarded after sorting.
@@ -108,16 +111,19 @@ public class MatchService {
 	 *         order (up to {@link #MAX_MATCHES})
 	 */
 	public List<User> findMatchesByDistance(User rider) {
+		if (rider != null) {
+			LOGGER.debug("findMatchesByDistance recieved user: %s", rider.getFirstName());
+		} else {
+			LOGGER.error("RECIEVED A NULL USER: findMatchesByDistance in matchService.");
+			throw new NullPointerException();
+		}
 		int officeId = officeLinkToId(rider.getOffice());
 		AggregateRankingBuilder arb = new AggregateRankingBuilder();
 		arb.addCriterion(rankByDistance);
 
 		return userClient.findByOfficeAndRole(officeId, DRIVER_ROLE).stream()
-				.map(driver -> new RankedUser(driver, arb.rankMatch(rider, driver)))
-				.sorted(Comparator.reverseOrder())
-				.limit(MAX_MATCHES)
-				.map(rankedUser -> rankedUser.user)
-				.collect(Collectors.toList());
+				.map(driver -> new RankedUser(driver, arb.rankMatch(rider, driver))).sorted(Comparator.reverseOrder())
+				.limit(MAX_MATCHES).map(rankedUser -> rankedUser.user).collect(Collectors.toList());
 	}
 
 	/**
@@ -129,16 +135,19 @@ public class MatchService {
 	 *         {@link #MAX_MATCHES})
 	 */
 	public List<User> findMatchesByAffects(User rider) {
+		if (rider != null) {
+			LOGGER.debug("findMatchesByAffects recieved user: %s", rider.getFirstName());
+		} else {
+			LOGGER.error("RECIEVED A NULL USER: findMatchesByAffects in matchService.");
+			throw new NullPointerException();
+		}
 		int officeId = officeLinkToId(rider.getOffice());
 		AggregateRankingBuilder arb = new AggregateRankingBuilder();
 		arb.addCriterion(rankByAffect);
 
 		return userClient.findByOfficeAndRole(officeId, DRIVER_ROLE).stream()
-				.map(driver -> new RankedUser(driver, arb.rankMatch(rider, driver)))
-				.sorted(Comparator.reverseOrder())
-				.limit(MAX_MATCHES)
-				.map(rankedUser -> rankedUser.user)
-				.collect(Collectors.toList());
+				.map(driver -> new RankedUser(driver, arb.rankMatch(rider, driver))).sorted(Comparator.reverseOrder())
+				.limit(MAX_MATCHES).map(rankedUser -> rankedUser.user).collect(Collectors.toList());
 	}
 
 	/**
@@ -150,16 +159,43 @@ public class MatchService {
 	 *         descending order
 	 */
 	public List<User> findMatchesByBatchEnd(User rider) {
+		if (rider != null) {
+			LOGGER.debug("findMatchesByBatchEnd recieved user: %s", rider.getFirstName());
+		} else {
+			LOGGER.error("RECIEVED A NULL USER: findMatchesByBatchEnd in matchService.");
+			throw new NullPointerException();
+		}
 		int officeId = officeLinkToId(rider.getOffice());
 		AggregateRankingBuilder arb = new AggregateRankingBuilder();
 		arb.addCriterion(rankByBatchEnd);
 
 		return userClient.findByOfficeAndRole(officeId, DRIVER_ROLE).stream()
-				.map(driver -> new RankedUser(driver, arb.rankMatch(rider, driver)))
-				.sorted(Comparator.reverseOrder())
-				.limit(MAX_MATCHES)
-				.map(rankedUser -> rankedUser.user)
-				.collect(Collectors.toList());
+				.map(driver -> new RankedUser(driver, arb.rankMatch(rider, driver))).sorted(Comparator.reverseOrder())
+				.limit(MAX_MATCHES).map(rankedUser -> rankedUser.user).collect(Collectors.toList());
+	}
+
+	/**
+	 * Finds matched drivers for rider based on start time. Association formed
+	 * between driver and a ranking, with rank discarded after sorting.
+	 *
+	 * @param rider the user looking for a ride
+	 * @return unranked list of matched drivers, sorted by daily start time in
+	 *         descending order
+	 */
+	public List<User> findMatchesByStartTime(User rider) {
+		if (rider != null) {
+			LOGGER.debug("findMatchesByStartTime recieved user: %s", rider.getFirstName());
+		} else {
+			LOGGER.error("RECIEVED A NULL USER: findMatchesByStartTime in matchService.");
+			throw new NullPointerException();
+		}
+		int officeId = officeLinkToId(rider.getOffice());
+		AggregateRankingBuilder arb = new AggregateRankingBuilder();
+		arb.addCriterion(rankByDistance);
+
+		return userClient.findByOfficeAndRole(officeId, DRIVER_ROLE).stream()
+				.map(driver -> new RankedUser(driver, arb.rankMatch(rider, driver))).sorted(Comparator.reverseOrder())
+				.limit(MAX_MATCHES).map(rankedUser -> rankedUser.user).collect(Collectors.toList());
 	}
 
 	/**
@@ -189,6 +225,12 @@ public class MatchService {
 	 *         end date in descending order (up to {@link #MAX_MATCHES})
 	 */
 	public List<User> findMatches(User rider) {
+		if (rider != null) {
+			LOGGER.debug("findMatches recieved user: %s", rider.getFirstName());
+		} else {
+			LOGGER.error("RECIEVED A NULL USER: findMatches in matchService.");
+			throw new NullPointerException();
+		}
 		int officeId = officeLinkToId(rider.getOffice());
 		AggregateRankingBuilder arb = new AggregateRankingBuilder();
 		arb.addCriterion(rankByAffect);
@@ -196,9 +238,8 @@ public class MatchService {
 		arb.addCriterion(rankByDistance);
 
 		return userClient.findByOfficeAndRole(officeId, DRIVER_ROLE).stream()
-				.map(driver -> new RankedUser(driver, arb.rankMatch(rider, driver)))
-				.sorted(Comparator.reverseOrder()).limit(MAX_MATCHES).map(rankedUser -> rankedUser.user)
-				.collect(Collectors.toList());
+				.map(driver -> new RankedUser(driver, arb.rankMatch(rider, driver))).sorted(Comparator.reverseOrder())
+				.limit(MAX_MATCHES).map(rankedUser -> rankedUser.user).collect(Collectors.toList());
 	}
 
 	/**
