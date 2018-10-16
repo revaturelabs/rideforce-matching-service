@@ -1,16 +1,16 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.revature.rideshare</groupId>
 	<artifactId>rideshare-matching-service</artifactId>
-	<version>2</version>
+	<version>2.0.3-SNAPSHOT</version>
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>2.0.4.RELEASE</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
-	<!-- javadoc stuff -->
-	<!-- end Javadoc stuff -->
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
@@ -136,88 +136,6 @@
 		<finalName>rideshare-matching-service</finalName>
 		<pluginManagement>
 			<plugins>
-				<!-- Javadocs auto creation stuff -->
-				<plugin>
-					<groupId>org.codehaus.mojo</groupId>
-					<artifactId>build-helper-maven-plugin</artifactId>
-					<version>1.8</version>
-					<executions>
-						<execution>
-							<phase>pre-site</phase>
-							<id>regex-property</id>
-							<goals>
-								<goal>regex-property</goal>
-							</goals>
-							<configuration>
-								<name>release_version</name>
-								<value>${project.version}</value>
-								<regex>-SNAPSHOT</regex>
-								<replacement />
-								<failIfNoMatch>false</failIfNoMatch>
-							</configuration>
-						</execution>
-					</executions>
-				</plugin>
-				<!-- JavaDoc generation. JavaDoc is generated during pre-site phase. -->
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-javadoc-plugin</artifactId>
-					<version>2.9.1</version>
-					<executions>
-						<execution>
-							<phase>pre-site</phase>
-							<goals>
-								<goal>javadoc</goal>
-							</goals>
-						</execution>
-					</executions>
-					<configuration>
-						<show>private</show>
-					</configuration>
-				</plugin>
-				<!-- Copy JavaDoc to publish directory. Performed during the site phase. 
-					If changing the phase, make sure that copying the documentation is performed 
-					after having generated the JavaDoc. -->
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-resources-plugin</artifactId>
-					<version>2.6</version>
-					<executions>
-						<execution>
-							<id>copy-resources</id>
-							<phase>site</phase>
-							<goals>
-								<goal>copy-resources</goal>
-							</goals>
-							<configuration>
-								<generateProjectInfo>false</generateProjectInfo>
-								<generateReports>false</generateReports>
-								<outputDirectory>${release.javadoc.root.path}${project.artifactId}-${release_version}/</outputDirectory>
-								<resources>
-									<resource>
-										<directory>${project.build.directory}/site/</directory>
-										<filtering>true</filtering>
-									</resource>
-								</resources>
-							</configuration>
-						</execution>
-					</executions>
-				</plugin>
-
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-release-plugin</artifactId>
-					<version>2.5.3</version>
-					<dependencies>
-						<dependency>
-							<groupId>org.apache.maven.shared</groupId>
-							<artifactId>maven-invoker</artifactId>
-							<version>2.2</version>
-						</dependency>
-					</dependencies>
-				</plugin>
-
-				<!-- end javadocs stuff -->
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-compiler-plugin</artifactId>
