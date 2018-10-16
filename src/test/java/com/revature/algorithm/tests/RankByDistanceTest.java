@@ -81,9 +81,7 @@ public class RankByDistanceTest {
 	
 	public double invokeRank(User rider, User driver, Route route) throws IllegalArgumentException {
 		Method rank = null;
-//		TestMapsClient testMapsClient = new TestMapsClient();
 		testMapsClient.setRoute(route);
-//		RankByDistance rankByDistance = new RankByDistance(testMapsClient);
 		double result = -1;
 		try {
 			rank = RankByDistance.class.getDeclaredMethod("rank", User.class, User.class);
