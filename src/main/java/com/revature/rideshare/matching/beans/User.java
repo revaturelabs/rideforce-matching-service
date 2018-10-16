@@ -3,6 +3,7 @@ package com.revature.rideshare.matching.beans;
 import java.util.Date;
 import java.util.Set;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
@@ -17,6 +18,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public class User {
 
 	/** User's id. */
+	@Min(value = 0)
 	private int id;
 
 	/** User's first name. */
@@ -79,7 +81,7 @@ public class User {
 	private Set<String> contactInfo;
 
 	/** User's start time. */
-	@NotEmpty
+	@Min(value = 1)
 	private float startTime;
 
 	/**
@@ -111,7 +113,7 @@ public class User {
 	public User(int id, @NotEmpty String firstName, @NotEmpty String lastName, @NotEmpty String email, String password,
 			String photoUrl, boolean active, @NotEmpty String role, @NotEmpty String office, @NotEmpty String address,
 			@NotNull Date batchEnd, @NotNull Set<String> cars, String venmo, @NotNull Set<String> contactInfo,
-			@NotEmpty float startTime) {
+			@Min(value = 1) float startTime) {
 		super();
 		this.id = id;
 		this.firstName = firstName;
@@ -147,7 +149,7 @@ public class User {
 	 */
 	public User(int id, @NotEmpty String firstName, @NotEmpty String lastName, @NotEmpty String email,
 			@NotEmpty String role, @NotEmpty String office, @NotEmpty String address, @NotNull Date batchEnd,
-			@NotNull Set<String> cars, @NotNull Set<String> contactInfo, @NotEmpty float startTime) {
+			@NotNull Set<String> cars, @NotNull Set<String> contactInfo, @Min(value = 1) float startTime) {
 		super();
 		this.id = id;
 		this.firstName = firstName;
