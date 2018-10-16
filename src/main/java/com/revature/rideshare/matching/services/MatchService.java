@@ -1,12 +1,9 @@
 package com.revature.rideshare.matching.services;
 
 import java.util.Comparator;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.AntPathMatcher;
@@ -189,10 +186,7 @@ public class MatchService {
 	 */
 	private double rankByDistance(User rider, User driver) {
 		// TODO: This could be null based on the MapClient service.
-		// This is a patch job as even though a Route is sent from the Map Service, it is received as a LinkedHashMap. 
-		// TODO: Proper handling of error conditions can be done Monday
-		LinkedHashMap routeMap = (LinkedHashMap) mapsClient.getRoute(rider.getAddress(), driver.getAddress()).getBody();
-		Route riderToDriver = new Route((long)(int)routeMap.get("distance"), (long)(int)routeMap.get("duration"));
+		Route riderToDriver = mapsClient.getRoute(rider.getAddress(), driver.getAddress());
 		return 1 / ((double) riderToDriver.getDistance() + 1);
 	}
 	
