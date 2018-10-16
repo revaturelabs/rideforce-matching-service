@@ -21,19 +21,19 @@
 	</distributionManagement>
 	<scm>
 		<connection>scm:git:https://github.com/revaturelabs/rideshare-matching-service-documentation.git</connection>
-		<developerConnection>scm:git:[fetch=]https://github.com/revaturelabs/rideshare-matching-service-documentation.git[push=]https://github.com/revaturelabs/rideshare-matching-service-documentation.git</developerConnection>
+		<developerConnection>scm:git:https://github.com/revaturelabs/rideshare-matching-service-documentation.git</developerConnection>
 		<tag>rideshare</tag>
 	</scm>
 	<properties>
 		<!-- temp setting, set to tomcat home path for production -->
-		<release.javadoc.root.path>C:/Users/jeremiah/git/api-documentation/
+		<release.javadoc.root.path>C:/Users/jeremiah/git/Project3/rideshare_matching/api-documentation/
 		</release.javadoc.root.path>
 	</properties>
 
 	<!-- end Javadoc stuff -->
 	<dependencyManagement>
 		<dependencies>
-			<dependency>
+			<dependency> 
 				<groupId>org.springframework.cloud</groupId>
 				<artifactId>spring-cloud-dependencies</artifactId>
 				<version>Finchley.RELEASE</version>
