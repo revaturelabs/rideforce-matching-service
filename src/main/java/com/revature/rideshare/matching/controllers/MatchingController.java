@@ -1,17 +1,26 @@
 package com.revature.rideshare.matching.controllers;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.revature.rideshare.matching.beans.Filter;
@@ -30,7 +39,12 @@ public class MatchingController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(MatchingController.class);
 	private static final String MSG = "Get request to matching controller made with UserId : %d passed. userClient called to find user by that id. userClient returned the user: %d";
 	private static final String NULL = "userClient return a null user object.";
-
+	
+	/** This boolean specifies if detailed debugging output should be sent to 
+	 * the client or not. True means that the debugging info will be sent. 
+	 * DON'T FORGET TO CHANGE TO FALSE BEFORE PUSH TO PRODUCTION! */
+	private static final boolean DEBUG = true;
+	
 	/** The user client. */
 	@Autowired
 	UserClient userClient;
@@ -230,8 +244,52 @@ public class MatchingController {
 	}
 	
 	
-	@RequestMapping(value = "test", method = RequestMethod.GET)
-	public String test() {
-		return "Success";
+	/**
+	 * This is the general exception handler. This handles any exceptions that 
+	 * may occur in this controller. 
+	 * @param request - The request associated with the exception.
+	 * @param ex - The exception that was thrown
+	 * @return - A ResponseEntity that has information about the exception. 
+	 */
+	@ExceptionHandler(Exception.class) 
+	public ResponseEntity<String> handleError(HttpServletRequest request, Exception ex) {
+		// Construct an error message to send back to log. 
+		String message = "Request: \"%s\" With Query Params: \"%s\" threw Exception: %s";
+		
+		// Log the error with the provided information. 
+		LOGGER.error(message, request.getRequestURL(), request.getQueryString(), ex);
+		LOGGER.error("Stack Trace: ", ex);
+		
+		// If debugging is enabled, return a detailed string message.
+		if (DEBUG) {
+			return new ResponseEntity<>(generateStackTrace(ex), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		// Otherwise, just send the status with no meaningful message. 
+		else {
+			return new ResponseEntity<>("An error occurred processing the request", HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	}
+	
+	/** 
+	 * This is a helper method that generates a stack trace as a string. 
+	 * @param t - the {@code throwable} that to get the trace of. 
+	 * @return A single string representation of the stack trace. 
+	 */
+	private String generateStackTrace(Throwable t) {
+		// Create writers that the throwable can write to. 
+		StringWriter stringWriter = new StringWriter();
+		PrintWriter printWriter = new PrintWriter(stringWriter);
+		
+		// Print the generated stack trace to a string
+		t.printStackTrace(printWriter);
+		printWriter.flush();
+		String stackTrace = stringWriter.toString();
+		
+		// Closing here is not necessary, but it is done out of good practice 
+		// anyway.
+		printWriter.close();
+		
+		return stackTrace;
+	}
+	
 }
