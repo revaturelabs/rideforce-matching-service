@@ -171,6 +171,88 @@ public class MatchService {
 	// getting batch start time
 
 	/**
+<<<<<<< HEAD
+=======
+	 * Ranks drivers based on a weighted values from other ranking functions.
+	 * 
+	 * @param rider    the user looking for a ride
+	 * @param driver   the user who can provide a ride and who is being ranked
+	 * @param likes    a list of IDs for drivers whom the rider has liked. Consult
+	 *                 the getLikedIds() function below
+	 * @param dislikes a list of IDs for drivers whom the rider has disliked.
+	 *                 Consult the getDislikedIds() function below
+	 * @return double showing ranking of the driver, based on all ranking functions
+	 */
+	private double rankMatch(User rider, User driver, List<Integer> likes, List<Integer> dislikes) {
+
+		double distanceRank = rankByDistance(rider, driver);
+		double batchEndRank = rankByBatchEnd(rider, driver);
+		double affectRank = rankByAffect(driver, likes, dislikes);
+		// double startTimeRank = rankByStartTime(rider, driver);
+
+		// TODO: add START_TIME_COEFFICIENT, startTimeRank)
+		return (DISTANCE_COEFFICIENT * distanceRank + BATCH_END_COEFFICIENT * batchEndRank
+				+ AFFECT_COEFFICENT * affectRank) / (DISTANCE_COEFFICIENT + BATCH_END_COEFFICIENT + AFFECT_COEFFICENT);
+	}
+
+	/**
+	 * Ranks how well the given driver matches the given rider based on distance.
+	 * 
+	 * @param rider  the user looking for a ride
+	 * @param driver the potential driver being ranked
+	 * @return a double as ranking value; higher is better
+	 */
+	private double rankByDistance(User rider, User driver) {
+		// TODO: This could be null based on the MapClient service.
+		Route riderToDriver = mapsClient.getRoute(rider.getAddress(), driver.getAddress());
+		return 1 / ((double) riderToDriver.getDistance() + 1);
+	}
+	
+
+	/**
+	 * Ranks a driver by whether they have been liked or disliked by a particular rider.
+	 * 
+	 * @param driver   the potential driver being ranked
+	 * @param likes    a list of IDs for drivers whom the rider has liked. Consult
+	 *                 the getLikedIds() function below
+	 * @param dislikes a list of IDs for drivers whom the rider has disliked.
+	 *                 Consult the getDislikedIds() function below
+	 * @return a double as a rank
+	 */
+	private double rankByAffect(User driver, List<Integer> likes, List<Integer> dislikes) {
+		if (dislikes.stream().anyMatch(id -> id.equals(driver.getId()))) {
+			return 0.0;
+		} else if (likes.stream().anyMatch(id -> id.equals(driver.getId()))) {
+			return 1.0;
+		} else {
+			return 0.5;
+		}
+	}
+
+	/**
+	 * Ranks a driver based on if their batch ends sooner or later than the rider's
+	 * batch. If rider ends later than driver, driver is ranked lower. Time is
+	 * calculated in milliseconds and converted to days.
+	 * 
+	 * @param rider  the user looking for a ride
+	 * @param driver the potential driver being ranked
+	 * @return a double as ranking value; higher is better
+	 */
+	private double rankByBatchEnd(User rider, User driver) {
+		long diffInMilli;
+		long diff;
+
+		if (rider.getBatchEnd().compareTo(driver.getBatchEnd()) > 0) {
+			diffInMilli = Math.abs(driver.getBatchEnd().getTime() - rider.getBatchEnd().getTime());
+			diff = diffInMilli / (86400000); // Convert the difference to days instead of milliseconds
+			return 1 / ((double) diff + 1);
+		} else {
+			return 1;
+		}
+	}
+
+	/**
+>>>>>>> 9ec2e0090f63d32dab4a7b97f66e62c56ec7eb96
 	 * Extracts the office ID from an office link.
 	 * 
 	 * @param link a link to an office (e.g. "/offices/2")
