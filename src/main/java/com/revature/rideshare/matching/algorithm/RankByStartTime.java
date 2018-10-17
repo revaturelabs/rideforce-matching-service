@@ -10,7 +10,7 @@ import com.revature.rideshare.matching.beans.User;
  */
 
 public class RankByStartTime extends RankingCriterion {
-	
+
 	/**
 	 * Ranks a driver based on whether their start time is the same, earlier, or
 	 * later than rider's. It is ranked with weights in descending order from same,
@@ -20,18 +20,18 @@ public class RankByStartTime extends RankingCriterion {
 	 * @param driver the potential driver being ranked
 	 * @return a double as a ranking value; higher is better
 	 */
-	
+
 	@Override
 	protected double rank(User rider, User driver) {
 		if (rider == null || driver == null) {
 			throw new IllegalArgumentException("Rider and driver should not be null");
 		}
 
-		if (rider.getStartTime() < driver.getStartTime()) {
+		if (rider.getStartTime() > driver.getStartTime()) {
 			return 0.5;
 		} else if (rider.getStartTime() == driver.getStartTime()) {
 			return 1;
-		} else
-			return 0;
+		}
+		return 0;
 	}
 }

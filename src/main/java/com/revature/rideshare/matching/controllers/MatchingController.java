@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -31,12 +32,14 @@ import com.revature.rideshare.matching.services.MatchService;
 /**
  * The Class MatchingController.
  */
+@Lazy(true)
 @RestController
 @RequestMapping("matches")
 public class MatchingController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(MatchingController.class);
 	private static final String MSG = "Get request to matching controller made with UserId : %d passed. userClient called to find user by that id. userClient returned the user: %d";
 	private static final String NULL = "userClient return a null user object.";
+	private static final String USER_ID_URI = "/users/{id}";
 	
 	/** This boolean specifies if detailed debugging output should be sent to 
 	 * the client or not. True means that the debugging info will be sent. 
@@ -70,16 +73,15 @@ public class MatchingController {
 	public List<String> getAll(@PathVariable int id) {
 		User rider = userClient.findById(id);
 		if (rider == null) {
-			LOGGER.trace(NULL);
+			LOGGER.error(NULL);
 		} else {
 			LOGGER.info(MSG, id, rider.getFirstName());
 		}
 		return matchService.findMatches(rider).stream()
-				.map(driver -> UriComponentsBuilder.fromPath("/users/{id}").buildAndExpand(driver.getId()).toString())
+				.map(driver -> UriComponentsBuilder.fromPath(USER_ID_URI).buildAndExpand(driver.getId()).toString())
 				.collect(Collectors.toList());
 	}
 	
-	//TODO: Implement endpoint
 	@RequestMapping(value = "/filtered", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<String> getAllFiltered(@RequestBody Filter filter, @RequestBody int id) {
 		return null;
@@ -96,12 +98,12 @@ public class MatchingController {
 	public List<String> getAllMinusAffects(@PathVariable int id) {
 		User rider = userClient.findById(id);
 		if (rider == null) {
-			LOGGER.trace(NULL);
+			LOGGER.error(NULL);
 		} else {
 			LOGGER.info(MSG, id, rider.getFirstName());
 		}
 		return matchService.findMatchesByAffects(rider).stream()
-				.map(driver -> UriComponentsBuilder.fromPath("/users/{id}").buildAndExpand(driver.getId()).toString())
+				.map(driver -> UriComponentsBuilder.fromPath(USER_ID_URI).buildAndExpand(driver.getId()).toString())
 				.collect(Collectors.toList());
 	}
 
@@ -116,13 +118,13 @@ public class MatchingController {
 	public List<String> getByDistance(@PathVariable int id) {
 		User rider = userClient.findById(id);
 		if (rider == null) {
-			LOGGER.trace(NULL);
+			LOGGER.error(NULL);
 		} else {
 			LOGGER.info(MSG, id, rider.getFirstName());
 		}
 
 		return matchService.findMatchesByDistance(rider).stream()
-				.map(driver -> UriComponentsBuilder.fromPath("/users/{id}").buildAndExpand(driver.getId()).toString())
+				.map(driver -> UriComponentsBuilder.fromPath(USER_ID_URI).buildAndExpand(driver.getId()).toString())
 				.collect(Collectors.toList());
 	}
 
@@ -137,12 +139,12 @@ public class MatchingController {
 	public List<String> getByBatchEnd(@PathVariable int id) {
 		User rider = userClient.findById(id);
 		if (rider == null) {
-			LOGGER.trace(NULL);
+			LOGGER.error(NULL);
 		} else {
 			LOGGER.info(MSG, id, rider.getFirstName());
 		}
 		return matchService.findMatchesByBatchEnd(rider).stream()
-				.map(driver -> UriComponentsBuilder.fromPath("/users/{id}").buildAndExpand(driver.getId()).toString())
+				.map(driver -> UriComponentsBuilder.fromPath(USER_ID_URI).buildAndExpand(driver.getId()).toString())
 				.collect(Collectors.toList());
 	}
 	
@@ -155,7 +157,7 @@ public class MatchingController {
 			LOGGER.info(MSG, id, rider.getFirstName());
 		}
 		return matchService.findMatchesByStartTime(rider).stream()
-				.map(driver -> UriComponentsBuilder.fromPath("/users/{id}").buildAndExpand(driver.getId()).toString())
+				.map(driver -> UriComponentsBuilder.fromPath(USER_ID_URI).buildAndExpand(driver.getId()).toString())
 				.collect(Collectors.toList());
 	}
 
@@ -171,10 +173,10 @@ public class MatchingController {
 	public List<String> getLiked(@PathVariable("id") int id) {
 		List<String> likes = null;
 
-		likes = likeService.getLikes(id).stream().map(like -> UriComponentsBuilder.fromPath("/users/{id}")
+		likes = likeService.getLikes(id).stream().map(like -> UriComponentsBuilder.fromPath(USER_ID_URI)
 				.buildAndExpand(like.getPair().getAffectedId()).toString()).collect(Collectors.toList());
 		if (likes.isEmpty()) {
-			LOGGER.trace("Mapping process did not return any URIs associated with this user id: %d", id);
+			LOGGER.error("Mapping process did not return any URIs associated with this user id: %d", id);
 		} else {
 			LOGGER.info(
 					"likeService.getLikes called with id: %d which is then mapped to create a list of uri's that contain a path to "
@@ -217,10 +219,10 @@ public class MatchingController {
 	@RequestMapping(value = "dislikes/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<String> getDisliked(@PathVariable("id") int id) {
 		List<String> dislikes = null;
-		dislikes = dislikeService.getDislikes(id).stream().map(dislike -> UriComponentsBuilder.fromPath("/users/{id}")
+		dislikes = dislikeService.getDislikes(id).stream().map(dislike -> UriComponentsBuilder.fromPath(USER_ID_URI)
 				.buildAndExpand(dislike.getPair().getAffectedId()).toString()).collect(Collectors.toList());
 		if (dislikes.isEmpty()) {
-			LOGGER.trace("Mapping process did not return any URIs associated with this user id: %d ", id);
+			LOGGER.error("Mapping process did not return any URIs associated with this user id: %d ", id);
 		} else {
 			LOGGER.info(
 					"dislikeService.getDislikes called with id: %d which was then mapped to create a list of uri's that contain a path to "
