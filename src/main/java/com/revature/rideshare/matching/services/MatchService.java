@@ -62,27 +62,32 @@ public class MatchService {
 
 	
 	/** 
-	 * The string representation of the match service property, max matches
+	 * The string representation of the match service property, max matches. 
+	 * This references the matching.properties file. 
 	 */
 	public static final String MAX_MATCHES_STR = "max_matches";
 	
 	/** 
-	 * The string representation of the match service property, distance coefficient
+	 * The string representation of the match service property, distance coefficient. 
+	 * This references the matching.properties file. 
 	 */
 	public static final String DISTANCE_COEFFICIENT_STR = "distance_coefficient";
 	
 	/** 
-	 * The string representation of the match service property, batch end coefficient
+	 * The string representation of the match service property, batch end coefficient. 
+	 * This references the matching.properties file. 
 	 */
 	public static final String BATCH_END_COEFFICIENT_STR = "batch_end_coefficient";
 	
 	/** 
-	 * The string representation of the match service property, affect coefficient
+	 * The string representation of the match service property, affect coefficient. 
+	 * This references the matching.properties file. 
 	 */
 	public static final String AFFECT_COEFFICIENT_STR = "affect_coefficient";
 	
 	/** 
-	 * The string representation of the match service property, start time coefficient
+	 * The string representation of the match service property, start time coefficient. 
+	 * This references the matching.properties file. 
 	 */
 	public static final String START_TIME_COEFFICIENT_STR = "start_time_coefficient";
 	
