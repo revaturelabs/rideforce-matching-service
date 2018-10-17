@@ -1,6 +1,6 @@
 package com.revature.rideshare.matching.clients;
 
-import java.util.ArrayList;
+
 import java.util.List;
 
 import org.springframework.stereotype.Component;
