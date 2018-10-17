@@ -13,6 +13,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
+import com.revature.rideshare.matching.beans.Dislike;
 import com.revature.rideshare.matching.beans.Pair;
 
 public class PairBeanTest {
@@ -42,9 +43,12 @@ public class PairBeanTest {
 		Pair pair = new Pair(1, 2);
 		Pair pairEq = new Pair(1, 2);
 		Pair pairNotEq = new Pair(3, 4);
+		Pair pairNotEq1 = new Pair(1, 4);
 
 		assertTrue("Pair equals override not functioning properly; should be true.", pair.equals(pairEq));
 		assertFalse("Pair equals override not functioning properly; should be false.", pair.equals(pairNotEq));
+		assertFalse("Pair equals override not functioning properly; should be false.", pair.equals(null));
+		assertFalse("Pair equals override not functioning properly; should be false.", pair.equals(pairNotEq1));
 
 	}
 
@@ -95,6 +99,23 @@ public class PairBeanTest {
 		p.setAffectedId(200);
 		
 		assertTrue("Setter did not work: affectedId did not change as expected", p.getAffectedId() == 200);
+		
+	}
+	
+	@Test
+	public void testPairToString() {
+
+		Pair p = new Pair(1,2);
+
+		assertTrue(p.toString().equals("userId=" + 1 + ", affectedId=" + 2));
+	}
+	
+	@Test
+	public void testHash() {
+		Pair p = new Pair(1, 1);
+		Pair p1 = new Pair(1, 1);
+		
+		assertTrue(p.hashCode() == p1.hashCode());
 		
 	}
 }
