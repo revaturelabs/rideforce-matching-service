@@ -1,6 +1,7 @@
 package com.revature.rideshare.matching.services;
 
 import java.io.FileInputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Comparator;
@@ -25,7 +26,6 @@ import com.revature.rideshare.matching.beans.Filter;
 import com.revature.rideshare.matching.beans.User;
 import com.revature.rideshare.matching.clients.UserClient;
 
-// TODO: Auto-generated Javadoc
 /**
  * The main service class for finding drivers who match a given rider.
  */
@@ -66,6 +66,12 @@ public class MatchService {
 		batchEndCoefficient = property.get("batch_end_coefficient");
 		affectCoefficient = property.get("affect_coefficient");
 		startTimeCoefficient = property.get("start_time_coefficient");
+		
+		System.out.println(maxMatches);
+		System.out.println(distanceCoefficient);
+		System.out.println(batchEndCoefficient);
+		System.out.println(affectCoefficient);
+		System.out.println(startTimeCoefficient);
 	}
 
 	/**
@@ -324,10 +330,9 @@ public class MatchService {
 
 	private static Map<String, Double> setup() {
 		Properties prop = new Properties();
-		InputStream in;
+		String path = "src/main/resources/matching.properties";
 		try {
-			in = new FileInputStream("matching.properties");
-			prop.load(in);
+			prop.load(new FileReader(path));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
