@@ -13,7 +13,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
-import com.revature.rideshare.matching.beans.Dislike;
 import com.revature.rideshare.matching.beans.Pair;
 
 public class PairBeanTest {

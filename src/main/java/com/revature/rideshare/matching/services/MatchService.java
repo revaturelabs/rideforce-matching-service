@@ -344,7 +344,7 @@ public class MatchService {
 		try {
 			prop.load(new FileReader(path));
 		} catch (IOException e) {
-			e.printStackTrace();
+			LOGGER.error("Properties file not found! " + e);
 		}
 
 		Map<String, Double> values = new HashMap<>();
