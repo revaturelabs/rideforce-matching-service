@@ -60,16 +60,43 @@ public class MatchService {
 	 */
 	private static double startTimeCoefficient;
 
+	
+	/** 
+	 * The string representation of the match service property, max matches
+	 */
+	public static final String MAX_MATCHES_STR = "max_matches";
+	
+	/** 
+	 * The string representation of the match service property, distance coefficient
+	 */
+	public static final String DISTANCE_COEFFICIENT_STR = "distance_coefficient";
+	
+	/** 
+	 * The string representation of the match service property, batch end coefficient
+	 */
+	public static final String BATCH_END_COEFFICIENT_STR = "batch_end_coefficient";
+	
+	/** 
+	 * The string representation of the match service property, affect coefficient
+	 */
+	public static final String AFFECT_COEFFICIENT_STR = "affect_coefficient";
+	
+	/** 
+	 * The string representation of the match service property, start time coefficient
+	 */
+	public static final String START_TIME_COEFFICIENT_STR = "start_time_coefficient";
+	
+	
 	/**
 	 * The properties were configured in matching.properties file. See setup method.
 	 */
 	Map<String, Double> property = MatchService.setup();
 	{
-		maxMatches = property.get("max_matches").intValue();
-		distanceCoefficient = property.get("distance_coefficient");
-		batchEndCoefficient = property.get("batch_end_coefficient");
-		affectCoefficient = property.get("affect_coefficient");
-		startTimeCoefficient = property.get("start_time_coefficient");		
+		maxMatches = property.get(MAX_MATCHES_STR).intValue();
+		distanceCoefficient = property.get(DISTANCE_COEFFICIENT_STR);
+		batchEndCoefficient = property.get(BATCH_END_COEFFICIENT_STR);
+		affectCoefficient = property.get(AFFECT_COEFFICIENT_STR);
+		startTimeCoefficient = property.get(START_TIME_COEFFICIENT_STR);		
 	}
 
 	/**
@@ -349,11 +376,11 @@ public class MatchService {
 
 		Map<String, Double> values = new HashMap<>();
 
-		values.put("max_matches", Double.parseDouble(prop.getProperty("max_matches")));
-		values.put("distance_coefficient", Double.parseDouble(prop.getProperty("distance_coefficient")));
-		values.put("batch_end_coefficient", Double.parseDouble(prop.getProperty("batch_end_coefficient")));
-		values.put("affect_coefficient", Double.parseDouble(prop.getProperty("affect_coefficient")));
-		values.put("start_time_coefficient", Double.parseDouble(prop.getProperty("start_time_coefficient")));
+		values.put(MAX_MATCHES_STR, Double.parseDouble(prop.getProperty(MAX_MATCHES_STR)));
+		values.put(DISTANCE_COEFFICIENT_STR, Double.parseDouble(prop.getProperty(DISTANCE_COEFFICIENT_STR)));
+		values.put(BATCH_END_COEFFICIENT_STR, Double.parseDouble(prop.getProperty(BATCH_END_COEFFICIENT_STR)));
+		values.put(AFFECT_COEFFICIENT_STR, Double.parseDouble(prop.getProperty(AFFECT_COEFFICIENT_STR)));
+		values.put(START_TIME_COEFFICIENT_STR, Double.parseDouble(prop.getProperty(START_TIME_COEFFICIENT_STR)));
 
 		return values;
 	}
