@@ -1,4 +1,4 @@
-package com.revature.rideshare.matching.services;
+ package com.revature.rideshare.matching.services;
 
 import java.util.List;
 
@@ -46,7 +46,7 @@ public class DislikeService {
 	 * @return the dislikes
 	 */
 	public List<Dislike> getDislikes(int userId) {
-		LOGGER.info("retrieving dislikes for userId: %d", userId);
+		LOGGER.info("retrieving dislikes for userId: {}", userId);
 		List<Dislike> dislikes = null;
 		dislikes = dislikeRepository.findByPairUserId(userId);
 		return dislikes;
@@ -60,7 +60,7 @@ public class DislikeService {
 	 */
 	public void deleteDislike(int userId, int disliked) {
 		Dislike dislike = new Dislike(new Pair(userId, disliked));
-		LOGGER.info("Deleting like with userId: %d, and affected userId: %d.", userId, disliked);
+		LOGGER.info("Deleting like with userId: {}, and affected userId: {}.", userId, disliked);
 		dislikeRepository.delete(dislike);
 	}
 
