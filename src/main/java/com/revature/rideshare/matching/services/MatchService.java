@@ -105,13 +105,13 @@ public class MatchService {
 		/**
 		 * The user in the association.
 		 */
-		public User user;
+		private User user;
 		/**
 		 * The matching rank, as defined by
 		 * {@link com.revature.rideshare.matching.services.MatchService#rankMatch(User, User)
 		 * rankMatch}.
 		 */
-		public double rank;
+		private double rank;
 
 		/**
 		 * Instantiates a new ranked user.
