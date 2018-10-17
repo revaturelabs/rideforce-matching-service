@@ -182,7 +182,7 @@ public class MatchService {
 	 */
 	public List<User> findMatchesByDistance(User rider) {
 		if (rider != null) {
-			LOGGER.debug("findMatchesByDistance recieved user: %s", rider.getFirstName());
+			LOGGER.debug("findMatchesByDistance recieved user: {}", rider.getFirstName());
 		} else {
 			LOGGER.error("RECIEVED A NULL USER: findMatchesByDistance in matchService.");
 			throw new NullPointerException();
@@ -206,7 +206,7 @@ public class MatchService {
 	 */
 	public List<User> findMatchesByAffects(User rider) {
 		if (rider != null) {
-			LOGGER.debug("findMatchesByAffects recieved user: %s", rider.getFirstName());
+			LOGGER.debug("findMatchesByAffects recieved user: {}", rider.getFirstName());
 		} else {
 			LOGGER.error("RECIEVED A NULL USER: findMatchesByAffects in matchService.");
 			throw new NullPointerException();
@@ -230,7 +230,7 @@ public class MatchService {
 	 */
 	public List<User> findMatchesByBatchEnd(User rider) {
 		if (rider != null) {
-			LOGGER.debug("findMatchesByBatchEnd recieved user: %s", rider.getFirstName());
+			LOGGER.debug("findMatchesByBatchEnd recieved user: {}", rider.getFirstName());
 		} else {
 			LOGGER.error("RECIEVED A NULL USER: findMatchesByBatchEnd in matchService.");
 			throw new NullPointerException();
@@ -273,7 +273,7 @@ public class MatchService {
 	 */
 	public List<User> findMatches(User rider) {
 		if (rider != null) {
-			LOGGER.debug("findMatches recieved user: %s", rider.getFirstName());
+			LOGGER.debug("findMatches recieved user: {}", rider.getFirstName());
 		} else {
 			LOGGER.error("RECIEVED A NULL USER: findMatches in matchService.");
 			throw new NullPointerException();
