@@ -1,9 +1,7 @@
 package com.revature.rideshare.matching.services;
 
-import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -46,7 +44,9 @@ public class MatchService {
 	 * configured in matching.properties.
 	 */
 
-	/** Can change to impact weight of distance between rider and driver in algorithm */
+	/**
+	 * Can change to impact weight of distance between rider and driver in algorithm
+	 */
 	private static double distanceCoefficient;
 
 	/** Can change to impact weight of batch end of rider compared to driver */
@@ -55,10 +55,14 @@ public class MatchService {
 	/** Can change to impact weight of rider opinion of driver affect */
 	private static double affectCoefficient;
 
-	/** Can change to impact weight of daily start time of rider compared to driver */
+	/**
+	 * Can change to impact weight of daily start time of rider compared to driver
+	 */
 	private static double startTimeCoefficient;
 
-	/** The properties were configured in matching.properties file. See setup method. */
+	/**
+	 * The properties were configured in matching.properties file. See setup method.
+	 */
 	Map<String, Double> property = MatchService.setup();
 	{
 		maxMatches = property.get("max_matches").intValue();
@@ -66,7 +70,7 @@ public class MatchService {
 		batchEndCoefficient = property.get("batch_end_coefficient");
 		affectCoefficient = property.get("affect_coefficient");
 		startTimeCoefficient = property.get("start_time_coefficient");
-		
+
 		System.out.println(maxMatches);
 		System.out.println(distanceCoefficient);
 		System.out.println(batchEndCoefficient);
@@ -292,24 +296,31 @@ public class MatchService {
 				.map(driver -> new RankedUser(driver, arb.rankMatch(rider, driver))).sorted(Comparator.reverseOrder())
 				.limit(maxMatches).map(rankedUser -> rankedUser.user).collect(Collectors.toList());
 	}
-	
+
+	/**
+	 * Finds matches based on the criteria specified in the filter object.
+	 * 
+	 * @param filter the filter we use to determine which criteria to use
+	 * @param rider  the rider for whom we determine suitable matches
+	 * @return a list of drivers who fit our matching criteria
+	 */
 	public List<User> findFilteredMatches(Filter filter, User rider) {
 		int officeId = officeLinkToId(rider.getOffice());
 		AggregateRankingBuilder arb = new AggregateRankingBuilder();
-		if(filter.isBatchEndChange()) {
+		if (filter.isBatchEndChange()) {
 			arb.addCriterion(rankByBatchEnd);
 		}
-		if(filter.isDayStartChange()) {
+		if (filter.isDayStartChange()) {
 			arb.addCriterion(rankByStartTime);
 		}
-		if(filter.isDistanceChange()) {
+		if (filter.isDistanceChange()) {
 			arb.addCriterion(rankByDistance);
 		}
-		
+		arb.addCriterion(rankByAffect);
+
 		return userClient.findByOfficeAndRole(officeId, DRIVER_ROLE).stream()
-				.map(driver -> new RankedUser(driver, arb.rankMatch(rider, driver)))
-				.sorted(Comparator.reverseOrder()).limit(maxMatches).map(rankedUser -> rankedUser.user)
-				.collect(Collectors.toList());
+				.map(driver -> new RankedUser(driver, arb.rankMatch(rider, driver))).sorted(Comparator.reverseOrder())
+				.limit(maxMatches).map(rankedUser -> rankedUser.user).collect(Collectors.toList());
 	}
 
 	/**
@@ -328,6 +339,12 @@ public class MatchService {
 		}
 	}
 
+	/**
+	 * A function used to populate our property map with externally configured
+	 * values
+	 * 
+	 * @return a map of properties to use in this class
+	 */
 	private static Map<String, Double> setup() {
 		Properties prop = new Properties();
 		String path = "src/main/resources/matching.properties";
