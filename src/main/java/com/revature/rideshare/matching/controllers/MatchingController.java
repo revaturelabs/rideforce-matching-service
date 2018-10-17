@@ -72,6 +72,8 @@ public class MatchingController {
 	 */
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<String> getAll(@PathVariable int id) {
+		System.out.println("where are our msgs?");
+		LOGGER.info("can you see this?");
 		User rider = userClient.findById(id);
 		if (rider == null) {
 			LOGGER.error(NULL);

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import com.revature.rideshare.matching.beans.User;
 import com.revature.rideshare.matching.services.DislikeService;
@@ -15,6 +16,7 @@ import com.revature.rideshare.matching.services.LikeService;
  * @author Ray
  *
  */
+@Component
 public class RankByAffect extends RankingCriterion {
 
 	/**

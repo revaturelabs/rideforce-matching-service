@@ -78,24 +78,52 @@ public class MatchService {
 	private static final String DRIVER_ROLE = "DRIVER";
 
 	/** Feign client to User Service */
-	@Autowired
+//	@Autowired
 	private UserClient userClient;
 
-	private static RankByAffect rankByAffect;
-	private static RankByBatchEnd rankByBatchEnd;
-	private static RankByDistance rankByDistance;
-	private static RankByStartTime rankByStartTime;
-	{
-		rankByAffect = new RankByAffect();
-		rankByBatchEnd = new RankByBatchEnd();
-		rankByDistance = new RankByDistance();
-		rankByStartTime = new RankByStartTime();
+//	@Autowired
+	private RankByAffect rankByAffect;
+	
+//	@Autowired
+	private RankByBatchEnd rankByBatchEnd;
+	
+//	@Autowired
+	private RankByDistance rankByDistance;
+	
+//	@Autowired
+	private RankByStartTime rankByStartTime;
 
-		rankByAffect.setWeight(affectCoefficient);
-		rankByBatchEnd.setWeight(batchEndCoefficient);
-		rankByDistance.setWeight(distanceCoefficient);
-		rankByStartTime.setWeight(startTimeCoefficient);
-	}
+//	{
+//		rankByAffect = new RankByAffect();
+//		rankByBatchEnd = new RankByBatchEnd();
+//		rankByDistance = new RankByDistance();
+//		rankByStartTime = new RankByStartTime();
+	
+//	public MatchService(RankByAffect rankByAffect) {
+//		rankByAffect.setWeight(affectCoefficient);
+//		rankByBatchEnd.setWeight(batchEndCoefficient);
+//		rankByDistance.setWeight(distanceCoefficient);
+//		rankByStartTime.setWeight(startTimeCoefficient);
+//	}
+
+	@Autowired
+	public MatchService(UserClient userClient, RankByAffect rankByAffect, RankByBatchEnd rankByBatchEnd,
+		RankByDistance rankByDistance, RankByStartTime rankByStartTime) {
+	super();
+	this.userClient = userClient;
+	this.rankByAffect = rankByAffect;
+	this.rankByBatchEnd = rankByBatchEnd;
+	this.rankByDistance = rankByDistance;
+	this.rankByStartTime = rankByStartTime;
+	rankByAffect.setWeight(affectCoefficient);
+	rankByBatchEnd.setWeight(batchEndCoefficient);
+	rankByDistance.setWeight(distanceCoefficient);
+	rankByStartTime.setWeight(startTimeCoefficient);
+	System.out.println("Printing from MatchService constructor: Affect: " + rankByAffect);
+	System.out.println("Printing from MatchService constructor: BatchEnd: " + rankByBatchEnd);
+	System.out.println("Printing from MatchService constructor: Distance: " + rankByDistance);
+	System.out.println("Printing from MatchService constructor: StartTime: " + rankByStartTime);
+}
 
 	/**
 	 * An association of a user with a rank.
@@ -279,12 +307,14 @@ public class MatchService {
 			throw new NullPointerException();
 		}
 		int officeId = officeLinkToId(rider.getOffice());
+		System.out.println("officeId from findMatches method: " + officeId);
 		AggregateRankingBuilder arb = new AggregateRankingBuilder();
 		arb.addCriterion(rankByAffect);
 		arb.addCriterion(rankByBatchEnd);
 		arb.addCriterion(rankByDistance);
 		arb.addCriterion(rankByStartTime);
 
+		System.out.println("ARB from find Matches method: " + arb);
 		return userClient.findByOfficeAndRole(officeId, DRIVER_ROLE).stream()
 				.map(driver -> new RankedUser(driver, arb.rankMatch(rider, driver))).sorted(Comparator.reverseOrder())
 				.limit(maxMatches).map(rankedUser -> rankedUser.user).collect(Collectors.toList());

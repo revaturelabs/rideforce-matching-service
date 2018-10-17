@@ -1,5 +1,7 @@
 package com.revature.rideshare.matching.algorithm;
 
+import org.springframework.stereotype.Component;
+
 import com.revature.rideshare.matching.beans.User;
 
 /**
@@ -8,7 +10,7 @@ import com.revature.rideshare.matching.beans.User;
  * @author Julie
  *
  */
-
+@Component
 public class RankByStartTime extends RankingCriterion {
 
 	/**

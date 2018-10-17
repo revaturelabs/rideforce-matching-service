@@ -1,5 +1,7 @@
 package com.revature.rideshare.matching.algorithm;
 
+import org.springframework.stereotype.Component;
+
 import com.revature.rideshare.matching.beans.Route;
 import com.revature.rideshare.matching.beans.User;
 import com.revature.rideshare.matching.clients.MapsClient;
@@ -10,6 +12,7 @@ import com.revature.rideshare.matching.clients.MapsClient;
  * @author Ray
  *
  */
+@Component
 public class RankByDistance extends RankingCriterion {
 
 	/**
