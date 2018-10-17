@@ -13,7 +13,9 @@ import com.revature.rideshare.matching.beans.User;
 /**
  * A Feign client for accessing the user service.
  */
-@FeignClient(name="user-service", fallback=UserClientFallback.class)
+@FeignClient(name="user-service", 
+			configuration=FeignClientConfiguration.class, 
+			fallback=UserClientFallback.class)
 public interface UserClient {
 	/**
 	 * Finds all the users who work at the given office and have the given role.
@@ -27,4 +29,6 @@ public interface UserClient {
 	
 	@GetMapping(path = "/users/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	User findById(@PathVariable("id") int id);
+	
 }
+
