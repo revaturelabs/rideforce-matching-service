@@ -83,7 +83,15 @@ public class MatchingController {
 	//TODO: Implement endpoint
 	@RequestMapping(value = "/filtered", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<String> getAllFiltered(@RequestBody Filter filter, @RequestBody int id) {
-		return null;
+		User rider = userClient.findById(id);
+		if (rider == null) {
+			LOGGER.trace(NULL);
+		} else {
+			LOGGER.info(MSG, id, rider.getFirstName());
+		}
+		return matchService.findFilteredMatches(filter, rider).stream()
+				.map(driver -> UriComponentsBuilder.fromPath("/users/{id}").buildAndExpand(driver.getId()).toString())
+				.collect(Collectors.toList());
 	}
 
 	/**

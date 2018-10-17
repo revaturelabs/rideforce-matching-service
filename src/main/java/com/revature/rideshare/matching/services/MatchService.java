@@ -21,6 +21,7 @@ import com.revature.rideshare.matching.algorithm.RankByAffect;
 import com.revature.rideshare.matching.algorithm.RankByBatchEnd;
 import com.revature.rideshare.matching.algorithm.RankByDistance;
 import com.revature.rideshare.matching.algorithm.RankByStartTime;
+import com.revature.rideshare.matching.beans.Filter;
 import com.revature.rideshare.matching.beans.User;
 import com.revature.rideshare.matching.clients.UserClient;
 
@@ -80,7 +81,6 @@ public class MatchService {
 	private static RankByBatchEnd rankByBatchEnd;
 	private static RankByDistance rankByDistance;
 	private static RankByStartTime rankByStartTime;
-
 	{
 		rankByAffect = new RankByAffect();
 		rankByBatchEnd = new RankByBatchEnd();
@@ -285,6 +285,25 @@ public class MatchService {
 		return userClient.findByOfficeAndRole(officeId, DRIVER_ROLE).stream()
 				.map(driver -> new RankedUser(driver, arb.rankMatch(rider, driver))).sorted(Comparator.reverseOrder())
 				.limit(maxMatches).map(rankedUser -> rankedUser.user).collect(Collectors.toList());
+	}
+	
+	public List<User> findFilteredMatches(Filter filter, User rider) {
+		int officeId = officeLinkToId(rider.getOffice());
+		AggregateRankingBuilder arb = new AggregateRankingBuilder();
+		if(filter.isBatchEndChange()) {
+			arb.addCriterion(rankByBatchEnd);
+		}
+		if(filter.isDayStartChange()) {
+			arb.addCriterion(rankByStartTime);
+		}
+		if(filter.isDistanceChange()) {
+			arb.addCriterion(rankByDistance);
+		}
+		
+		return userClient.findByOfficeAndRole(officeId, DRIVER_ROLE).stream()
+				.map(driver -> new RankedUser(driver, arb.rankMatch(rider, driver)))
+				.sorted(Comparator.reverseOrder()).limit(maxMatches).map(rankedUser -> rankedUser.user)
+				.collect(Collectors.toList());
 	}
 
 	/**

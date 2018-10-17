@@ -13,6 +13,9 @@ public class Filter {
 	private boolean distanceChange;
 
 	public Filter() {
+		this.batchEndChange = false;
+		this.dayStartChange = false;
+		this.distanceChange = false;
 	}
 
 	public Filter(boolean batchEndChange, boolean dayStartChange, boolean distanceChange) {
