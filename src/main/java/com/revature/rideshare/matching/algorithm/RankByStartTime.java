@@ -27,7 +27,7 @@ public class RankByStartTime extends RankingCriterion {
 			throw new IllegalArgumentException("Rider and driver should not be null");
 		}
 
-		if (rider.getStartTime() < driver.getStartTime()) {
+		if (rider.getStartTime() > driver.getStartTime()) {
 			return 0.5;
 		} else if (rider.getStartTime() == driver.getStartTime()) {
 			return 1;

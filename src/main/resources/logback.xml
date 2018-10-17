@@ -73,7 +73,7 @@
 	</root>
 
 	<!-- LOG "com.revature*" at TRACE level (error, warn, debug, trace) for our logging purposes; debugging and errors-->
-	<logger name="com.revature" level="trace" additivity="false">
+	<logger name="com.revature" level="error" additivity="false">
 		<appender-ref ref="DebugFile" />
 		<appender-ref ref="Console" />
 	</logger>

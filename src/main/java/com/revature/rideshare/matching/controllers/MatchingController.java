@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +32,7 @@ import com.revature.rideshare.matching.services.MatchService;
 /**
  * The Class MatchingController.
  */
+@Lazy(true)
 @RestController
 @RequestMapping("matches")
 public class MatchingController {
@@ -73,7 +75,7 @@ public class MatchingController {
 	public List<String> getAll(@PathVariable int id) {
 		User rider = userClient.findById(id);
 		if (rider == null) {
-			LOGGER.trace(NULL);
+			LOGGER.error(NULL);
 		} else {
 			LOGGER.info(MSG, id, rider.getFirstName());
 		}
@@ -114,7 +116,7 @@ public class MatchingController {
 	public List<String> getAllMinusAffects(@PathVariable int id) {
 		User rider = userClient.findById(id);
 		if (rider == null) {
-			LOGGER.trace(NULL);
+			LOGGER.error(NULL);
 		} else {
 			LOGGER.info(MSG, id, rider.getFirstName());
 		}
@@ -134,7 +136,7 @@ public class MatchingController {
 	public List<String> getByDistance(@PathVariable int id) {
 		User rider = userClient.findById(id);
 		if (rider == null) {
-			LOGGER.trace(NULL);
+			LOGGER.error(NULL);
 		} else {
 			LOGGER.info(MSG, id, rider.getFirstName());
 		}
@@ -155,7 +157,7 @@ public class MatchingController {
 	public List<String> getByBatchEnd(@PathVariable int id) {
 		User rider = userClient.findById(id);
 		if (rider == null) {
-			LOGGER.trace(NULL);
+			LOGGER.error(NULL);
 		} else {
 			LOGGER.info(MSG, id, rider.getFirstName());
 		}
@@ -191,7 +193,7 @@ public class MatchingController {
 		likes = likeService.getLikes(id).stream().map(like -> UriComponentsBuilder.fromPath(USER_ID_URI)
 				.buildAndExpand(like.getPair().getAffectedId()).toString()).collect(Collectors.toList());
 		if (likes.isEmpty()) {
-			LOGGER.trace("Mapping process did not return any URIs associated with this user id: %d", id);
+			LOGGER.error("Mapping process did not return any URIs associated with this user id: %d", id);
 		} else {
 			LOGGER.info(
 					"likeService.getLikes called with id: %d which is then mapped to create a list of uri's that contain a path to "
@@ -237,7 +239,7 @@ public class MatchingController {
 		dislikes = dislikeService.getDislikes(id).stream().map(dislike -> UriComponentsBuilder.fromPath(USER_ID_URI)
 				.buildAndExpand(dislike.getPair().getAffectedId()).toString()).collect(Collectors.toList());
 		if (dislikes.isEmpty()) {
-			LOGGER.trace("Mapping process did not return any URIs associated with this user id: %d ", id);
+			LOGGER.error("Mapping process did not return any URIs associated with this user id: %d ", id);
 		} else {
 			LOGGER.info(
 					"dislikeService.getDislikes called with id: %d which was then mapped to create a list of uri's that contain a path to "

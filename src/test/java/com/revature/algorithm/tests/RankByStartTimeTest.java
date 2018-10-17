@@ -1,7 +1,10 @@
 package com.revature.algorithm.tests;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+
 import org.assertj.core.api.Assertions;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -64,6 +67,24 @@ public class RankByStartTimeTest {
 		Assertions.failBecauseExceptionWasNotThrown(IllegalArgumentException.class);
 	}
 	
+	@Test
+	public void testRankByStartTime_withSameStartTime_returns1() {
+		double resultSameStartTime = invokeRank(rider, driver1);
+		assertThat(resultSameStartTime).isEqualTo(1.0);
+	}
+	
+	@Test
+	public void testRankByStartTime_withDriverLaterStartTime_returns0() {
+		double resultLaterStartTime = invokeRank(rider, driver2);
+		assertThat(resultLaterStartTime).isEqualTo(0);
+	}
+	
+	@Test
+	public void testRankByStartTime_withDriverEarlierStartTime_returnsLessThan1() {
+		double resultEarlierStartTime = invokeRank(rider, driver3);
+		assertThat(resultEarlierStartTime).isEqualTo(0.5);
+	}
+		
 
 	public double invokeRank(User rider, User driver) throws IllegalArgumentException {
 		Method rank = null;
