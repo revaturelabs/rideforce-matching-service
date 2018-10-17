@@ -79,5 +79,28 @@ public class RankByAffect extends RankingCriterion {
 			return 0.5;
 		}
 	}
+	
+	
+	/**
+	 * Returns a hash code for this object. The hashcode functionality is 
+	 * specified in the parent class, as the exact algorithm for differentiating 
+	 * different subclasses is defined there. 
+	 * This method is still provided here to avoid code smells. 
+	 */
+	@Override
+	public int hashCode() {
+		return super.hashCode();
+	}
+	
+	/**
+	 * Used to constrain that all instances of a child class are viewed as equal.
+	 * This allows for only unique criterion to be stored as set items and map keys. 
+	 * The super class method is used to define the functionality. 
+	 * This method is still provided here to avoid code smells. 
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		return super.equals(obj);
+	}
 
 }
