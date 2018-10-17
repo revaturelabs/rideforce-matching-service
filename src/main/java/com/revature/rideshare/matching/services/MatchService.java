@@ -1,7 +1,13 @@
 package com.revature.rideshare.matching.services;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Properties;
 import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
@@ -18,38 +24,55 @@ import com.revature.rideshare.matching.algorithm.RankByStartTime;
 import com.revature.rideshare.matching.beans.User;
 import com.revature.rideshare.matching.clients.UserClient;
 
+// TODO: Auto-generated Javadoc
 /**
  * The main service class for finding drivers who match a given rider.
  */
 @Service
 public class MatchService {
+
+	/** The Constant LOGGER. */
+
 	private static final Logger LOGGER = LoggerFactory.getLogger(MatchService.class);
-	/**
-	 * The maximum number of matches to find.
-	 */
-	private static final int MAX_MATCHES = 10;
 
 	/**
-	 * The coefficients used to weight importance of matching features.
+	 * The maximum number of matches to find. Configured in matching.properties.
+	 */
+	private static int maxMatches;
+
+	/**
+	 * The coefficients used to weight importance of matching features. These are
+	 * configured in matching.properties.
 	 */
 
-	private static final double DISTANCE_COEFFICIENT = 1;
+	/** Can change to impact weight of distance between rider and driver in algorithm */
+	private static double distanceCoefficient;
 
-	/** The Constant BATCH_END_COEFFICIENT. */
-	private static final double BATCH_END_COEFFICIENT = 4;
+	/** Can change to impact weight of batch end of rider compared to driver */
+	private static double batchEndCoefficient;
 
-	/** The Constant AFFECT_COEFFICENT. */
-	private static final double AFFECT_COEFFICENT = 1;
-	
-	private static final double START_TIME_COEFFICIENT = 0;
-	
+	/** Can change to impact weight of rider opinion of driver affect */
+	private static double affectCoefficient;
+
+	/** Can change to impact weight of daily start time of rider compared to driver */
+	private static double startTimeCoefficient;
+
+	/** The properties were configured in matching.properties file. See setup method. */
+	Map<String, Double> property = MatchService.setup();
+	{
+		maxMatches = property.get("max_matches").intValue();
+		distanceCoefficient = property.get("distance_coefficient");
+		batchEndCoefficient = property.get("batch_end_coefficient");
+		affectCoefficient = property.get("affect_coefficient");
+		startTimeCoefficient = property.get("start_time_coefficient");
+	}
 
 	/**
 	 * The role corresponding to a potential driver.
 	 */
 	private static final String DRIVER_ROLE = "DRIVER";
 
-	/** The maps client. */
+	/** Feign client to User Service */
 	@Autowired
 	private UserClient userClient;
 
@@ -57,24 +80,25 @@ public class MatchService {
 	private static RankByBatchEnd rankByBatchEnd;
 	private static RankByDistance rankByDistance;
 	private static RankByStartTime rankByStartTime;
-	
+
 	{
 		rankByAffect = new RankByAffect();
 		rankByBatchEnd = new RankByBatchEnd();
 		rankByDistance = new RankByDistance();
 		rankByStartTime = new RankByStartTime();
-		
-		rankByAffect.setWeight(AFFECT_COEFFICENT);
-		rankByBatchEnd.setWeight(BATCH_END_COEFFICIENT);
-		rankByDistance.setWeight(DISTANCE_COEFFICIENT);
-		rankByStartTime.setWeight(START_TIME_COEFFICIENT);
-		
+
+		rankByAffect.setWeight(affectCoefficient);
+		rankByBatchEnd.setWeight(batchEndCoefficient);
+		rankByDistance.setWeight(distanceCoefficient);
+		rankByStartTime.setWeight(startTimeCoefficient);
+
 	}
 
 	/**
 	 * An association of a user with a rank.
 	 */
 	private static class RankedUser implements Comparable<RankedUser> {
+
 		/**
 		 * The user in the association.
 		 */
@@ -106,6 +130,43 @@ public class MatchService {
 		public int compareTo(RankedUser o) {
 			return Double.compare(rank, o.rank);
 		}
+
+		@Override
+		public int hashCode() {
+			final int prime = 31;
+			int result = 1;
+			long temp;
+			temp = Double.doubleToLongBits(rank);
+			result = prime * result + (int) (temp ^ (temp >>> 32));
+			result = prime * result + ((user == null) ? 0 : user.hashCode());
+			return result;
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (this == obj) {
+				return true;
+			}
+			if (obj == null) {
+				return false;
+			}
+			if (getClass() != obj.getClass()) {
+				return false;
+			}
+			RankedUser other = (RankedUser) obj;
+			if (Double.doubleToLongBits(rank) != Double.doubleToLongBits(other.rank)) {
+				return false;
+			}
+			if (user == null) {
+				if (other.user != null) {
+					return false;
+				}
+			} else if (!user.equals(other.user)) {
+				return false;
+			}
+			return true;
+		}
+
 	}
 
 	/**
@@ -114,7 +175,7 @@ public class MatchService {
 	 * 
 	 * @param rider the user looking for a ride
 	 * @return unranked list of matched drivers, sorted by distance in descending
-	 *         order (up to {@link #MAX_MATCHES})
+	 *         order (up to {@link #maxMatches})
 	 */
 	public List<User> findMatchesByDistance(User rider) {
 		if (rider != null) {
@@ -129,7 +190,7 @@ public class MatchService {
 
 		return userClient.findByOfficeAndRole(officeId, DRIVER_ROLE).stream()
 				.map(driver -> new RankedUser(driver, arb.rankMatch(rider, driver))).sorted(Comparator.reverseOrder())
-				.limit(MAX_MATCHES).map(rankedUser -> rankedUser.user).collect(Collectors.toList());
+				.limit(maxMatches).map(rankedUser -> rankedUser.user).collect(Collectors.toList());
 	}
 
 	/**
@@ -138,7 +199,7 @@ public class MatchService {
 	 * 
 	 * @param rider the user looking for a ride
 	 * @return unranked list of matched drivers, minus affected (up to
-	 *         {@link #MAX_MATCHES})
+	 *         {@link #maxMatches})
 	 */
 	public List<User> findMatchesByAffects(User rider) {
 		if (rider != null) {
@@ -153,7 +214,7 @@ public class MatchService {
 
 		return userClient.findByOfficeAndRole(officeId, DRIVER_ROLE).stream()
 				.map(driver -> new RankedUser(driver, arb.rankMatch(rider, driver))).sorted(Comparator.reverseOrder())
-				.limit(MAX_MATCHES).map(rankedUser -> rankedUser.user).collect(Collectors.toList());
+				.limit(maxMatches).map(rankedUser -> rankedUser.user).collect(Collectors.toList());
 	}
 
 	/**
@@ -177,9 +238,8 @@ public class MatchService {
 
 		return userClient.findByOfficeAndRole(officeId, DRIVER_ROLE).stream()
 				.map(driver -> new RankedUser(driver, arb.rankMatch(rider, driver))).sorted(Comparator.reverseOrder())
-				.limit(MAX_MATCHES).map(rankedUser -> rankedUser.user).collect(Collectors.toList());
+				.limit(maxMatches).map(rankedUser -> rankedUser.user).collect(Collectors.toList());
 	}
-
 
 	/**
 	 * Finds matched drivers for rider based on start time. Association formed
@@ -196,16 +256,17 @@ public class MatchService {
 
 		return userClient.findByOfficeAndRole(officeId, DRIVER_ROLE).stream()
 				.map(driver -> new RankedUser(driver, arb.rankMatch(rider, driver))).sorted(Comparator.reverseOrder())
-				.limit(MAX_MATCHES).map(rankedUser -> rankedUser.user).collect(Collectors.toList());
+				.limit(maxMatches).map(rankedUser -> rankedUser.user).collect(Collectors.toList());
 	}
 
 	/**
-	 * Finds matched drivers for rider based on a weighted rank from distance batch
-	 * end, and whether they are liked or disliked drivers (affected drivers).
+	 * Finds matched drivers for rider based on a weighted rank from distance, batch
+	 * end, daily start time, and whether they are liked or disliked drivers
+	 * (affected drivers).
 	 * 
 	 * @param rider the user for whom to find a driver
 	 * @return list of matched drivers, sorted by nearest distance and closest batch
-	 *         end date in descending order (up to {@link #MAX_MATCHES})
+	 *         end date in descending order (up to {@link #maxMatches})
 	 */
 	public List<User> findMatches(User rider) {
 		if (rider != null) {
@@ -223,7 +284,7 @@ public class MatchService {
 
 		return userClient.findByOfficeAndRole(officeId, DRIVER_ROLE).stream()
 				.map(driver -> new RankedUser(driver, arb.rankMatch(rider, driver))).sorted(Comparator.reverseOrder())
-				.limit(MAX_MATCHES).map(rankedUser -> rankedUser.user).collect(Collectors.toList());
+				.limit(maxMatches).map(rankedUser -> rankedUser.user).collect(Collectors.toList());
 	}
 
 	/**
@@ -240,5 +301,26 @@ public class MatchService {
 		} catch (NumberFormatException e) {
 			throw new IllegalArgumentException(link + " is not a valid office link.");
 		}
+	}
+
+	private static Map<String, Double> setup() {
+		Properties prop = new Properties();
+		InputStream in;
+		try {
+			in = new FileInputStream("matching.properties");
+			prop.load(in);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		Map<String, Double> values = new HashMap<>();
+
+		values.put("max_matches", Double.parseDouble(prop.getProperty("max_matches")));
+		values.put("distance_coefficient", Double.parseDouble(prop.getProperty("distance_coefficient")));
+		values.put("batch_end_coefficient", Double.parseDouble(prop.getProperty("batch_end_coefficient")));
+		values.put("affect_coefficient", Double.parseDouble(prop.getProperty("affect_coefficient")));
+		values.put("start_time_coefficient", Double.parseDouble(prop.getProperty("start_time_coefficient")));
+
+		return values;
 	}
 }
