@@ -32,7 +32,7 @@ import com.revature.rideshare.matching.services.MatchService;
 /**
  * The Class MatchingController.
  */
-@Lazy(true)
+
 @RestController
 @RequestMapping("matches")
 public class MatchingController {
