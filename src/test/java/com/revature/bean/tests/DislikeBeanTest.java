@@ -16,6 +16,7 @@ import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import com.revature.rideshare.matching.beans.Dislike;
 import com.revature.rideshare.matching.beans.Pair;
 
+// TODO: Auto-generated Javadoc
 /**
  * This test, DislikeBeanTest, will act as 
  * regression testing to ensure the stability of our 
@@ -57,9 +58,12 @@ public class DislikeBeanTest {
 	public void testDislikeConstructorNull() {
 
 		Dislike dis = new Dislike(null);
+		Dislike disNoArg = new Dislike();
 
 		Set<ConstraintViolation<Dislike>> violations = localValidatorFactory.validate(dis);
+		Set<ConstraintViolation<Dislike>> violations1 = localValidatorFactory.validate(disNoArg);
 		assertTrue(violations.size() == 1);
+		assertTrue(violations1.size() == 1);
 	}
 	
 	/**
@@ -73,9 +77,45 @@ public class DislikeBeanTest {
 		Set<ConstraintViolation<Dislike>> violations = localValidatorFactory.validate(dis);
 		assertTrue(violations.size() == 0);
 	}
+	
+	/**
+	 * Test dislike toString.
+	 */
+	@Test
+	public void testDislikeToString() {
+
+		Dislike dis = new Dislike(new Pair(1,2));
+
+		assertTrue(dis.toString().equals("Dislike [userId=" + 1 + ", affectedId=" + 2 + "]"));
+	}
+	
+	/**
+	 * Test dislike setter.
+	 */
+	@Test
+	public void testDislikeSetter() {
+
+		Dislike dis = new Dislike(new Pair(1,2));
+		Pair p = new Pair(3,4);
+		dis.setPair(p);
+
+		assertTrue(dis.getPair().equals(p));
+	}
+	
+	/**
+	 * Test dislike hash.
+	 */
+	@Test
+	public void testHash() {
+
+		Dislike dis = new Dislike(new Pair(1,2));
+		Dislike dis1 = new Dislike(new Pair(1,2));
+
+		assertTrue(dis.hashCode() == dis1.hashCode());
+	}
 
 	/**
-	 * Test dislike equals method
+	 * Test dislike equals method.
 	 */
 	@Test
 	public void testDislikeEquals() {
@@ -83,13 +123,19 @@ public class DislikeBeanTest {
 		Pair pair = new Pair(1, 2);
 		Pair pairEq = new Pair(1, 2);
 		Pair pairNotEq = new Pair(3, 4);
+		Pair pairNotEq1 = new Pair(1, 4);
 
 		Dislike dis = new Dislike(pair);
 		Dislike disEq = new Dislike(pairEq);
 		Dislike disNotEq = new Dislike(pairNotEq);
+		Dislike disNotEq1 = new Dislike(pairNotEq1);
 
 		assertTrue("Dislike equals override not functioning properly; should be true.", dis.equals(disEq));
+		assertTrue("Dislike equals override not functioning properly; should be true.", dis.equals(dis));
+		assertFalse("Dislike equals override not functioning properly; should be false.", dis.equals(pair));
 		assertFalse("Dislike equals override not functioning properly; should be false.", dis.equals(disNotEq));
+		assertFalse("Dislike equals override not functioning properly; should be false.", dis.equals(disNotEq1));
+		assertFalse("Dislike equals override not functioning properly; should be false.", dis.equals(null));
 
 	}
 

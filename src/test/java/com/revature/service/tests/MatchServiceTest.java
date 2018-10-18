@@ -26,7 +26,6 @@ import com.revature.rideshare.matching.beans.Pair;
 import com.revature.rideshare.matching.beans.User;
 import com.revature.rideshare.matching.repositories.DislikeRepository;
 import com.revature.rideshare.matching.repositories.LikeRepository;
-import com.revature.rideshare.matching.services.MatchService;
 
 @SpringBootTest(classes= Application.class)
 @RunWith(SpringRunner.class)
@@ -43,9 +42,9 @@ public class MatchServiceTest {
 	
 	@Autowired
 	private DislikeRepository dislikeRepository;
-	
+	/*
 	private MatchService matchService = new MatchService();
-	
+	*/
 	
 	User rider = new User();
 	User driver1 = new User();

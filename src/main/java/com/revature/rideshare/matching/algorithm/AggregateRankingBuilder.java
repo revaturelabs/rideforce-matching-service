@@ -11,7 +11,7 @@ import com.revature.rideshare.matching.exceptions.NoRankingCriteriaException;
 
 /**
  * Class used to build a complex ranking algorithm. Allows for different ranking
- * criteria to be added to the ranking equation dynamically
+ * criteria to be added to the ranking equation dynamically.
  * 
  * @author Ray
  *
@@ -25,7 +25,7 @@ public class AggregateRankingBuilder {
 	private Set<RankingCriterion> criteria;
 
 	/**
-	 * This variable is used to re-scale the ranking to between 0 and 1
+	 * This variable is used to re-scale the ranking to between 0 and 1.
 	 */
 	private double scaleVariable;
 
@@ -35,7 +35,7 @@ public class AggregateRankingBuilder {
 
 	/**
 	 * Adds a new ranking criterion to the algorithm. It will accept only unique
-	 * criterion, repeats will be ignored
+	 * criterion; repeats will be ignored.
 	 * 
 	 * @param criterion criterion to be added into the algorithm
 	 */
@@ -50,8 +50,8 @@ public class AggregateRankingBuilder {
 	}
 
 	/**
-	 * Adds a new ranking criterion to the algorithm with it's associated weight. It
-	 * will accept only unique criterion, repeats will be ignored
+	 * Adds a new ranking criterion to the algorithm along with its associated weight. It
+	 * will accept only unique criterion; repeats will be ignored.
 	 * 
 	 * @param criterion criterion to be added into the algorithm
 	 * @param weight the weight to be associated with the criterion
@@ -72,7 +72,7 @@ public class AggregateRankingBuilder {
 	 * 
 	 * @param rider  the rider for whom we are finding a match
 	 * @param driver the candidate driver for the match
-	 * @return
+	 * @return double value between 0 and 1 that represents a driver's rank; higher is better
 	 */
 	public double rankMatch(User rider, User driver) {
 		if (rider == null || driver == null) {

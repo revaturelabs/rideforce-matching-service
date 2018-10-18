@@ -44,7 +44,7 @@ public class ResponseError {
 	 * @param e the exception from which to construct the {@code ResponseError}. The
 	 *          exception's message will be used as the message for the
 	 *          {@code ResponseError}, but the stack trace will not be included in
-	 *          the details (for security reasons).
+	 *          the details for security reasons.
 	 */
 	public ResponseError(Exception e) {
 		this(e.getMessage());
@@ -87,7 +87,7 @@ public class ResponseError {
 
 	/** 
 	 * Returns the string message describing the error that occurred. 
-	 * @return A string describing the error. 
+	 * @return a string describing the error. 
 	 */
 	public String getMessage() {
 		return message;
@@ -95,7 +95,7 @@ public class ResponseError {
 	
 	/**
 	 * Sets the string message describing the error that occurred.
-	 * @param message  a string describing the error. 
+	 * @param message a string describing the error. 
 	 */
 	public void setMessage(String message) {
 		this.message = message;
@@ -119,8 +119,9 @@ public class ResponseError {
 		this.details = details;
 	}
 
-	/** Returns a hashcode for this Route object. This code is based on the 
-	 * message string and the array of details strings. */
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -130,15 +131,9 @@ public class ResponseError {
 		return result;
 	}
 
-	/** Tests for equality between this {@code ResponseError} and another object. 
-	 * This returns true if the provided object reference is a non-null reference 
-	 * to a {@code ResponseError} object, and that the message and details of 
-	 * this and the other {@code ResponseError}objects are equal. For details this 
-	 * tests equality of each element. Returns false if the this and the provided 
-	 * object aren't equal. 
-	 * @param obj - An object to test for equality against
-	 * @return True if this and {@code obj} are equal. False otherwise. */
-	@Override
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;

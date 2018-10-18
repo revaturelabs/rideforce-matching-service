@@ -32,13 +32,14 @@ import com.revature.rideshare.matching.services.MatchService;
 /**
  * The Class MatchingController.
  */
+@Lazy(true)
 @RestController
 @RequestMapping("matches")
 public class MatchingController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(MatchingController.class);
 	private static final String MSG = "Get request to matching controller made with UserId : {} passed. userClient called to find user by that id. userClient returned the user: {}";
 	private static final String NULL = "userClient return a null user object.";
-	private static final String USER_ID_URI = "/users/{id}";
+	private static final String USER_ID_URI = "/users/{id}"; 
 
 	/**
 	 * This boolean specifies if detailed debugging output should be sent to the
@@ -100,7 +101,7 @@ public class MatchingController {
 			LOGGER.info(MSG, id, rider.getFirstName());
 		}
 		return matchService.findFilteredMatches(filter, rider).stream()
-				.map(driver -> UriComponentsBuilder.fromPath("/users/{id}").buildAndExpand(driver.getId()).toString())
+				.map(driver -> UriComponentsBuilder.fromPath(USER_ID_URI).buildAndExpand(driver.getId()).toString())
 				.collect(Collectors.toList());
 	}
 

@@ -35,6 +35,9 @@ import com.revature.rideshare.matching.repositories.LikeRepository;
 import com.revature.rideshare.matching.services.DislikeService;
 import com.revature.rideshare.matching.services.LikeService;
 
+/**
+ * The Class RankByAffectTest.
+ */
 @SpringBootTest(classes = Application.class)
 @RunWith(SpringRunner.class)
 @DataJpaTest
@@ -43,11 +46,14 @@ import com.revature.rideshare.matching.services.LikeService;
 @EnableAsync
 public class RankByAffectTest {
 
+	/**
+	 * The Class TestContextConfiguration.
+	 */
 	@TestConfiguration
-	static class ServiceImplTestContextConfiguration {
+	static class TestContextConfiguration {
 
 		/**
-		 * Like service.
+		 * LikeService mock bean.
 		 *
 		 * @return the like service
 		 */
@@ -56,11 +62,21 @@ public class RankByAffectTest {
 			return new LikeService();
 		}
 
+		/**
+		 * DislikeService mock bean.
+		 *
+		 * @return the dislike service
+		 */
 		@Bean
 		public DislikeService dislikeService() {
 			return new DislikeService();
 		}
-		
+
+		/**
+		 * RankByAffect mock bean.
+		 *
+		 * @return the rank by affect
+		 */
 		@Bean
 		public RankByAffect rankByAffect() {
 			return new RankByAffect();
@@ -72,7 +88,7 @@ public class RankByAffectTest {
 	@Autowired
 	TestEntityManager testEntityManager;
 
-	/** The like repo. */
+	/** The like repository. */
 	@Autowired
 	LikeRepository likeRepo;
 
@@ -80,20 +96,33 @@ public class RankByAffectTest {
 	@Autowired
 	LikeService likeService;
 
+	/** The dislike repository. */
 	@Autowired
 	DislikeRepository dislikeRepo;
 
+	/** The dislike service. */
 	@Autowired
 	DislikeService dislikeService;
-	
+
+	/** The rank by affect. */
 	@Autowired
 	RankByAffect rankByAffect;
 
+	/** The rider. */
 	static User rider = new User();
+
+	/** The driver 1. */
 	static User driver1 = new User();
+
+	/** The driver 2. */
 	static User driver2 = new User();
+
+	/** The driver 3. */
 	static User driver3 = new User();
 
+	/**
+	 * Sets up the mock data and cleans the application context.
+	 */
 	@Before
 	public void setUp() {
 
@@ -113,6 +142,9 @@ public class RankByAffectTest {
 		driver3.setId(4);
 	}
 
+	/**
+	 * Validates setup variables.
+	 */
 	@Test
 	public void validate() {
 		assertNotNull(testEntityManager);
@@ -123,6 +155,9 @@ public class RankByAffectTest {
 		assertNotNull(rankByAffect);
 	}
 
+	/**
+	 * Rank with null rider should throw illegal argument exception.
+	 */
 	@Test
 	public void rank_withNullRider_shouldThrowIllegalArgumentException() {
 		try {
@@ -134,6 +169,9 @@ public class RankByAffectTest {
 		Assertions.failBecauseExceptionWasNotThrown(IllegalArgumentException.class);
 	}
 
+	/**
+	 * Tests that rank with null driver throws illegal argument exception.
+	 */
 	@Test
 	public void rank_withNullDriver_shouldThrowIllegalArgumentException() {
 		try {
@@ -145,6 +183,9 @@ public class RankByAffectTest {
 		Assertions.failBecauseExceptionWasNotThrown(IllegalArgumentException.class);
 	}
 
+	/**
+	 * Tests that rank with null parameters throws illegal argument exception.
+	 */
 	@Test
 	public void rank_withNullParameters_shouldThrowIllegalArgumentException() {
 		try {
@@ -156,6 +197,9 @@ public class RankByAffectTest {
 		Assertions.failBecauseExceptionWasNotThrown(IllegalArgumentException.class);
 	}
 
+	/**
+	 * Tests that initializeAffects populates likedIds and dislikedIds lists
+	 */
 	@Test
 	public void testRankByAffect_initializeAffects() {
 		Method initializeAffects = null;
@@ -179,28 +223,45 @@ public class RankByAffectTest {
 		List<Integer> dislikedIdsList = rankByAffect.getDislikedIds();
 		assertThat(likedIdsList).hasSize(1);
 		assertThat(dislikedIdsList).hasSize(1);
-
 	}
 
+	/**
+	 * Tests that liked affect returns a 1 for rider-driver ranking.
+	 */
 	@Test
-	public void testRankByAffect_liked_returns1() {	
+	public void testRankByAffect_liked_returns1() {
 		double resultLikedAffect = invokeRank(rider, driver1);
 		assertThat(resultLikedAffect).isEqualTo(1.0);
 	}
-	
+
+	/**
+	 * Tests that disliked affect returns a 0 for rider-driver ranking.
+	 */
 	@Test
-	public void testRankByAffect_disliked_returns0() {	
+	public void testRankByAffect_disliked_returns0() {
 		double resultdisLikedAffect = invokeRank(rider, driver2);
 		assertThat(resultdisLikedAffect).isEqualTo(0.0);
 	}
 
-	
+	/**
+	 * Tests that neutral (neither liked nor disliked) affect returns a 0.5 for
+	 * rider-driver ranking.
+	 */
 	@Test
-	public void testRankByAffect_neutral_returnsLessThan1() {	
+	public void testRankByAffect_neutral_returnsLessThan1() {
 		double resultNeutralAffect = invokeRank(rider, driver3);
 		assertThat(resultNeutralAffect).isEqualTo(0.5);
 	}
 
+	/**
+	 * Invoke rank. Method uses reflection to access private rank method from
+	 * RankByAffect.
+	 *
+	 * @param rider  the rider
+	 * @param driver the driver
+	 * @return the double value representing rider-driver ranking
+	 * @throws IllegalArgumentException the illegal argument exception
+	 */
 	public double invokeRank(User rider, User driver) throws IllegalArgumentException {
 		Method rank = null;
 		double result = -1;

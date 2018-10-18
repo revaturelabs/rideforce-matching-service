@@ -27,7 +27,7 @@ public class Dislike {
 	/**
 	 * Instantiates a new dislike.
 	 *
-	 * @param pair the pair
+	 * @param pair the rider-driver pair
 	 */
 	public Dislike(Pair pair) {
 		super();
@@ -35,18 +35,18 @@ public class Dislike {
 	}
 
 	/**
-	 * Gets the pair.
+	 * Gets the rider-driver pair.
 	 *
-	 * @return the pair
+	 * @return the rider-driver pair
 	 */
 	public Pair getPair() {
 		return pair;
 	}
 
 	/**
-	 * Sets the pair.
+	 * Sets the rider-driver pair.
 	 *
-	 * @param pair the new pair
+	 * @param pair the new  rider-driver pair
 	 */
 	public void setPair(Pair pair) {
 		this.pair = pair;
