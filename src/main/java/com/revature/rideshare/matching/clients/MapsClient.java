@@ -10,7 +10,7 @@ import com.revature.rideshare.matching.beans.Route;
 /**
  * A Feign client for accessing the Maps Service.
  */
-@FeignClient(name="maps-service", fallback=MapsClientFallback.class)
+@FeignClient(name="maps-service")//, fallback=MapsClientFallback.class)
 public interface MapsClient {
 	/**
 	 * Gets information for a route between two addresses.

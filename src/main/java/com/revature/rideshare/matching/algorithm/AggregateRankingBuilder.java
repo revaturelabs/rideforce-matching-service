@@ -82,11 +82,20 @@ public class AggregateRankingBuilder {
 			throw new NoRankingCriteriaException("At least one criterion required to run algorithm");
 		}
 		double totalWeightedRank = 0;
-		List<Double> weightedRanks = this.criteria.stream().map(criterion -> criterion.getWeightedRank(rider, driver))
+//		System.out.println("Initial totalWeightedRank in rankMatch: " + totalWeightedRank);
+		List<Double> weightedRanks = this.criteria.stream().map(criterion -> {
+//					System.out.println("Executing criterion: " + criterion.getClass().getSimpleName());
+					double result = criterion.getWeightedRank(rider, driver);
+//					System.out.println("Results from " + criterion.getClass().getSimpleName() + " is " + result);
+					return result;
+		})
+
 				.collect(Collectors.toList());
+//		System.out.println("weightedRanks list: " + weightedRanks.toString());
 		for (Double weightedRank : weightedRanks) {
 			totalWeightedRank += weightedRank;
 		}
+//		System.out.println(totalWeightedRank);
 		return totalWeightedRank / scaleVariable;
 	}
 

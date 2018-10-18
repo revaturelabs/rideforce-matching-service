@@ -11,7 +11,7 @@ spring:
     name: matching-service
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     database-platform: Oracle10g
 
 eureka:

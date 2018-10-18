@@ -1,5 +1,6 @@
 package com.revature.rideshare.matching.algorithm;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.revature.rideshare.matching.beans.Route;
@@ -18,6 +19,7 @@ public class RankByDistance extends RankingCriterion {
 	/**
 	 * The feign client used to connect to our maps service
 	 */
+	@Autowired
 	private MapsClient mapsClient;
 
 	/**
@@ -29,7 +31,9 @@ public class RankByDistance extends RankingCriterion {
 	 */
 	@Override
 	protected double rank(User rider, User driver) {
+//		System.out.println("Executing rank in RankByDistance");
 		Route riderToDriver = mapsClient.getRoute(rider.getAddress(), driver.getAddress());
+//		System.out.println("riderToDriver in RankByDistance class: " + riderToDriver.toString());
 		return 1 / ((double) riderToDriver.getDistance() + 1);
 	}
 

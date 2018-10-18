@@ -218,10 +218,12 @@ public class MatchService {
 		int officeId = officeLinkToId(rider.getOffice());
 		AggregateRankingBuilder arb = new AggregateRankingBuilder();
 		arb.addCriterion(rankByDistance);
-
-		return userClient.findByOfficeAndRole(officeId, DRIVER_ROLE).stream()
+		System.out.println("ARB from findMatchesByDistance: " + arb.toString());
+		List<User> results = userClient.findByOfficeAndRole(officeId, DRIVER_ROLE).stream()
 				.map(driver -> new RankedUser(driver, arb.rankMatch(rider, driver))).sorted(Comparator.reverseOrder())
 				.limit(maxMatches).map(rankedUser -> rankedUser.user).collect(Collectors.toList());
+		System.out.println("Results from findMatchesByDistance: " + results.toString());
+		return results;
 	}
 
 	/**
@@ -307,17 +309,19 @@ public class MatchService {
 			throw new NullPointerException();
 		}
 		int officeId = officeLinkToId(rider.getOffice());
-		System.out.println("officeId from findMatches method: " + officeId);
+//		System.out.println("officeId from findMatches method: " + officeId);
 		AggregateRankingBuilder arb = new AggregateRankingBuilder();
 		arb.addCriterion(rankByAffect);
 		arb.addCriterion(rankByBatchEnd);
 		arb.addCriterion(rankByDistance);
 		arb.addCriterion(rankByStartTime);
 
-		System.out.println("ARB from find Matches method: " + arb);
-		return userClient.findByOfficeAndRole(officeId, DRIVER_ROLE).stream()
+//		System.out.println("ARB from find Matches method: " + arb);
+		List<User> drivers = userClient.findByOfficeAndRole(officeId, DRIVER_ROLE).stream()
 				.map(driver -> new RankedUser(driver, arb.rankMatch(rider, driver))).sorted(Comparator.reverseOrder())
 				.limit(maxMatches).map(rankedUser -> rankedUser.user).collect(Collectors.toList());
+		System.out.println("Returned drivers: " + drivers.toString());
+		return drivers;
 	}
 
 	/**
