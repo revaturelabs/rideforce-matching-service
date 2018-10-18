@@ -60,48 +60,16 @@ public class MatchService {
 	 */
 	private static double startTimeCoefficient;
 
-	
-	/** 
-	 * The string representation of the match service property, max matches. 
-	 * This references the matching.properties file. 
-	 */
-	public static final String MAX_MATCHES_STR = "max_matches";
-	
-	/** 
-	 * The string representation of the match service property, distance coefficient. 
-	 * This references the matching.properties file. 
-	 */
-	public static final String DISTANCE_COEFFICIENT_STR = "distance_coefficient";
-	
-	/** 
-	 * The string representation of the match service property, batch end coefficient. 
-	 * This references the matching.properties file. 
-	 */
-	public static final String BATCH_END_COEFFICIENT_STR = "batch_end_coefficient";
-	
-	/** 
-	 * The string representation of the match service property, affect coefficient. 
-	 * This references the matching.properties file. 
-	 */
-	public static final String AFFECT_COEFFICIENT_STR = "affect_coefficient";
-	
-	/** 
-	 * The string representation of the match service property, start time coefficient. 
-	 * This references the matching.properties file. 
-	 */
-	public static final String START_TIME_COEFFICIENT_STR = "start_time_coefficient";
-	
-	
 	/**
 	 * The properties were configured in matching.properties file. See setup method.
 	 */
 	Map<String, Double> property = MatchService.setup();
 	{
-		maxMatches = property.get(MAX_MATCHES_STR).intValue();
-		distanceCoefficient = property.get(DISTANCE_COEFFICIENT_STR);
-		batchEndCoefficient = property.get(BATCH_END_COEFFICIENT_STR);
-		affectCoefficient = property.get(AFFECT_COEFFICIENT_STR);
-		startTimeCoefficient = property.get(START_TIME_COEFFICIENT_STR);		
+		maxMatches = property.get("max_matches").intValue();
+		distanceCoefficient = property.get("distance_coefficient");
+		batchEndCoefficient = property.get("batch_end_coefficient");
+		affectCoefficient = property.get("affect_coefficient");
+		startTimeCoefficient = property.get("start_time_coefficient");		
 	}
 
 	/**
@@ -110,24 +78,52 @@ public class MatchService {
 	private static final String DRIVER_ROLE = "DRIVER";
 
 	/** Feign client to User Service */
-	@Autowired
+//	@Autowired
 	private UserClient userClient;
 
-	private static RankByAffect rankByAffect;
-	private static RankByBatchEnd rankByBatchEnd;
-	private static RankByDistance rankByDistance;
-	private static RankByStartTime rankByStartTime;
-	{
-		rankByAffect = new RankByAffect();
-		rankByBatchEnd = new RankByBatchEnd();
-		rankByDistance = new RankByDistance();
-		rankByStartTime = new RankByStartTime();
+//	@Autowired
+	private RankByAffect rankByAffect;
+	
+//	@Autowired
+	private RankByBatchEnd rankByBatchEnd;
+	
+//	@Autowired
+	private RankByDistance rankByDistance;
+	
+//	@Autowired
+	private RankByStartTime rankByStartTime;
 
-		rankByAffect.setWeight(affectCoefficient);
-		rankByBatchEnd.setWeight(batchEndCoefficient);
-		rankByDistance.setWeight(distanceCoefficient);
-		rankByStartTime.setWeight(startTimeCoefficient);
-	}
+//	{
+//		rankByAffect = new RankByAffect();
+//		rankByBatchEnd = new RankByBatchEnd();
+//		rankByDistance = new RankByDistance();
+//		rankByStartTime = new RankByStartTime();
+	
+//	public MatchService(RankByAffect rankByAffect) {
+//		rankByAffect.setWeight(affectCoefficient);
+//		rankByBatchEnd.setWeight(batchEndCoefficient);
+//		rankByDistance.setWeight(distanceCoefficient);
+//		rankByStartTime.setWeight(startTimeCoefficient);
+//	}
+
+	@Autowired
+	public MatchService(UserClient userClient, RankByAffect rankByAffect, RankByBatchEnd rankByBatchEnd,
+		RankByDistance rankByDistance, RankByStartTime rankByStartTime) {
+	super();
+	this.userClient = userClient;
+	this.rankByAffect = rankByAffect;
+	this.rankByBatchEnd = rankByBatchEnd;
+	this.rankByDistance = rankByDistance;
+	this.rankByStartTime = rankByStartTime;
+	rankByAffect.setWeight(affectCoefficient);
+	rankByBatchEnd.setWeight(batchEndCoefficient);
+	rankByDistance.setWeight(distanceCoefficient);
+	rankByStartTime.setWeight(startTimeCoefficient);
+	System.out.println("Printing from MatchService constructor: Affect: " + rankByAffect);
+	System.out.println("Printing from MatchService constructor: BatchEnd: " + rankByBatchEnd);
+	System.out.println("Printing from MatchService constructor: Distance: " + rankByDistance);
+	System.out.println("Printing from MatchService constructor: StartTime: " + rankByStartTime);
+}
 
 	/**
 	 * An association of a user with a rank.
@@ -137,13 +133,13 @@ public class MatchService {
 		/**
 		 * The user in the association.
 		 */
-		private User user;
+		public User user;
 		/**
 		 * The matching rank, as defined by
 		 * {@link com.revature.rideshare.matching.services.MatchService#rankMatch(User, User)
 		 * rankMatch}.
 		 */
-		private double rank;
+		public double rank;
 
 		/**
 		 * Instantiates a new ranked user.
@@ -222,10 +218,12 @@ public class MatchService {
 		int officeId = officeLinkToId(rider.getOffice());
 		AggregateRankingBuilder arb = new AggregateRankingBuilder();
 		arb.addCriterion(rankByDistance);
-
-		return userClient.findByOfficeAndRole(officeId, DRIVER_ROLE).stream()
+		System.out.println("ARB from findMatchesByDistance: " + arb.toString());
+		List<User> results = userClient.findByOfficeAndRole(officeId, DRIVER_ROLE).stream()
 				.map(driver -> new RankedUser(driver, arb.rankMatch(rider, driver))).sorted(Comparator.reverseOrder())
 				.limit(maxMatches).map(rankedUser -> rankedUser.user).collect(Collectors.toList());
+		System.out.println("Results from findMatchesByDistance: " + results.toString());
+		return results;
 	}
 
 	/**
@@ -311,15 +309,19 @@ public class MatchService {
 			throw new NullPointerException();
 		}
 		int officeId = officeLinkToId(rider.getOffice());
+//		System.out.println("officeId from findMatches method: " + officeId);
 		AggregateRankingBuilder arb = new AggregateRankingBuilder();
 		arb.addCriterion(rankByAffect);
 		arb.addCriterion(rankByBatchEnd);
 		arb.addCriterion(rankByDistance);
 		arb.addCriterion(rankByStartTime);
 
-		return userClient.findByOfficeAndRole(officeId, DRIVER_ROLE).stream()
+//		System.out.println("ARB from find Matches method: " + arb);
+		List<User> drivers = userClient.findByOfficeAndRole(officeId, DRIVER_ROLE).stream()
 				.map(driver -> new RankedUser(driver, arb.rankMatch(rider, driver))).sorted(Comparator.reverseOrder())
 				.limit(maxMatches).map(rankedUser -> rankedUser.user).collect(Collectors.toList());
+		System.out.println("Returned drivers: " + drivers.toString());
+		return drivers;
 	}
 
 	/**
@@ -376,16 +378,16 @@ public class MatchService {
 		try {
 			prop.load(new FileReader(path));
 		} catch (IOException e) {
-			LOGGER.error("Properties file not found! " + e);
+			e.printStackTrace();
 		}
 
 		Map<String, Double> values = new HashMap<>();
 
-		values.put(MAX_MATCHES_STR, Double.parseDouble(prop.getProperty(MAX_MATCHES_STR)));
-		values.put(DISTANCE_COEFFICIENT_STR, Double.parseDouble(prop.getProperty(DISTANCE_COEFFICIENT_STR)));
-		values.put(BATCH_END_COEFFICIENT_STR, Double.parseDouble(prop.getProperty(BATCH_END_COEFFICIENT_STR)));
-		values.put(AFFECT_COEFFICIENT_STR, Double.parseDouble(prop.getProperty(AFFECT_COEFFICIENT_STR)));
-		values.put(START_TIME_COEFFICIENT_STR, Double.parseDouble(prop.getProperty(START_TIME_COEFFICIENT_STR)));
+		values.put("max_matches", Double.parseDouble(prop.getProperty("max_matches")));
+		values.put("distance_coefficient", Double.parseDouble(prop.getProperty("distance_coefficient")));
+		values.put("batch_end_coefficient", Double.parseDouble(prop.getProperty("batch_end_coefficient")));
+		values.put("affect_coefficient", Double.parseDouble(prop.getProperty("affect_coefficient")));
+		values.put("start_time_coefficient", Double.parseDouble(prop.getProperty("start_time_coefficient")));
 
 		return values;
 	}
