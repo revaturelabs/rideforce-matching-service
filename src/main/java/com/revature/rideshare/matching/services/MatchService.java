@@ -124,6 +124,9 @@ public class MatchService {
 	System.out.println("Printing from MatchService constructor: Distance: " + rankByDistance);
 	System.out.println("Printing from MatchService constructor: StartTime: " + rankByStartTime);
 }
+	public MatchService(){
+	super();
+	}
 
 	/**
 	 * An association of a user with a rank.
