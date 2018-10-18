@@ -1,5 +1,6 @@
 package com.revature.bean.tests;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Set;
@@ -25,7 +26,7 @@ public class LikeBeanTest {
 	/** The local validator factory. */
 	private static LocalValidatorFactoryBean localValidatorFactory;
 	
-	/** The like. */
+	/**  Test data objects. */
 	private Like like;
 	
 	/** The pair. */
@@ -49,8 +50,7 @@ public class LikeBeanTest {
 		pair = new Pair(100, 200);
 		like = new Like(pair);
 		
-		assertTrue("should be same", like.getPair().equals(pair));
-		
+		assertTrue("should be same", like.getPair().equals(pair));	
 	}
 	
 	/**
@@ -77,17 +77,61 @@ public class LikeBeanTest {
 		Assertions.assertThat(violations.size()).isEqualTo(1);		
 	}
 	
+	/**
+	 * Test Like equals.
+	 */
 	@Test
 	public void testLikeEquals() {
 		Pair pair = new Pair(100, 200);
 		Pair pairEq = new Pair(100, 200);
-		Pair pairNotEq = new Pair(200, 300);
+		Pair pairNotEq1 = new Pair(200, 300);
+		Pair pairNotEq2 = new Pair(100, 300);
 		
 		Like like = new Like(pair);
 		Like likeEq = new Like(pairEq);
-		Like likeNotEq = new Like(pairNotEq);
+		Like likeNotEq1 = new Like(pairNotEq1);
+		Like likeNotEq2 = new Like(pairNotEq2);
 		
 		assertTrue("Like equals override not functioning properly; should be true", like.equals(likeEq));
-		assertFalse("Like equals override not functioning properly; should be false", like.equals(likeNotEq));
+		assertTrue("Like equals override not functioning properly; should be true", like.equals(like));
+		assertFalse("Like equals override not functioning properly; should be false", like.equals(likeNotEq1));
+		assertFalse("Like equals override not functioning properly; should be false", like.equals(likeNotEq2));
+		assertFalse("Like equals override not functioning properly; should be false", like.equals(pair));
+		assertFalse("Like equals override not functioning properly; should be false", like.equals(null));
+	}
+	
+	/**
+	 * Test Like setPair.
+	 */
+	@Test
+	public void testLikeSetPair() {
+		Like like = new Like();
+		Pair pair = new Pair(100, 200);
+		like.setPair(pair);
+		
+		assertSame(like.getPair(), pair);
+	}
+	
+	/**
+	 * Test Like toString.
+	 */
+	@Test
+	public void testLikeToString() {
+		Like like = new Like(new Pair(100, 200));
+		
+		assertTrue(like.toString().equals("Like [userId=" + 100 + ", affectedId=" + 200 + "]"));
+	}
+	
+	/**
+	 * Test Like hash code.
+	 */
+	@Test
+	public void testLikeHashCode() {
+		Like like1 = new Like(new Pair(100, 200));
+		Like like2 = new Like(new Pair(100, 200));
+		Pair pair = null;
+		Like like3 = new Like(pair);
+		assertTrue(like1.hashCode() == like2.hashCode());
+		assertFalse(like3.hashCode() == like2.hashCode());
 	}
 }

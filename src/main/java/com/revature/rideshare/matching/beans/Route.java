@@ -38,10 +38,10 @@ public class Route {
 	/**
 	 * Constructs a new Route object.
 	 * 
-	 * @param distance - The distance between the source address and destination
-	 *                 address.
-	 * @param duration - The duration of the drive between the source address and
-	 *                 destination address.
+	 * @param distance the distance between the source address and destination
+	 *                 address
+	 * @param duration the duration of the drive between the source address and
+	 *                 destination address
 	 */
 	public Route(long distance, long duration) {
 		this.distance = distance;
@@ -100,14 +100,8 @@ public class Route {
 		return result;
 	}
 
-	/**
-	 * Tests for equality between this {@code Route} and another object. This
-	 * returns true if the provided object reference is a non-null reference to a
-	 * {@code Route} object, and that the distances and durations of this and the
-	 * other {@code Route} objects are equal. Returns false otherwise.
-	 * 
-	 * @param obj - An object to test for equality against
-	 * @return True if this and {@code obj} are equal. False otherwise.
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override
 	public boolean equals(Object obj) {

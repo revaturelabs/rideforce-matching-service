@@ -79,8 +79,6 @@ public class Pair implements Serializable {
 		this.affectedId = affectedId;
 	}
 
-
-
 	/* (non-Javadoc)
 	 * @see java.lang.Object#hashCode()
 	 */

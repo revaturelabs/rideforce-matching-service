@@ -5,7 +5,7 @@ import com.revature.rideshare.matching.beans.User;
 import com.revature.rideshare.matching.clients.MapsClient;
 
 /**
- * Class used to rank a rider driver pair by distance
+ * Class used to rank a rider-driver pair by distance
  * 
  * @author Ray
  *
@@ -18,11 +18,12 @@ public class RankByDistance extends RankingCriterion {
 	private MapsClient mapsClient;
 
 	/**
-	 * Ranks how well the given driver matches the given rider.
+	 * Ranks how well the given driver matches the given rider based on distance.
+	 * Closer drivers rank higher.
 	 * 
 	 * @param rider  the rider under consideration
 	 * @param driver the potential driver, whose suitability is to be determined
-	 * @return a ranking value, where higher is better
+	 * @return a double between 0 and 1 representing rider-driver ranking value, where higher is better
 	 */
 	@Override
 	protected double rank(User rider, User driver) {

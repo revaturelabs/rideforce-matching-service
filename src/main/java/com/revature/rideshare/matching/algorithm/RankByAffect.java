@@ -9,45 +9,49 @@ import com.revature.rideshare.matching.beans.User;
 import com.revature.rideshare.matching.services.DislikeService;
 import com.revature.rideshare.matching.services.LikeService;
 
+// TODO: Auto-generated Javadoc
 /**
- * Class used to rank a rider driver pair by affect
- * 
- * @author Ray
+ * Class used to rank a rider-driver pair by affect (likes, dislikes).
  *
+ * @author Ray
  */
 public class RankByAffect extends RankingCriterion {
 
-	/**
-	 * The service used to get the likes a rider has made
-	 */
+	/** The service used to get the likes a rider has made. */
 	@Autowired
 	LikeService likeService;
 
-	/**
-	 * The service used to get the dislikes a rider has made
-	 */
+	/** The service used to get the dislikes a rider has made. */
 	@Autowired
 	DislikeService dislikeService;
 
-	/**
-	 * The list of IDs of drivers whom the rider has liked and disliked
-	 */
+	/** The lists of IDs of drivers whom the rider has liked and disliked. */
 	private List<Integer> likedIds;
 	private List<Integer> dislikedIds;
 
+	/**
+	 * Gets IDs of drivers whom rider has liked.
+	 *
+	 * @return list of liked driver ids
+	 */
 	public List<Integer> getLikedIds() {
 		return likedIds;
 	}
 
+	/**
+	 * Gets IDs of drivers whom the rider has disliked.
+	 *
+	 * @return list of disliked driver ids
+	 */
 	public List<Integer> getDislikedIds() {
 		return dislikedIds;
 	}
 
 	/**
 	 * Function used to populate the likedIds and dislikedIds. Runs the first time
-	 * the rank algorithm is called
-	 * 
-	 * @param rider
+	 * the rank algorithm is called.
+	 *
+	 * @param rider the rider
 	 */
 	private void initializeAffects(User rider) {
 		likedIds = likeService.getLikes(rider.getId()).stream().map(like -> like.getPair().getAffectedId())
@@ -57,11 +61,12 @@ public class RankByAffect extends RankingCriterion {
 	}
 
 	/**
-	 * Ranks a driver based on whether they have been liked or disliked
-	 * 
+	 * Ranks a driver based on whether they have been liked or disliked.
+	 *
 	 * @param rider  the rider under consideration
-	 * @param driver the potential driver who we are ranking
-	 * @return
+	 * @param driver the potential driver being ranked
+	 * @return a double between 0 and 1 representing rider-driver ranking value;
+	 *         higher is better
 	 */
 	@Override
 	protected double rank(User rider, User driver) {

@@ -3,7 +3,7 @@ package com.revature.rideshare.matching.algorithm;
 import com.revature.rideshare.matching.beans.User;
 
 /**
- * Class used to rank a rider driver pair by batch end date
+ * Class used to rank a rider-driver pair by daily start time
  * 
  * @author Julie
  *
@@ -18,7 +18,7 @@ public class RankByStartTime extends RankingCriterion {
 	 *
 	 * @param rider  the user looking for a ride
 	 * @param driver the potential driver being ranked
-	 * @return a double as a ranking value; higher is better
+	 * @return a double between 0 and 1 representing a rider-driver ranking value; higher is better
 	 */
 
 	@Override
