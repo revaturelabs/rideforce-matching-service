@@ -76,12 +76,14 @@ public class MatchingController {
 		User rider = userClient.findById(id);
 		if (rider == null) {
 			LOGGER.error(NULL);
+			return new ArrayList<>();
 		} else {
 			LOGGER.info(MSG, id, rider.getFirstName());
+			return matchService.findMatches(rider).stream()
+					.map(driver -> UriComponentsBuilder.fromPath(USER_ID_URI).buildAndExpand(driver.getId()).toString())
+					.collect(Collectors.toList());
 		}
-		return matchService.findMatches(rider).stream()
-				.map(driver -> UriComponentsBuilder.fromPath(USER_ID_URI).buildAndExpand(driver.getId()).toString())
-				.collect(Collectors.toList());
+		
 	}
 
 	/**
