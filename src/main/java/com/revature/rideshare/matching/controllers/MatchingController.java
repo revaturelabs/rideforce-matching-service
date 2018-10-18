@@ -14,7 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,7 +32,7 @@ import com.revature.rideshare.matching.services.MatchService;
 /**
  * The Class MatchingController.
  */
-
+@CrossOrigin
 @RestController
 @RequestMapping("matches")
 public class MatchingController {
@@ -73,17 +73,19 @@ public class MatchingController {
 	 */
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<String> getAll(@PathVariable int id) {
+		LOGGER.info("can you see this?" + id);
 		User rider = userClient.findById(id);
 		if (rider == null) {
 			LOGGER.error(NULL);
 			return new ArrayList<>();
 		} else {
 			LOGGER.info(MSG, id, rider.getFirstName());
-			return matchService.findMatches(rider).stream()
-					.map(driver -> UriComponentsBuilder.fromPath(USER_ID_URI).buildAndExpand(driver.getId()).toString())
-					.collect(Collectors.toList());
+			List<String> matches =  matchService.findMatches(rider).stream()
+				.map(driver -> UriComponentsBuilder.fromPath(USER_ID_URI).buildAndExpand(driver.getId()).toString())
+				.collect(Collectors.toList());
+		LOGGER.debug("Returning matches: " + matches.toString());
+		return matches;
 		}
-		
 	}
 
 	/**
@@ -300,7 +302,7 @@ public class MatchingController {
 	 * @param ex      - The exception that was thrown
 	 * @return - A ResponseEntity that has information about the exception.
 	 */
-	@ExceptionHandler(Exception.class)
+//	@ExceptionHandler(Exception.class)
 	public ResponseEntity<String> handleError(HttpServletRequest request, Exception ex) {
 		String message = "Request: \"{}\" With Query Params: \"{}\" threw Exception: {}";
 
