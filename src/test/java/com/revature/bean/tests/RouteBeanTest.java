@@ -16,6 +16,7 @@ public class RouteBeanTest {
 	 * As the Route class currently doesn't have any annotations besides Component*/
 	private static LocalValidatorFactoryBean localValidatorFactory;
 	
+	/** Sets up the validator factory for the tests. */
 	@BeforeClass
 	public static void setupValidatorFactory () {
 		localValidatorFactory = new LocalValidatorFactoryBean();
@@ -24,7 +25,7 @@ public class RouteBeanTest {
 	}
 	
 	
-	/** test Get Distance */
+	/** test Get Distance method in Route Class. */
 	@Test
 	public void testGetDistance() {
 		Route route = new Route();
@@ -36,7 +37,7 @@ public class RouteBeanTest {
 	}
 	
 	
-	/** test Set Distance */
+	/** test Set Distance method in Route Class. */
 	@Test
 	public void testSetDistance() {
 		Route route = new Route();
@@ -53,7 +54,7 @@ public class RouteBeanTest {
 	
 	
 	
-	/** test Get Duration */
+	/** test Get Duration method in Route Class. */
 	@Test
 	public void testGetDuration() {
 		Route route = new Route();
@@ -65,7 +66,7 @@ public class RouteBeanTest {
 	}
 	
 	
-	/** test Set Duration */
+	/** test Set Duration method in Route Class. */
 	@Test
 	public void testSetDuration() {
 		Route route = new Route();
@@ -81,6 +82,7 @@ public class RouteBeanTest {
 	}
 	
 	
+	/** test that Routes made with an empty constructor are equal. */
 	@Test
 	public void testEqualsWithEmptyConstructor() {
 		Route route = new Route();
@@ -95,6 +97,7 @@ public class RouteBeanTest {
 
 	}
 	
+	/** test Set Duration method in Route Class. */
 	@Test
 	public void testEquals() {
 		Route testRoute = new Route(2, 4);
