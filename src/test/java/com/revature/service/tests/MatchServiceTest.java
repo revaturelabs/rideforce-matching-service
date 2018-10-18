@@ -85,7 +85,7 @@ public class MatchServiceTest {
 		driver2.setBatchEnd(new Date(Instant.parse("2018-11-01T00:00:00Z").toEpochMilli()));
 		driver3.setBatchEnd(new Date(Instant.parse("2018-10-12T00:00:00Z").toEpochMilli()));
 		driver4.setBatchEnd(new Date(Instant.parse("2018-10-05T00:00:00Z").toEpochMilli()));
-
+/*
 		Field rankByAffectField = MatchService.class.getDeclaredField("rankByAffect");
 		Field rankByBatchEndField = MatchService.class.getDeclaredField("rankByBatchEnd");
 		Field rankByDistanceField = MatchService.class.getDeclaredField("rankByDistance");
@@ -95,13 +95,14 @@ public class MatchServiceTest {
 		
 		mapsClientField.set(rankByDistanceField, testMapsClient);
 		userClientField.set(matchService, testUserClient);
-		
+		*/
 	}
 
 	@AfterClass
 	public static void tearDownAfterClass() throws Exception {
 	}
 
+	/*
 	@Before
 	public void validate() {
 		Assertions.assertThat(likeRepository).isNotNull();
@@ -110,7 +111,7 @@ public class MatchServiceTest {
 		Like like = new Like(new Pair(1,2));
 		testEntityManager.persist(like);
 	}
-	
+	*/
 	@After
 	public void tearDown() throws Exception {
 	}
