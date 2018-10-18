@@ -29,7 +29,7 @@ public class AggregateRankingBuilderTest {
 		}
 
 	}
-	
+
 	/**
 	 * Test class 2 for testing the AggregateRankingBuilder
 	 */
@@ -54,6 +54,9 @@ public class AggregateRankingBuilderTest {
 
 	}
 
+	/**
+	 * Test class 4 for testing the AggregateRankingBuilder
+	 */
 	@Test
 	public void rankMatch_whenNoCriteriaAdded_throwsNoRankingCriteriaException() {
 		AggregateRankingBuilder arb = new AggregateRankingBuilder();
@@ -68,6 +71,9 @@ public class AggregateRankingBuilderTest {
 		;
 	}
 
+	/**
+	 * Test class 5 for testing the AggregateRankingBuilder
+	 */
 	@Test
 	public void rankMatch_whenPassedNullParameters_throwsIllegalArgumentException() {
 		AggregateRankingBuilder arb = new AggregateRankingBuilder();
@@ -80,6 +86,9 @@ public class AggregateRankingBuilderTest {
 		;
 	}
 
+	/**
+	 * Test class 6 for testing the AggregateRankingBuilder
+	 */
 	@Test
 	public void rankMatch_whenPassedNullRider_throwsIllegalArgumentException() {
 		AggregateRankingBuilder arb = new AggregateRankingBuilder();
@@ -93,6 +102,9 @@ public class AggregateRankingBuilderTest {
 		;
 	}
 
+	/**
+	 * Test class 7 for testing the AggregateRankingBuilder
+	 */
 	@Test
 	public void rankMatch_whenPassedNullDriver_throwsIllegalArgumentException() {
 		AggregateRankingBuilder arb = new AggregateRankingBuilder();
@@ -106,6 +118,9 @@ public class AggregateRankingBuilderTest {
 		;
 	}
 
+	/**
+	 * Test class 8 for testing the AggregateRankingBuilder
+	 */
 	@Test
 	public void rankMatch_whenOneCriterionAdded_returnsExpectedValue() {
 		AggregateRankingBuilder arb = new AggregateRankingBuilder();
@@ -117,6 +132,9 @@ public class AggregateRankingBuilderTest {
 		Assertions.assertThat(result).isEqualTo(CRITERION_A_RESULT);
 	}
 
+	/**
+	 * Test class 9 for testing the AggregateRankingBuilder
+	 */
 	@Test
 	public void rankMatch_whenTwoUniqueUnweightedCriteriaAdded_returnsExpectedValue() {
 		AggregateRankingBuilder arb = new AggregateRankingBuilder();
@@ -132,6 +150,9 @@ public class AggregateRankingBuilderTest {
 		Assertions.assertThat(result).isEqualTo(expectedResult);
 	}
 
+	/**
+	 * Test class 10 for testing the AggregateRankingBuilder
+	 */
 	@Test
 	public void rankMatch_whenTwoUniqueWeightedCriteriaAdded_returnsExpectedValue() {
 		AggregateRankingBuilder arb = new AggregateRankingBuilder();
@@ -150,21 +171,27 @@ public class AggregateRankingBuilderTest {
 		Assertions.assertThat(result).isEqualTo(expectedResult);
 	}
 
+	/**
+	 * Test class 11 for testing the AggregateRankingBuilder
+	 */
 	@Test
 	public void rankMatch_whenTwoDuplicateCriteriaAdded_throwsDuplicateRankingCriteriaException() {
 		AggregateRankingBuilder arb = new AggregateRankingBuilder();
 		RankingCriterion testCriterionA_1 = new TestRankingCriteriaA();
-		RankingCriterion testCriterionA_2 = new TestRankingCriteriaA();		
+		RankingCriterion testCriterionA_2 = new TestRankingCriteriaA();
 		arb.addCriterion(testCriterionA_1);
 		try {
 			arb.addCriterion(testCriterionA_2);
 		} catch (DuplicateRankingCriteriaException drce) {
 			return;
 		}
-		
+
 		Assertions.failBecauseExceptionWasNotThrown(DuplicateRankingCriteriaException.class);
 	}
 
+	/**
+	 * Test class 12 for testing the AggregateRankingBuilder
+	 */
 	@Test
 	public void rankMatch_whenThreeUniqueUnweightedCriteriaAdded_returnsExpectedValue() {
 		AggregateRankingBuilder arb = new AggregateRankingBuilder();
@@ -181,7 +208,10 @@ public class AggregateRankingBuilderTest {
 		double expectedResult = (CRITERION_A_RESULT + CRITERION_B_RESULT + CRITERION_C_RESULT) / 3;
 		Assertions.assertThat(result).isEqualTo(expectedResult);
 	}
-	
+
+	/**
+	 * Test class 12 for testing the AggregateRankingBuilder
+	 */
 	@Test
 	public void rankMatch_whenThreeUniqueWeightedCriteriaAdded_returnsExpectedValue() {
 		AggregateRankingBuilder arb = new AggregateRankingBuilder();
@@ -198,12 +228,9 @@ public class AggregateRankingBuilderTest {
 		arb.addCriterion(testCriterionC);
 		double result = arb.rankMatch(rider, driver);
 
-		double expectedResult = (
-				CRITERION_A_WEIGHT * CRITERION_A_RESULT + 
-				CRITERION_B_WEIGHT * CRITERION_B_RESULT + 
-				CRITERION_C_WEIGHT * CRITERION_C_RESULT)
+		double expectedResult = (CRITERION_A_WEIGHT * CRITERION_A_RESULT + CRITERION_B_WEIGHT * CRITERION_B_RESULT
+				+ CRITERION_C_WEIGHT * CRITERION_C_RESULT)
 				/ (CRITERION_A_WEIGHT + CRITERION_B_WEIGHT + CRITERION_C_WEIGHT);
 		Assertions.assertThat(result).isEqualTo(expectedResult);
 	}
-
 }

@@ -16,6 +16,7 @@ import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import com.revature.rideshare.matching.beans.Dislike;
 import com.revature.rideshare.matching.beans.Pair;
 
+// TODO: Auto-generated Javadoc
 /**
  * This test, DislikeBeanTest, will act as 
  * regression testing to ensure the stability of our 
@@ -77,6 +78,9 @@ public class DislikeBeanTest {
 		assertTrue(violations.size() == 0);
 	}
 	
+	/**
+	 * Test dislike toString.
+	 */
 	@Test
 	public void testDislikeToString() {
 
@@ -85,6 +89,9 @@ public class DislikeBeanTest {
 		assertTrue(dis.toString().equals("Dislike [userId=" + 1 + ", affectedId=" + 2 + "]"));
 	}
 	
+	/**
+	 * Test dislike setter.
+	 */
 	@Test
 	public void testDislikeSetter() {
 
@@ -95,6 +102,9 @@ public class DislikeBeanTest {
 		assertTrue(dis.getPair().equals(p));
 	}
 	
+	/**
+	 * Test dislike hash.
+	 */
 	@Test
 	public void testHash() {
 
@@ -105,7 +115,7 @@ public class DislikeBeanTest {
 	}
 
 	/**
-	 * Test dislike equals method
+	 * Test dislike equals method.
 	 */
 	@Test
 	public void testDislikeEquals() {
