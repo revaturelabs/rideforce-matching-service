@@ -111,11 +111,8 @@ public class Pair implements Serializable {
 		if (affectedId != other.affectedId) {
 			return false;
 		}
-		if (userId != other.userId) {
-			return false;
-		}
-		
-		return true;
+
+		return userId == other.userId;
 	}
 
 	/*
