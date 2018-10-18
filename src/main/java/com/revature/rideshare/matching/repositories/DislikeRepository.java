@@ -8,6 +8,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.revature.rideshare.matching.beans.Dislike;
 
+/**
+ * The Interface DislikeRepository.
+ */
 @Repository
 @Transactional
 public interface DislikeRepository extends JpaRepository<Dislike, Integer>{

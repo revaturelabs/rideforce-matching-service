@@ -7,6 +7,9 @@ import org.springframework.stereotype.Repository;
 
 import com.revature.rideshare.matching.beans.Like;
 
+/**
+ * The Interface LikeRepository.
+ */
 @Repository
 public interface LikeRepository extends JpaRepository<Like, Integer> {
 

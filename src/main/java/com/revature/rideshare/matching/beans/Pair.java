@@ -6,7 +6,6 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.validation.constraints.Min;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class Pair. Holds the IDs of two users, representing a user and an affected
  * user; maps affect of second user as set by the first user.
@@ -80,8 +79,6 @@ public class Pair implements Serializable {
 		this.affectedId = affectedId;
 	}
 
-
-
 	/* (non-Javadoc)
 	 * @see java.lang.Object#hashCode()
 	 */
@@ -112,11 +109,8 @@ public class Pair implements Serializable {
 		if (affectedId != other.affectedId) {
 			return false;
 		}
-		if (userId != other.userId) {
-			return false;
-		}
-		
-		return true;
+
+		return userId == other.userId;
 	}
 
 	/*
