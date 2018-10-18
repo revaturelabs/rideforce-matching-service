@@ -85,9 +85,7 @@ public abstract class RankingCriterion {
 	public boolean equals(Object obj) {
 		if (obj == null)
 			return false;
-		if (getClass() == obj.getClass())
-			return true;
-		return false;
+		return getClass() == obj.getClass();
 	}
 
 }

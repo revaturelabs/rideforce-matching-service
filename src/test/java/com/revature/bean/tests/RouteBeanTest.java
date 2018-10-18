@@ -21,20 +21,17 @@ public class RouteBeanTest {
 	 * As the Route class currently doesn't have any annotations besides Component
 	 */
 	private static LocalValidatorFactoryBean localValidatorFactory;
-
-	/**
-	 * Setup validator factory.
-	 */
+	
+	/** Sets up the validator factory for the tests. */
 	@BeforeClass
 	public static void setupValidatorFactory() {
 		localValidatorFactory = new LocalValidatorFactoryBean();
 		localValidatorFactory.setProviderClass(HibernateValidator.class);
 		localValidatorFactory.afterPropertiesSet();
 	}
-
-	/**
-	 * test Get Distance.
-	 */
+	
+	
+	/** test Get Distance method in Route Class. */
 	@Test
 	public void testGetDistance() {
 		Route route = new Route();
@@ -44,10 +41,9 @@ public class RouteBeanTest {
 		route = new Route(1, 2);
 		Assert.assertEquals(1L, route.getDistance());
 	}
-
-	/**
-	 * test Set Distance.
-	 */
+	
+	
+	/** test Set Distance method in Route Class. */
 	@Test
 	public void testSetDistance() {
 		Route route = new Route();
@@ -61,10 +57,10 @@ public class RouteBeanTest {
 		route.setDistance(-5);
 		Assert.assertEquals(-5L, route.getDistance());
 	}
-
-	/**
-	 * test Get Duration.
-	 */
+	
+	
+	
+	/** test Get Duration method in Route Class. */
 	@Test
 	public void testGetDuration() {
 		Route route = new Route();
@@ -74,10 +70,9 @@ public class RouteBeanTest {
 		route = new Route(1, 2);
 		Assert.assertEquals(2L, route.getDuration());
 	}
-
-	/**
-	 * test Set Duration.
-	 */
+	
+	
+	/** test Set Duration method in Route Class. */
 	@Test
 	public void testSetDuration() {
 		Route route = new Route();
@@ -91,11 +86,9 @@ public class RouteBeanTest {
 		route.setDuration(-5);
 		Assert.assertEquals(-5L, route.getDuration());
 	}
-
-	/**
-	 * Test equals with empty constructor, making sure an object equals itself and
-	 * is not equal to null.
-	 */
+	
+	
+	/** test that Routes made with an empty constructor are equal. */
 	@Test
 	public void testEqualsWithEmptyConstructor() {
 		Route route = new Route();
@@ -107,10 +100,8 @@ public class RouteBeanTest {
 		Assert.assertNotEquals(null, route);
 
 	}
-
-	/**
-	 * Tests Route equals.
-	 */
+	
+	/** test Set Duration method in Route Class. */
 	@Test
 	public void testEquals() {
 		Route testRoute = new Route(2, 4);
