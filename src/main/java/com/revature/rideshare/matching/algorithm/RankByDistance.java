@@ -24,7 +24,8 @@ public class RankByDistance extends RankingCriterion {
 
 	/**
 	 * Ranks how well the given driver matches the given rider based on distance.
-	 * Closer drivers rank higher.
+	 * Closer drivers rank higher. Returns 0 in the case that the call to the 
+	 * maps-service isn't successful. 
 	 * 
 	 * @param rider  the rider under consideration
 	 * @param driver the potential driver, whose suitability is to be determined
@@ -32,9 +33,10 @@ public class RankByDistance extends RankingCriterion {
 	 */
 	@Override
 	protected double rank(User rider, User driver) {
-//		System.out.println("Executing rank in RankByDistance");
 		Route riderToDriver = mapsClient.getRoute(rider.getAddress(), driver.getAddress());
-//		System.out.println("riderToDriver in RankByDistance class: " + riderToDriver.toString());
+		if (riderToDriver == null) {
+			return  0;
+		}
 		return 1 / ((double) riderToDriver.getDistance() + 1);
 	}
 	

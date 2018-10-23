@@ -14,6 +14,10 @@ spring:
       ddl-auto: update
     database-platform: Oracle10g
 
+feign:
+  hystrix:
+    enabled: true
+
 eureka:
   client:
     service-url:
