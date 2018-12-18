@@ -14,7 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,7 +32,6 @@ import com.revature.rideshare.matching.services.MatchService;
 /**
  * The Class MatchingController.
  */
-@CrossOrigin
 @RestController
 @RequestMapping("matches")
 public class MatchingController {
@@ -302,7 +301,7 @@ public class MatchingController {
 	 * @param ex      - The exception that was thrown
 	 * @return - A ResponseEntity that has information about the exception.
 	 */
-//	@ExceptionHandler(Exception.class)
+	@ExceptionHandler(Exception.class)
 	public ResponseEntity<String> handleError(HttpServletRequest request, Exception ex) {
 		String message = "Request: \"{}\" With Query Params: \"{}\" threw Exception: {}";
 
@@ -341,5 +340,4 @@ public class MatchingController {
 
 		return stackTrace;
 	}
-
 }
