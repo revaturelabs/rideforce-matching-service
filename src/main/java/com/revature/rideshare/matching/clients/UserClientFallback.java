@@ -1,9 +1,8 @@
 package com.revature.rideshare.matching.clients;
 
-import java.lang.invoke.MethodHandles;
 import java.util.Collections;
 import java.util.List;
-
+import java.lang.invoke.MethodHandles;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
