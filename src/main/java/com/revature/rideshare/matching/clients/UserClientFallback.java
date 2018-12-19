@@ -2,7 +2,7 @@ package com.revature.rideshare.matching.clients;
 
 import java.util.Collections;
 import java.util.List;
-
+import java.lang.invoke.MethodHandles;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -22,7 +22,7 @@ public class UserClientFallback implements UserClient {
 		// Note, a different, but similar exception is actually thrown if the 
 		// fallback throws an exception.
 		logger.info("findByOfficeAndRole() FALLBACK EXECUTED");
-		return Collections.EMPTY_LIST;
+		return Collections.emptyList();
 	}
 
 	@Override
