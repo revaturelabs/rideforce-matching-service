@@ -37,7 +37,7 @@ import com.revature.rideshare.matching.services.MatchService;
 public class MatchingController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(MatchingController.class);
 	private static final String MSG = "Get request to matching controller made with UserId : {} passed. userClient called to find user by that id. userClient returned the user: {}";
-	private static final String NULL = "userClient return a null user object.";
+	private static final String NULL = "userClient returned a null user object.";
 	private static final String USER_ID_URI = "/users/{id}";
 
 	/**
@@ -72,7 +72,7 @@ public class MatchingController {
 	 */
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<String> getAll(@PathVariable int id) {
-		LOGGER.info("can you see this?" + id);
+		LOGGER.info("getAll() for UserId: " + id);
 		User rider = userClient.findById(id);
 		if (rider == null) {
 			LOGGER.error(NULL);

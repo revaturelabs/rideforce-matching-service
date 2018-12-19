@@ -13,7 +13,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @SpringBootApplication
 @EnableDiscoveryClient
 @EnableFeignClients
-//@EnableCircuitBreaker // enables the Hystrix Circuit breaker. commented out to match what was working locally 
+@EnableCircuitBreaker
 @EnableJpaRepositories
 public class Application {
 	
@@ -27,4 +27,3 @@ public class Application {
 		SpringApplication.run(Application.class, args);
 	}
 }
-

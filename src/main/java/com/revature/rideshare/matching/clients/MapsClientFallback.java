@@ -1,9 +1,13 @@
 package com.revature.rideshare.matching.clients;
 
+import java.lang.invoke.MethodHandles;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.revature.rideshare.matching.beans.Route;
-import com.revature.rideshare.matching.exceptions.FeignClientFallbackException;
 
 /** This class is the fallback implementation for when a service cannot 
  * make a successful connection with a MapClient. The general behavior
@@ -11,13 +15,15 @@ import com.revature.rideshare.matching.exceptions.FeignClientFallbackException;
  * made. */
 @Component
 public class MapsClientFallback implements MapsClient {
-
+	static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+	/** 
+	 * Returns null. This fallback is executed when the we can't successfully 
+	 * receive input from the maps-service. 
+	 */
 	@Override
-	public Route getRoute(String start, String end) {
-		// Note, a different, but similar exception is actually thrown if the 
-				// fallback throws an exception. 
-		throw new FeignClientFallbackException("Counldn't connect to the MapClient");
+	public Route getRoute(@RequestParam("start") String start, @RequestParam("end") String end) {
+		logger.info("getRoute() FALLBACK EXECUTED");
+		return null;
 	}
-
 
 }
