@@ -27,6 +27,5 @@ public interface UserClient {
 	
 	@GetMapping(path = "/users/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	User findById(@PathVariable("id") int id);
-	
-}
 
+}

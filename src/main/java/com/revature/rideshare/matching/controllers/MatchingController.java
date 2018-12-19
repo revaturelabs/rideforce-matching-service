@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -33,13 +32,12 @@ import com.revature.rideshare.matching.services.MatchService;
 /**
  * The Class MatchingController.
  */
-@CrossOrigin
 @RestController
 @RequestMapping("matches")
 public class MatchingController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(MatchingController.class);
 	private static final String MSG = "Get request to matching controller made with UserId : {} passed. userClient called to find user by that id. userClient returned the user: {}";
-	private static final String NULL = "userClient return a null user object.";
+	private static final String NULL = "userClient returned a null user object.";
 	private static final String USER_ID_URI = "/users/{id}";
 
 	/**
@@ -74,7 +72,7 @@ public class MatchingController {
 	 */
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<String> getAll(@PathVariable int id) {
-		LOGGER.info("can you see this?" + id);
+		LOGGER.info("getAll() for UserId: " + id);
 		User rider = userClient.findById(id);
 		if (rider == null) {
 			LOGGER.error(NULL);
@@ -342,5 +340,4 @@ public class MatchingController {
 
 		return stackTrace;
 	}
-
 }
