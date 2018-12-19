@@ -1,6 +1,5 @@
 package com.revature.rideshare.matching.clients;
 
-import java.lang.invoke.MethodHandles;
 import java.util.Collections;
 import java.util.List;
 
@@ -23,7 +22,7 @@ public class UserClientFallback implements UserClient {
 		// Note, a different, but similar exception is actually thrown if the 
 		// fallback throws an exception.
 		logger.info("findByOfficeAndRole() FALLBACK EXECUTED");
-		return Collections.emptyList();
+		return Collections.EMPTY_LIST;
 	}
 
 	@Override
