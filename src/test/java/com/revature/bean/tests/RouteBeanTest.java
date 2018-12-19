@@ -1,5 +1,9 @@
 package com.revature.bean.tests;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import org.hibernate.validator.HibernateValidator;
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -7,6 +11,7 @@ import org.junit.Test;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
 import com.revature.rideshare.matching.beans.Route;
+import com.revature.rideshare.matching.beans.User;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -123,5 +128,29 @@ public class RouteBeanTest {
 		Assert.assertNotEquals(testFirstParamDiff, testRoute);
 		Assert.assertNotEquals(testSecondParamDiff, testRoute);
 	}
+	
+	@Test
+	public void hashCodeTest() {
+		Route testRoute = new Route(2, 4);
+		assertEquals(testRoute.hashCode(), 1027);
+	}
 
+	@Test
+	public void toStringTest() {
+		Route testRoute = new Route(0, 1);
+		String toString = "Route [distance=0, duration=1]";
+		assertTrue(testRoute.toString().equals(toString));
+	}
+	
+	@Test
+	public void equalsTest() {
+		Route testRoute = new Route(0, 1);
+		assertFalse(testRoute.equals(null));
+	}
+	
+	@Test
+	public void equalsTest2() {
+		Route testRoute = new Route(0, 1);
+		assertFalse(testRoute.equals(new User()));
+	}
 }

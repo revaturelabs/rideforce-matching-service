@@ -1,7 +1,14 @@
 package com.revature.service.tests;
 
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.assertj.core.api.Assertions.assertThatNullPointerException;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import java.lang.reflect.Field;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -119,6 +126,31 @@ public class MatchServiceTest {
 	@Test
 	public void test() {
 		
+	}
+	
+	@Test(expected=NullPointerException.class)
+	public void findMatchesByDistanceNullRiderTest() throws NullPointerException {
+		this.matchService.findMatchesByDistance(null);
+	}
+	
+	@Test(expected=NullPointerException.class)
+	public void findMatchesByAffectsNullRiderTest() throws NullPointerException {
+		this.matchService.findMatchesByAffects(null);
+	}
+	
+	@Test(expected=NullPointerException.class)
+	public void findMatchesByBatchEndNullRiderTest() throws NullPointerException {
+		this.matchService.findMatchesByBatchEnd(null);
+	}
+	
+	@Test(expected=NullPointerException.class)
+	public void findMatchesByStartTimeNullRiderTest() throws NullPointerException {
+		this.matchService.findMatchesByStartTime(null);
+	}
+	
+	@Test(expected=NullPointerException.class)
+	public void findMatchesNullRiderTest() throws NullPointerException {
+		this.matchService.findMatches(null);
 	}
 	
 }
