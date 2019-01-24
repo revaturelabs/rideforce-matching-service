@@ -22,6 +22,34 @@
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
+	
+	<repositories>
+		<repository>
+			<id>my-nexus</id>
+			<name>Nexus</name>
+			<url>http://nexus.revature.tech/nexus/content/groups/public</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
+	<pluginRepositories>
+		<pluginRepository>
+			<id>my-nexus</id>
+			<name>Nexus</name>
+			<url>http://nexus.revature.tech/nexus/content/groups/public</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</pluginRepository>
+	</pluginRepositories> 
+	
 	<dependencies>
 		<!-- Spring Boot -->
 		<dependency>
@@ -120,11 +148,6 @@
 					<artifactId>tomcat-jdbc</artifactId>
 				</exclusion>
 			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>com.oracle</groupId>
-			<artifactId>ojdbc7</artifactId>
-			<version>11.2.0</version>
 		</dependency>
 	</dependencies>
 	<build>
