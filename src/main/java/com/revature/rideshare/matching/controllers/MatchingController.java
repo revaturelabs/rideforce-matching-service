@@ -95,8 +95,8 @@ public class MatchingController {
 	 * @param id     the id of the rider for whom we determine matches
 	 * @return a list of drivers which are matched to the rider
 	 */
-	@RequestMapping(value = "/filtered", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<String> getAllFiltered(@RequestBody Filter filter, @RequestBody int id) {
+	@RequestMapping(value = "/filtered/{id}", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<String> getAllFiltered(@RequestBody Filter filter, @PathVariable int id) {
 		User rider = userClient.findById(id);
 		if (rider == null) {
 			LOGGER.trace(NULL);
