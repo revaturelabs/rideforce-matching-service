@@ -389,7 +389,8 @@ public class MatchService {
 	 */
 	private static Map<String, Double> setup() {
 		Properties prop = new Properties();
-		String path = "src/main/resources/matching.properties";
+// 		String path = "src/main/resources/matching.properties";
+		String path = "matching.properties";
 		try {
 			prop.load(new FileReader(path));
 		} catch (IOException e) {
