@@ -389,10 +389,10 @@ public class MatchService {
 	 */
 	private static Map<String, Double> setup() {
 		Properties prop = new Properties();
- 		String path = "/tmp/rideshare-matching-service.jar/BOOT-INF/classes/matching.properties";
+ 		String path = "";
 // 		String path = "matching.properties";
 		try {
-			prop.load(new FileReader(path));
+			prop.load(MatchService.class.getResourceAsStream("/matching.properties"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
