@@ -5,6 +5,11 @@ import static org.assertj.core.api.Assertions.assertThatNullPointerException;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mockito;
+import org.mockito.ArgumentMatchers.*;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.lang.reflect.Field;
 import java.time.Instant;
@@ -26,6 +31,8 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -39,6 +46,8 @@ import com.revature.rideshare.matching.algorithm.RankByStartTime;
 import com.revature.rideshare.matching.beans.Like;
 import com.revature.rideshare.matching.beans.Pair;
 import com.revature.rideshare.matching.beans.User;
+import com.revature.rideshare.matching.clients.MapsClient;
+import com.revature.rideshare.matching.clients.UserClient;
 import com.revature.rideshare.matching.repositories.DislikeRepository;
 import com.revature.rideshare.matching.repositories.LikeRepository;
 import com.revature.rideshare.matching.services.MatchService;
@@ -51,47 +60,35 @@ import com.revature.rideshare.matching.beans.Filter;
 @EnableAsync
 public class MatchServiceTest {
 	
-	@Autowired
-	private TestEntityManager testEntityManager;
+	@TestConfiguration
+	static class MatchServiceTestContextConfiguration {
+		@Bean
+		public MatchService matchService() {
+			return new MatchService();
+		}
+	}
 	
-	@Autowired
-	private LikeRepository likeRepository;
+	@InjectMocks
+	@Autowired private MatchService matchService;
+	@MockBean private LikeRepository likeRepository;
+	@MockBean private DislikeRepository dislikeRepository;
+	@MockBean private UserClient userClient;
+	@MockBean private MapsClient mapsClient;
 	
-	@Autowired
-	private DislikeRepository dislikeRepository;
-	
-	private static MatchService matchService = new MatchService();
-	private static TestUserClient testUserClient = new TestUserClient();
-	private static TestMapsClient testMapsClient = new TestMapsClient();
-
-	private static Filter fnone;
-	private static Filter fbend;
-	private static Filter fdstart;
-	private static Filter fdist;
-	private static User rider;
-	private static User driver1;
-	private static User driver2;
-	private static User driver3;
-	private static User driver4;
+	private static Filter fnone = new Filter();
+	private static Filter fbend = new Filter(true,false,false);
+	private static Filter fdstart = new Filter(false,true,false);
+	private static Filter fdist = new Filter(false,false,true);
+	private static User rider = new User();
+	private static User driver1 = new User();
+	private static User driver2 = new User();
+	private static User driver3 = new User();
+	private static User driver4 = new User();
 	private static List<Integer> likedIds;
 	private static List<Integer> dislikedIds;
 	
-	@BeforeClass
+	@Before
 	public static void setUpBeforeClass() throws Exception {
-		rider = new User();
-		driver1 = new User();
-		driver2 = new User();
-		driver3 = new User();
-		driver4 = new User();
-		
-		fnone = new Filter();
-		fbend = new Filter();
-		fbend.setBatchEndChange(true);
-		fdstart = new Filter();
-		fdstart.setDayStartChange(true);
-		fdist = new Filter();
-		fdist.setDistanceChange(true);
-		
 		rider.setId(1);
 		driver1.setId(2);
 		driver2.setId(3);
@@ -99,39 +96,24 @@ public class MatchServiceTest {
 		driver4.setId(5);
 		
 		rider.setOffice("/offices/1");
+		driver1.setOffice("/offices/1");
+		driver2.setOffice("/offices/1");
+		driver3.setOffice("/offices/2");
+		driver4.setOffice("/offices/2");
 		
 		rider.setBatchEnd(new Date(Instant.parse("2018-10-19T00:00:00Z").toEpochMilli()));
 		driver1.setBatchEnd(new Date(Instant.parse("2018-10-19T00:00:00Z").toEpochMilli()));
 		driver2.setBatchEnd(new Date(Instant.parse("2018-11-01T00:00:00Z").toEpochMilli()));
 		driver3.setBatchEnd(new Date(Instant.parse("2018-10-12T00:00:00Z").toEpochMilli()));
 		driver4.setBatchEnd(new Date(Instant.parse("2018-10-05T00:00:00Z").toEpochMilli()));
-/*
-		Field rankByAffectField = MatchService.class.getDeclaredField("rankByAffect");
-		Field rankByBatchEndField = MatchService.class.getDeclaredField("rankByBatchEnd");
-		Field rankByDistanceField = MatchService.class.getDeclaredField("rankByDistance");
-		Field rankByStartTimeField = MatchService.class.getDeclaredField("rankByStartTime");
-		Field mapsClientField = RankByDistance.class.getDeclaredField("testMapsClient");
-		Field userClientField = MatchService.class.getDeclaredField("matchService");
 		
-		mapsClientField.set(rankByDistanceField, testMapsClient);
-		userClientField.set(matchService, testUserClient);
-		*/
+		Mockito.mock(UserClient.class);
 	}
 
 	@AfterClass
 	public static void tearDownAfterClass() throws Exception {
 	}
 
-	/*
-	@Before
-	public void validate() {
-		Assertions.assertThat(likeRepository).isNotNull();
-		Assertions.assertThat(dislikeRepository).isNotNull();
-		
-		Like like = new Like(new Pair(1,2));
-		testEntityManager.persist(like);
-	}
-	*/
 	@After
 	public void tearDown() throws Exception {
 	}
