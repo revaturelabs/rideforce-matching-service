@@ -108,6 +108,8 @@ public class MatchServiceTest {
 		driver4.setBatchEnd(new Date(Instant.parse("2018-10-05T00:00:00Z").toEpochMilli()));
 		
 		Mockito.mock(UserClient.class);
+		Mockito.mock(MapsClient.class);
+		/*Mockito.when(UserClient.save(Mockito.any(User.class))).thenReturn(null);*/
 	}
 
 	@AfterClass
