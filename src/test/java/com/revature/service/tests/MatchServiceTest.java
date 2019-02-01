@@ -75,6 +75,7 @@ public class MatchServiceTest {
 	@MockBean private UserClient userClient;
 	@MockBean private MapsClient mapsClient;
 	
+	private static List<User> drivers = new ArrayList<User>();
 	private static Filter fnone = new Filter();
 	private static Filter fbend = new Filter(true,false,false);
 	private static Filter fdstart = new Filter(false,true,false);
@@ -107,17 +108,21 @@ public class MatchServiceTest {
 		driver3.setBatchEnd(new Date(Instant.parse("2018-10-12T00:00:00Z").toEpochMilli()));
 		driver4.setBatchEnd(new Date(Instant.parse("2018-10-05T00:00:00Z").toEpochMilli()));
 		
+		drivers.add(driver1);
+		drivers.add(driver2);
+		drivers.add(driver3);
+		drivers.add(driver4);
+		
 		Mockito.mock(UserClient.class);
 		Mockito.mock(MapsClient.class);
-		/*Mockito.when(UserClient.save(Mockito.any(User.class))).thenReturn(null);*/
+		
 	}
-
-	@AfterClass
-	public static void tearDownAfterClass() throws Exception {
-	}
-
-	@After
-	public void tearDown() throws Exception {
+	
+	@Test
+	public void getMatchesInDatabase() throws Exception {
+		List<User> matches = new ArrayList<User>();
+		
+		Mockito.when(userClient.findByOfficeAndRole(Mockito.anyInt(), Mockito.anyString())).thenReturn(drivers);
 	}
 	
 	@Test(expected=NullPointerException.class)
