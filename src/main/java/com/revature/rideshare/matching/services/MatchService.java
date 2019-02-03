@@ -222,11 +222,16 @@ public class MatchService {
 		AggregateRankingBuilder arb = new AggregateRankingBuilder();
 		arb.addCriterion(rankByDistance);
 		System.out.println("ARB from findMatchesByDistance: " + arb.toString());
-		List<User> results = userClient.findByOfficeAndRole(officeId, DRIVER_ROLE).stream()
+		List<User> drivers = userClient.findByOfficeAndRole(officeId, DRIVER_ROLE).stream()
 				.map(driver -> new RankedUser(driver, arb.rankMatch(rider, driver))).sorted(Comparator.reverseOrder())
 				.limit(maxMatches).map(rankedUser -> rankedUser.user).collect(Collectors.toList());
-		System.out.println("Results from findMatchesByDistance: " + results.toString());
-		return results;
+		System.out.println("Results from findMatchesByDistance: " + drivers.toString());
+		for (User u: drivers) {
+			if ("INACTIVE".equals(u.isActive()))
+				drivers.remove(drivers.indexOf(u));
+		}
+		return drivers;
+		
 	}
 
 	/**
@@ -248,9 +253,14 @@ public class MatchService {
 		AggregateRankingBuilder arb = new AggregateRankingBuilder();
 		arb.addCriterion(rankByAffect);
 
-		return userClient.findByOfficeAndRole(officeId, DRIVER_ROLE).stream()
+		List<User> drivers = userClient.findByOfficeAndRole(officeId, DRIVER_ROLE).stream()
 				.map(driver -> new RankedUser(driver, arb.rankMatch(rider, driver))).sorted(Comparator.reverseOrder())
 				.limit(maxMatches).map(rankedUser -> rankedUser.user).collect(Collectors.toList());
+		for (User u: drivers) {
+			if ("INACTIVE".equals(u.isActive()))
+				drivers.remove(drivers.indexOf(u));
+		}
+		return drivers;
 	}
 
 	/**
@@ -272,9 +282,14 @@ public class MatchService {
 		AggregateRankingBuilder arb = new AggregateRankingBuilder();
 		arb.addCriterion(rankByBatchEnd);
 
-		return userClient.findByOfficeAndRole(officeId, DRIVER_ROLE).stream()
+		List<User> drivers = userClient.findByOfficeAndRole(officeId, DRIVER_ROLE).stream()
 				.map(driver -> new RankedUser(driver, arb.rankMatch(rider, driver))).sorted(Comparator.reverseOrder())
 				.limit(maxMatches).map(rankedUser -> rankedUser.user).collect(Collectors.toList());
+		for (User u: drivers) {
+			if ("INACTIVE".equals(u.isActive()))
+				drivers.remove(drivers.indexOf(u));
+		}
+		return drivers;
 	}
 
 	/**
@@ -296,9 +311,14 @@ public class MatchService {
 		AggregateRankingBuilder arb = new AggregateRankingBuilder();
 		arb.addCriterion(rankByStartTime);
 
-		return userClient.findByOfficeAndRole(officeId, DRIVER_ROLE).stream()
+		List<User> drivers =  userClient.findByOfficeAndRole(officeId, DRIVER_ROLE).stream()
 				.map(driver -> new RankedUser(driver, arb.rankMatch(rider, driver))).sorted(Comparator.reverseOrder())
 				.limit(maxMatches).map(rankedUser -> rankedUser.user).collect(Collectors.toList());
+		for (User u: drivers) {
+			if ("INACTIVE".equals(u.isActive()))
+				drivers.remove(drivers.indexOf(u));
+		}
+		return drivers;
 	}
 
 	/**
@@ -330,6 +350,10 @@ public class MatchService {
 				.map(driver -> new RankedUser(driver, arb.rankMatch(rider, driver))).sorted(Comparator.reverseOrder())
 				.limit(maxMatches).map(rankedUser -> rankedUser.user).collect(Collectors.toList());
 		System.out.println("Returned drivers: " + drivers.toString());
+		for (User u: drivers) {
+			if ("INACTIVE".equals(u.isActive()))
+				drivers.remove(drivers.indexOf(u));
+		}
 		return drivers;
 	}
 
@@ -360,9 +384,14 @@ public class MatchService {
 		}
 		arb.addCriterion(rankByAffect);
 
-		return userClient.findByOfficeAndRole(officeId, DRIVER_ROLE).stream()
+		List<User> drivers = userClient.findByOfficeAndRole(officeId, DRIVER_ROLE).stream()
 				.map(driver -> new RankedUser(driver, arb.rankMatch(rider, driver))).sorted(Comparator.reverseOrder())
 				.limit(maxMatches).map(rankedUser -> rankedUser.user).collect(Collectors.toList());
+		for (User u: drivers) {
+			if ("INACTIVE".equals(u.isActive()))
+				drivers.remove(drivers.indexOf(u));
+		}
+		return drivers;
 	}
 
 	/**
