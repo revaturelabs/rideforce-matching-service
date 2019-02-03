@@ -14,7 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,13 +32,12 @@ import com.revature.rideshare.matching.services.MatchService;
 /**
  * The Class MatchingController.
  */
-@CrossOrigin
 @RestController
 @RequestMapping("matches")
 public class MatchingController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(MatchingController.class);
 	private static final String MSG = "Get request to matching controller made with UserId : {} passed. userClient called to find user by that id. userClient returned the user: {}";
-	private static final String NULL = "userClient return a null user object.";
+	private static final String NULL = "userClient returned a null user object.";
 	private static final String USER_ID_URI = "/users/{id}";
 
 	/**
@@ -73,7 +72,7 @@ public class MatchingController {
 	 */
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<String> getAll(@PathVariable int id) {
-		LOGGER.info("can you see this?" + id);
+		LOGGER.info("getAll() for UserId: " + id);
 		User rider = userClient.findById(id);
 		if (rider == null) {
 			LOGGER.error(NULL);
@@ -96,8 +95,8 @@ public class MatchingController {
 	 * @param id     the id of the rider for whom we determine matches
 	 * @return a list of drivers which are matched to the rider
 	 */
-	@RequestMapping(value = "/filtered", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<String> getAllFiltered(@RequestBody Filter filter, @RequestBody int id) {
+	@RequestMapping(value = "/filtered/{id}", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<String> getAllFiltered(@RequestBody Filter filter, @PathVariable int id) {
 		User rider = userClient.findById(id);
 		if (rider == null) {
 			LOGGER.trace(NULL);
@@ -302,7 +301,7 @@ public class MatchingController {
 	 * @param ex      - The exception that was thrown
 	 * @return - A ResponseEntity that has information about the exception.
 	 */
-//	@ExceptionHandler(Exception.class)
+	@ExceptionHandler(Exception.class)
 	public ResponseEntity<String> handleError(HttpServletRequest request, Exception ex) {
 		String message = "Request: \"{}\" With Query Params: \"{}\" threw Exception: {}";
 
@@ -341,5 +340,4 @@ public class MatchingController {
 
 		return stackTrace;
 	}
-
 }

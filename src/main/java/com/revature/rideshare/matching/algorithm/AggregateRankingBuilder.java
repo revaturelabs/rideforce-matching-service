@@ -99,4 +99,7 @@ public class AggregateRankingBuilder {
 		return totalWeightedRank / scaleVariable;
 	}
 
+	public double getScaleVariable() {
+		return scaleVariable;
+	}
 }

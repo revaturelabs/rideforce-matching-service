@@ -1,9 +1,14 @@
 package com.revature.bean.tests;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import java.util.Set;
 
 import javax.validation.ConstraintViolation;
 
+import org.assertj.core.api.Assertions;
 import org.hibernate.validator.HibernateValidator;
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -190,6 +195,49 @@ public class ResponseErrorBeanTest {
 		assertViolations(1, re);
 	}
 	
+	@Test
+	public void hashCodeTest() {
+		ResponseError re = new ResponseError("message");
+		assertTrue(re.hashCode() == 954926055);
+	}
+	
+	@Test
+	public void equalsTest1() {
+		ResponseError re1 = new ResponseError("message");
+		ResponseError re2 = new ResponseError("message");
+		assertTrue(re1.equals(re2));
+	}
+	
+	@Test
+	public void equalsTest2() {
+		ResponseError re1 = new ResponseError("message");
+		ResponseError re2 = new ResponseError("message123");
+		assertTrue(!re1.equals(re2));
+	}
+	
+	@Test
+	public void equalsTest3() {
+		ResponseError re1 = new ResponseError("message");
+		String[] details = new String[]{""};
+		re1.setDetails(details);
+		ResponseError re2 = new ResponseError("123");
+		re2.setDetails(null);
+		assertFalse(re1.equals(re2));
+	}
+	
+	@Test
+	public void equalsTest4() {
+		ResponseError re = new ResponseError("message");
+		assertFalse(re.equals(null));
+	}
+	
+	@Test
+	public void equalsTest5() {
+		ResponseError re1 = new ResponseError("message");
+		ResponseError re2 = new ResponseError("message");
+		re1.setMessage(null);
+		assertFalse(re1.equals(re2));
+	}
 	
 	/** Tests that there are 2 violations if the details are null and message
 	 * are null. */

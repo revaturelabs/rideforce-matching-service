@@ -14,8 +14,13 @@ spring:
       ddl-auto: update
     database-platform: Oracle10g
 
+feign:
+  hystrix:
+    enabled: true
+
 eureka:
   client:
     service-url:
       default-zone: http://localhost:8761/eureka
-      
+      fetch-registry: false
+      register-with-eureka: false

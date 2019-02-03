@@ -1,13 +1,21 @@
 package com.revature.service.tests;
 
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.assertj.core.api.Assertions.assertThatNullPointerException;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import java.lang.reflect.Field;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import org.assertj.core.api.Assertions;
 import org.junit.After;
 import org.junit.AfterClass;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -34,6 +42,7 @@ import com.revature.rideshare.matching.beans.User;
 import com.revature.rideshare.matching.repositories.DislikeRepository;
 import com.revature.rideshare.matching.repositories.LikeRepository;
 import com.revature.rideshare.matching.services.MatchService;
+import com.revature.rideshare.matching.beans.Filter;
 
 @SpringBootTest(classes= Application.class)
 @RunWith(SpringRunner.class)
@@ -55,7 +64,10 @@ public class MatchServiceTest {
 	private static TestUserClient testUserClient = new TestUserClient();
 	private static TestMapsClient testMapsClient = new TestMapsClient();
 
-	
+	private static Filter fnone;
+	private static Filter fbend;
+	private static Filter fdstart;
+	private static Filter fdist;
 	private static User rider;
 	private static User driver1;
 	private static User driver2;
@@ -71,6 +83,14 @@ public class MatchServiceTest {
 		driver2 = new User();
 		driver3 = new User();
 		driver4 = new User();
+		
+		fnone = new Filter();
+		fbend = new Filter();
+		fbend.setBatchEndChange(true);
+		fdstart = new Filter();
+		fdstart.setDayStartChange(true);
+		fdist = new Filter();
+		fdist.setDistanceChange(true);
 		
 		rider.setId(1);
 		driver1.setId(2);
@@ -116,9 +136,33 @@ public class MatchServiceTest {
 	public void tearDown() throws Exception {
 	}
 	
-	@Test
-	public void test() {
-		
+	@Test(expected=NullPointerException.class)
+	public void findMatchesByDistanceNullRiderTest() throws NullPointerException {
+		this.matchService.findMatchesByDistance(null);
 	}
 	
+	@Test(expected=NullPointerException.class)
+	public void findMatchesByAffectsNullRiderTest() throws NullPointerException {
+		this.matchService.findMatchesByAffects(null);
+	}
+	
+	@Test(expected=NullPointerException.class)
+	public void findMatchesByBatchEndNullRiderTest() throws NullPointerException {
+		this.matchService.findMatchesByBatchEnd(null);
+	}
+	
+	@Test(expected=NullPointerException.class)
+	public void findMatchesByStartTimeNullRiderTest() throws NullPointerException {
+		this.matchService.findMatchesByStartTime(null);
+	}
+	
+	@Test(expected=NullPointerException.class)
+	public void findMatchesNullRiderTest() throws NullPointerException {
+		this.matchService.findMatches(null);
+	}
+	
+	@Test(expected=NullPointerException.class)
+	public void findFilteredMatchesNullRiderTest() throws NullPointerException {
+		this.matchService.findFilteredMatches(fnone, null);
+	}
 }

@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;
-import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -14,7 +13,7 @@ import com.revature.rideshare.matching.beans.User;
 /**
  * A Feign client for accessing the user service.
  */
-@FeignClient(name="user-service")//, fallback=UserClientFallback.class)
+@FeignClient(name="user-service", fallback=UserClientFallback.class, url="${USER_URL}")
 public interface UserClient {
 	/**
 	 * Finds all the users who work at the given office and have the given role.
@@ -28,6 +27,5 @@ public interface UserClient {
 	
 	@GetMapping(path = "/users/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	User findById(@PathVariable("id") int id);
-	
-}
 
+}

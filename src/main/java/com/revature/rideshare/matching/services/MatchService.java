@@ -78,19 +78,19 @@ public class MatchService {
 	private static final String DRIVER_ROLE = "DRIVER";
 
 	/** Feign client to User Service */
-//	@Autowired
+	@Autowired
 	private UserClient userClient;
 
-//	@Autowired
+	@Autowired
 	private RankByAffect rankByAffect;
 	
-//	@Autowired
+	@Autowired
 	private RankByBatchEnd rankByBatchEnd;
 	
-//	@Autowired
+	@Autowired
 	private RankByDistance rankByDistance;
 	
-//	@Autowired
+	@Autowired
 	private RankByStartTime rankByStartTime;
 
 //	{
@@ -301,6 +301,12 @@ public class MatchService {
 	 *         descending order
 	 */
 	public List<User> findMatchesByStartTime(User rider) {
+		if (rider != null) {
+			LOGGER.debug("findMatchesByBatchEnd recieved user: {}", rider.getFirstName());
+		} else {
+			LOGGER.error("RECIEVED A NULL USER: findMatchesByBatchEnd in matchService.");
+			throw new NullPointerException();
+		}
 		int officeId = officeLinkToId(rider.getOffice());
 		AggregateRankingBuilder arb = new AggregateRankingBuilder();
 		arb.addCriterion(rankByStartTime);
@@ -359,6 +365,12 @@ public class MatchService {
 	 * @return a list of drivers who fit our matching criteria
 	 */
 	public List<User> findFilteredMatches(Filter filter, User rider) {
+		if (rider != null) {
+			LOGGER.debug("findMatches recieved user: {}", rider.getFirstName());
+		} else {
+			LOGGER.error("RECIEVED A NULL USER: findMatches in matchService.");
+			throw new NullPointerException();
+		}
 		int officeId = officeLinkToId(rider.getOffice());
 		AggregateRankingBuilder arb = new AggregateRankingBuilder();
 		if (filter.isBatchEndChange()) {
@@ -406,9 +418,10 @@ public class MatchService {
 	 */
 	private static Map<String, Double> setup() {
 		Properties prop = new Properties();
-		String path = "src/main/resources/matching.properties";
+ 		String path = "";
+// 		String path = "matching.properties";
 		try {
-			prop.load(new FileReader(path));
+			prop.load(MatchService.class.getResourceAsStream("/matching.properties"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

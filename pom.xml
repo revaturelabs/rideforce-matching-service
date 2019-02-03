@@ -2,6 +2,7 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
+	<packaging>jar</packaging>
 	<groupId>com.revature.rideshare</groupId>
 	<artifactId>rideshare-matching-service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
@@ -22,6 +23,34 @@
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
+	
+	<repositories>
+		<repository>
+			<id>my-nexus</id>
+			<name>Nexus</name>
+			<url>http://nexus.revature.tech/nexus/content/groups/public</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
+	<pluginRepositories>
+		<pluginRepository>
+			<id>my-nexus</id>
+			<name>Nexus</name>
+			<url>http://nexus.revature.tech/nexus/content/groups/public</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</pluginRepository>
+	</pluginRepositories> 
+	
 	<dependencies>
 		<!-- Spring Boot -->
 		<dependency>
@@ -123,15 +152,15 @@
 		</dependency>
 		<dependency>
 			<groupId>com.oracle</groupId>
-			<artifactId>ojdbc7</artifactId>
+			<artifactId>ojdbc6</artifactId>
 			<version>11.2.0</version>
 		</dependency>
 	</dependencies>
 	<build>
 		<finalName>rideshare-matching-service</finalName>
-		<pluginManagement>
+<!-- 		<pluginManagement> -->
 			<plugins>
-				<plugin>
+<!-- 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-compiler-plugin</artifactId>
 					<version>3.6.0</version>
@@ -139,13 +168,13 @@
 						<source>1.8</source>
 						<target>1.8</target>
 					</configuration>
-				</plugin>
+				</plugin> -->
 
 				<plugin>
 					<groupId>org.springframework.boot</groupId>
 					<artifactId>spring-boot-maven-plugin</artifactId>
 				</plugin>
 			</plugins>
-		</pluginManagement>
+<!-- 		</pluginManagement> -->
 	</build>
 </project>
