@@ -4,6 +4,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -324,6 +325,16 @@ public class MatchService {
 				.map(driver -> new RankedUser(driver, arb.rankMatch(rider, driver))).sorted(Comparator.reverseOrder())
 				.limit(maxMatches).map(rankedUser -> rankedUser.user).collect(Collectors.toList());
 		System.out.println("Returned drivers: " + drivers.toString());
+		
+		for(int i = 0; i < drivers.size(); i++)
+		{
+			if(drivers.get(i).isActive().contains("INACTIVE"))
+			{
+				drivers.remove(i);
+			}
+		}
+		
+		
 		return drivers;
 	}
 
@@ -348,9 +359,11 @@ public class MatchService {
 		}
 		arb.addCriterion(rankByAffect);
 
-		return userClient.findByOfficeAndRole(officeId, DRIVER_ROLE).stream()
+		List<User>  users = userClient.findByOfficeAndRole(officeId, DRIVER_ROLE).stream()
 				.map(driver -> new RankedUser(driver, arb.rankMatch(rider, driver))).sorted(Comparator.reverseOrder())
 				.limit(maxMatches).map(rankedUser -> rankedUser.user).collect(Collectors.toList());
+		
+		return users;
 	}
 
 	/**

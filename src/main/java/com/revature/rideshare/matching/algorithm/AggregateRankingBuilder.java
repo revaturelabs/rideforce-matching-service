@@ -95,7 +95,7 @@ public class AggregateRankingBuilder {
 		for (Double weightedRank : weightedRanks) {
 			totalWeightedRank += weightedRank;
 		}
-//		System.out.println(totalWeightedRank);
+		
 		return totalWeightedRank / scaleVariable;
 	}
 
