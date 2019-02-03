@@ -82,6 +82,7 @@ public class MatchingController {
 			List<String> matches =  matchService.findMatches(rider).stream()
 				.map(driver -> UriComponentsBuilder.fromPath(USER_ID_URI).buildAndExpand(driver.getId()).toString())
 				.collect(Collectors.toList());
+						
 		LOGGER.debug("Returning matches: " + matches.toString());
 		return matches;
 		}

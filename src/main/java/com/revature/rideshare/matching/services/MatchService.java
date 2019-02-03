@@ -227,6 +227,15 @@ public class MatchService {
 				.map(driver -> new RankedUser(driver, arb.rankMatch(rider, driver))).sorted(Comparator.reverseOrder())
 				.limit(maxMatches).map(rankedUser -> rankedUser.user).collect(Collectors.toList());
 		System.out.println("Results from findMatchesByDistance: " + results.toString());
+		
+		for(int i = 0; i < results.size(); i++)
+		{
+			if(results.get(i).isActive().contains("INACTIVE"))
+			{
+				results.remove(i);
+			}
+		}
+		
 		return results;
 	}
 
@@ -249,9 +258,19 @@ public class MatchService {
 		AggregateRankingBuilder arb = new AggregateRankingBuilder();
 		arb.addCriterion(rankByAffect);
 
-		return userClient.findByOfficeAndRole(officeId, DRIVER_ROLE).stream()
+		List<User> users = userClient.findByOfficeAndRole(officeId, DRIVER_ROLE).stream()
 				.map(driver -> new RankedUser(driver, arb.rankMatch(rider, driver))).sorted(Comparator.reverseOrder())
 				.limit(maxMatches).map(rankedUser -> rankedUser.user).collect(Collectors.toList());
+		
+		for(int i = 0; i < users.size(); i++)
+		{
+			if(users.get(i).isActive().contains("INACTIVE"))
+			{
+				users.remove(i);
+			}
+		}
+		
+		return users;
 	}
 
 	/**
@@ -273,9 +292,19 @@ public class MatchService {
 		AggregateRankingBuilder arb = new AggregateRankingBuilder();
 		arb.addCriterion(rankByBatchEnd);
 
-		return userClient.findByOfficeAndRole(officeId, DRIVER_ROLE).stream()
+		List<User> users = userClient.findByOfficeAndRole(officeId, DRIVER_ROLE).stream()
 				.map(driver -> new RankedUser(driver, arb.rankMatch(rider, driver))).sorted(Comparator.reverseOrder())
 				.limit(maxMatches).map(rankedUser -> rankedUser.user).collect(Collectors.toList());
+		
+		for(int i = 0; i < users.size(); i++)
+		{
+			if(users.get(i).isActive().contains("INACTIVE"))
+			{
+				users.remove(i);
+			}
+		}
+		
+		return users;
 	}
 
 	/**
@@ -291,9 +320,19 @@ public class MatchService {
 		AggregateRankingBuilder arb = new AggregateRankingBuilder();
 		arb.addCriterion(rankByStartTime);
 
-		return userClient.findByOfficeAndRole(officeId, DRIVER_ROLE).stream()
+		List<User> users =  userClient.findByOfficeAndRole(officeId, DRIVER_ROLE).stream()
 				.map(driver -> new RankedUser(driver, arb.rankMatch(rider, driver))).sorted(Comparator.reverseOrder())
 				.limit(maxMatches).map(rankedUser -> rankedUser.user).collect(Collectors.toList());
+		
+		for(int i = 0; i < users.size(); i++)
+		{
+			if(users.get(i).isActive().contains("INACTIVE"))
+			{
+				users.remove(i);
+			}
+		}
+		
+		return users;
 	}
 
 	/**
@@ -362,6 +401,14 @@ public class MatchService {
 		List<User>  users = userClient.findByOfficeAndRole(officeId, DRIVER_ROLE).stream()
 				.map(driver -> new RankedUser(driver, arb.rankMatch(rider, driver))).sorted(Comparator.reverseOrder())
 				.limit(maxMatches).map(rankedUser -> rankedUser.user).collect(Collectors.toList());
+		
+		for(int i = 0; i < users.size(); i++)
+		{
+			if(users.get(i).isActive().contains("INACTIVE"))
+			{
+				users.remove(i);
+			}
+		}
 		
 		return users;
 	}
