@@ -34,7 +34,7 @@ import com.revature.rideshare.matching.services.MatchService;
  * The Class MatchingController.
  */
 @RestController
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "*")
 @RequestMapping("matches")
 public class MatchingController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(MatchingController.class);
