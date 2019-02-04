@@ -14,7 +14,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EnableDiscoveryClient
 @EnableFeignClients
 @EnableCircuitBreaker
-@EnableJpaRepositories
+@EnableJpaRepositories("com.revature")
 public class Application {
 	
 	/**

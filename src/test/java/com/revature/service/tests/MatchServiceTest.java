@@ -89,7 +89,7 @@ public class MatchServiceTest {
 	private static List<Integer> dislikedIds;
 	
 	@Before
-	public static void setUpBeforeClass() throws Exception {
+	public void init() throws Exception {
 		rider.setId(1);
 		driver1.setId(2);
 		driver2.setId(3);
@@ -120,9 +120,8 @@ public class MatchServiceTest {
 	
 	@Test
 	public void getMatchesInDatabase() throws Exception {
-		List<User> matches = new ArrayList<User>();
-		
 		Mockito.when(userClient.findByOfficeAndRole(Mockito.anyInt(), Mockito.anyString())).thenReturn(drivers);
+		
 	}
 	
 	@Test(expected=NullPointerException.class)

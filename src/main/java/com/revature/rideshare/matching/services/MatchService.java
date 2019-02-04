@@ -64,13 +64,6 @@ public class MatchService {
 	 * The properties were configured in matching.properties file. See setup method.
 	 */
 	Map<String, Double> property = MatchService.setup();
-	{
-		maxMatches = property.get("max_matches").intValue();
-		distanceCoefficient = property.get("distance_coefficient");
-		batchEndCoefficient = property.get("batch_end_coefficient");
-		affectCoefficient = property.get("affect_coefficient");
-		startTimeCoefficient = property.get("start_time_coefficient");		
-	}
 
 	/**
 	 * The role corresponding to a potential driver.
@@ -93,39 +86,9 @@ public class MatchService {
 	@Autowired
 	private RankByStartTime rankByStartTime;
 
-//	{
-//		rankByAffect = new RankByAffect();
-//		rankByBatchEnd = new RankByBatchEnd();
-//		rankByDistance = new RankByDistance();
-//		rankByStartTime = new RankByStartTime();
-	
-//	public MatchService(RankByAffect rankByAffect) {
-//		rankByAffect.setWeight(affectCoefficient);
-//		rankByBatchEnd.setWeight(batchEndCoefficient);
-//		rankByDistance.setWeight(distanceCoefficient);
-//		rankByStartTime.setWeight(startTimeCoefficient);
-//	}
-
 	@Autowired
-	public MatchService(UserClient userClient, RankByAffect rankByAffect, RankByBatchEnd rankByBatchEnd,
-		RankByDistance rankByDistance, RankByStartTime rankByStartTime) {
-	super();
-	this.userClient = userClient;
-	this.rankByAffect = rankByAffect;
-	this.rankByBatchEnd = rankByBatchEnd;
-	this.rankByDistance = rankByDistance;
-	this.rankByStartTime = rankByStartTime;
-	rankByAffect.setWeight(affectCoefficient);
-	rankByBatchEnd.setWeight(batchEndCoefficient);
-	rankByDistance.setWeight(distanceCoefficient);
-	rankByStartTime.setWeight(startTimeCoefficient);
-	System.out.println("Printing from MatchService constructor: Affect: " + rankByAffect);
-	System.out.println("Printing from MatchService constructor: BatchEnd: " + rankByBatchEnd);
-	System.out.println("Printing from MatchService constructor: Distance: " + rankByDistance);
-	System.out.println("Printing from MatchService constructor: StartTime: " + rankByStartTime);
-}
 	public MatchService(){
-	super();
+		super();
 	}
 
 	/**
