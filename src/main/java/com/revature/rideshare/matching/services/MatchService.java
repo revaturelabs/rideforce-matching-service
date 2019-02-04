@@ -9,6 +9,8 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.stream.Collectors;
 
+import javax.annotation.PostConstruct;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,11 +61,6 @@ public class MatchService {
 	 * Can change to impact weight of daily start time of rider compared to driver
 	 */
 	private static double startTimeCoefficient;
-
-	/**
-	 * The properties were configured in matching.properties file. See setup method.
-	 */
-	Map<String, Double> property = MatchService.setup();
 
 	/**
 	 * The role corresponding to a potential driver.
@@ -350,23 +347,18 @@ public class MatchService {
 	 * 
 	 * @return a map of properties to use in this class
 	 */
-	private static Map<String, Double> setup() {
+	@PostConstruct
+	private static void setup() {
 		Properties prop = new Properties();
 		String path = "src/main/resources/matching.properties";
 		try {
 			prop.load(new FileReader(path));
+			maxMatches = (int) Double.parseDouble(prop.getProperty("max_matches"));
+			distanceCoefficient = Double.parseDouble(prop.getProperty("distance_coefficient"));
+			affectCoefficient = Double.parseDouble(prop.getProperty("affect_coefficient"));
+			startTimeCoefficient = Double.parseDouble(prop.getProperty("start_time_coefficient"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
-		Map<String, Double> values = new HashMap<>();
-
-		values.put("max_matches", Double.parseDouble(prop.getProperty("max_matches")));
-		values.put("distance_coefficient", Double.parseDouble(prop.getProperty("distance_coefficient")));
-		values.put("batch_end_coefficient", Double.parseDouble(prop.getProperty("batch_end_coefficient")));
-		values.put("affect_coefficient", Double.parseDouble(prop.getProperty("affect_coefficient")));
-		values.put("start_time_coefficient", Double.parseDouble(prop.getProperty("start_time_coefficient")));
-
-		return values;
 	}
 }

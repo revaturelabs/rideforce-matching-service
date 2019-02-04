@@ -127,12 +127,15 @@ public class MatchServiceTest {
 		Mockito.when(userClient.findByOfficeAndRole(Mockito.anyInt(), Mockito.anyString())).thenReturn(drivers);
 		
 		Assert.assertEquals(drivers, matchService.findMatches(rider));
-		/*Assert.assertEquals(drivers, matchService.findFilteredMatches(fnone, rider));
+		Assert.assertEquals(drivers, matchService.findFilteredMatches(fnone, rider));
+		Assert.assertEquals(drivers, matchService.findFilteredMatches(fbend, rider));
+		Assert.assertEquals(drivers, matchService.findFilteredMatches(fdstart, rider));
+		Assert.assertEquals(drivers, matchService.findFilteredMatches(fdist, rider));
 		Assert.assertEquals(drivers, matchService.findMatchesByAffects(rider));
 		Assert.assertEquals(drivers, matchService.findMatchesByBatchEnd(rider));
 		Assert.assertEquals(drivers, matchService.findMatchesByStartTime(rider));
 		Assert.assertEquals(drivers, matchService.findMatchesByDistance(rider));
-	*/}
+	}
 	
 	@Test(expected=NullPointerException.class)
 	public void findMatchesByDistanceNullRiderTest() throws NullPointerException {
