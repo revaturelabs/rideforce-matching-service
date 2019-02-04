@@ -292,7 +292,7 @@ public class MatchService {
 		List<User> drivers = userClient.findByOfficeAndRole(officeId, DRIVER_ROLE).stream()
 				.map(driver -> new RankedUser(driver, arb.rankMatch(rider, driver))).sorted(Comparator.reverseOrder())
 				.limit(maxMatches).map(rankedUser -> rankedUser.user).collect(Collectors.toList());
-		System.out.println("Returned drivers: " + drivers.toString());
+		//System.out.println("Returned drivers: " + drivers.toString());
 		return drivers;
 	}
 

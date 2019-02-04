@@ -74,6 +74,10 @@ public class MatchServiceTest {
 	@MockBean private DislikeRepository dislikeRepository;
 	@MockBean private UserClient userClient;
 	@MockBean private MapsClient mapsClient;
+	@MockBean private RankByAffect rankByAffect;
+	@MockBean private RankByBatchEnd rankByBatchEnd;
+	@MockBean private RankByDistance rankByDistance;
+	@MockBean private RankByStartTime rankByStartTime;
 	
 	private static List<User> drivers = new ArrayList<User>();
 	private static Filter fnone = new Filter();
@@ -122,7 +126,13 @@ public class MatchServiceTest {
 	public void getMatchesInDatabase() throws Exception {
 		Mockito.when(userClient.findByOfficeAndRole(Mockito.anyInt(), Mockito.anyString())).thenReturn(drivers);
 		
-	}
+		Assert.assertEquals(drivers, matchService.findMatches(rider));
+		/*Assert.assertEquals(drivers, matchService.findFilteredMatches(fnone, rider));
+		Assert.assertEquals(drivers, matchService.findMatchesByAffects(rider));
+		Assert.assertEquals(drivers, matchService.findMatchesByBatchEnd(rider));
+		Assert.assertEquals(drivers, matchService.findMatchesByStartTime(rider));
+		Assert.assertEquals(drivers, matchService.findMatchesByDistance(rider));
+	*/}
 	
 	@Test(expected=NullPointerException.class)
 	public void findMatchesByDistanceNullRiderTest() throws NullPointerException {
