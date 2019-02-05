@@ -78,7 +78,7 @@ public class MatchServiceTest {
 	/**
 	 * Mock beans are created here and the Match service is created.
 	 * All dependent classes must be made into mock beans, otherwise the program will
-	 * be unable to obtain the application context
+	 * be unable to obtain the application context (at least from what I experienced)
 	 */
 	@InjectMocks
 	@Autowired private MatchService matchService;
