@@ -57,7 +57,6 @@ public class MatchService {
 	 */
 	private double startTimeCoefficient;
 
-
 	/**
 	 * The role corresponding to a potential driver.
 	 */
@@ -72,7 +71,7 @@ public class MatchService {
 	 * Each is to be weighted to allow for matches to be ranked
 	 * Weights are found in the properties file in resources
 	 */
-	@Autowired
+//	@Autowired
 	private RankByAffect rankByAffect;
 	
 //	@Autowired
