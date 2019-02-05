@@ -39,23 +39,23 @@ public class MatchService {
 	/**
 	 * The maximum number of matches to find. Configured in matching.properties.
 	 */
-	private static int maxMatches;
+	private int maxMatches;
 
 	/**
 	 * Can change to impact weight of distance between rider and driver in algorithm
 	 */
-	private static double distanceCoefficient;
+	private double distanceCoefficient;
 
 	/** Can change to impact weight of batch end of rider compared to driver */
-	private static double batchEndCoefficient;
+	private double batchEndCoefficient;
 
 	/** Can change to impact weight of rider opinion of driver affect */
-	private static double affectCoefficient;
+	private double affectCoefficient;
 
 	/**
 	 * Can change to impact weight of daily start time of rider compared to driver
 	 */
-	private static double startTimeCoefficient;
+	private double startTimeCoefficient;
 
 	/**
 	 * The role corresponding to a potential driver.
@@ -343,18 +343,23 @@ public class MatchService {
 	 * This function will run after the variables and constructor are run
 	 */
 	@PostConstruct
-	private static void setup() {
+	private void setup() {
 		Properties prop = new Properties();
 		String path = "src/main/resources/matching.properties";
 		try {
 			prop.load(new FileReader(path));
-			maxMatches = (int) Double.parseDouble(prop.getProperty("max_matches"));
-			distanceCoefficient = Double.parseDouble(prop.getProperty("distance_coefficient"));
-			batchEndCoefficient = Double.parseDouble(prop.getProperty("distance_coefficient"));
-			affectCoefficient = Double.parseDouble(prop.getProperty("affect_coefficient"));
-			startTimeCoefficient = Double.parseDouble(prop.getProperty("start_time_coefficient"));
+			this.maxMatches = (int) Double.parseDouble(prop.getProperty("max_matches"));
+			this.distanceCoefficient = Double.parseDouble(prop.getProperty("distance_coefficient"));
+			this.batchEndCoefficient = Double.parseDouble(prop.getProperty("batch_end_coefficient"));
+			this.affectCoefficient = Double.parseDouble(prop.getProperty("affect_coefficient"));
+			this.startTimeCoefficient = Double.parseDouble(prop.getProperty("start_time_coefficient"));
 		} catch (IOException e) {
 			e.printStackTrace();
+		} finally {
+			rankByAffect.setWeight(affectCoefficient);
+			rankByBatchEnd.setWeight(batchEndCoefficient);
+			rankByDistance.setWeight(distanceCoefficient);
+			rankByStartTime.setWeight(startTimeCoefficient);
 		}
 	}
 }
