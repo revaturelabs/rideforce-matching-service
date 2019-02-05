@@ -71,6 +71,7 @@ public class MatchService {
 	 * Each is to be weighted to allow for matches to be ranked
 	 * Weights are found in the properties file in resources
 	 */
+
 	@Autowired
 	private RankByAffect rankByAffect;
 	
@@ -346,9 +347,11 @@ public class MatchService {
 	@PostConstruct
 	private void setup() {
 		Properties prop = new Properties();
-		String path = "src/main/resources/matching.properties";
+ 		String path = "";
+    //String path = "matching.properties";
 		try {
-			prop.load(new FileReader(path));
+			//prop.load(new FileReader(path));
+      prop.load(MatchService.class.getResourceAsStream("/matching.properties"));
 			this.maxMatches = (int) Double.parseDouble(prop.getProperty("max_matches"));
 			this.distanceCoefficient = Double.parseDouble(prop.getProperty("distance_coefficient"));
 			this.batchEndCoefficient = Double.parseDouble(prop.getProperty("batch_end_coefficient"));
