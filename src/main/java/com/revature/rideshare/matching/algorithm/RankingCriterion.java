@@ -17,6 +17,10 @@ public abstract class RankingCriterion {
 	 */
 	private double weight = 1;
 
+	public RankingCriterion() {
+		super();
+	}
+
 	/**
 	 * Method used to perform a simple ranking algorithm defined in the child class
 	 * 

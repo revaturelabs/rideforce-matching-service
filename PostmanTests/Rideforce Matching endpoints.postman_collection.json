@@ -1,0 +1,418 @@
+{
+	"info": {
+		"_postman_id": "dff126ec-dd12-40c5-8ecb-a1069a463096",
+		"name": "Rideforce Matching endpoints",
+		"description": "Rideforce testing",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "localhost:4444/matches/filtered/57",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"Filter\":{\n\t\t\"batchEndChange\":true,\n\t\t\"dayStartChange\":true,\n\t\t\"distanceChange\":true\n\t}\n}"
+				},
+				"url": {
+					"raw": "localhost:4444/matches/filtered/57",
+					"host": [
+						"localhost"
+					],
+					"port": "4444",
+					"path": [
+						"matches",
+						"filtered",
+						"57"
+					]
+				},
+				"description": "Tries to get filtered users based on the filter and the user Id given in the body"
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:4444/matches/3102",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "localhost:4444/matches/3102",
+					"host": [
+						"localhost"
+					],
+					"port": "4444",
+					"path": [
+						"matches",
+						"3102"
+					]
+				},
+				"description": "Gets all matches based on the user ID provided in URL"
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:4444/matches/likes-dislikes/3102",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "localhost:4444/matches/likes-dislikes/3102",
+					"host": [
+						"localhost"
+					],
+					"port": "4444",
+					"path": [
+						"matches",
+						"likes-dislikes",
+						"3102"
+					]
+				},
+				"description": "Returns drives not liked/disliked by user"
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:4444/matches/distance/3102",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "localhost:4444/matches/distance/3102",
+					"host": [
+						"localhost"
+					],
+					"port": "4444",
+					"path": [
+						"matches",
+						"distance",
+						"3102"
+					]
+				},
+				"description": "Returns matches based on distance"
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:4444/matches/batch-end/3102",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "localhost:4444/matches/batch-end/3102",
+					"host": [
+						"localhost"
+					],
+					"port": "4444",
+					"path": [
+						"matches",
+						"batch-end",
+						"3102"
+					]
+				},
+				"description": "Gets matches by batch end date"
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:4444/matches/start-time/3102",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "localhost:4444/matches/start-time/3102",
+					"host": [
+						"localhost"
+					],
+					"port": "4444",
+					"path": [
+						"matches",
+						"start-time",
+						"3102"
+					]
+				},
+				"description": "Gets matches based on daily start time"
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:4444/matches/likes/1",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "localhost:4444/matches/likes/1",
+					"host": [
+						"localhost"
+					],
+					"port": "4444",
+					"path": [
+						"matches",
+						"likes",
+						"1"
+					]
+				},
+				"description": "Gets matches based off drivers the user has liked"
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:4444/matches/likes/1/2",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "localhost:4444/matches/likes/1/2",
+					"host": [
+						"localhost"
+					],
+					"port": "4444",
+					"path": [
+						"matches",
+						"likes",
+						"1",
+						"2"
+					]
+				},
+				"description": "Put request for testing liking in rideforce"
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:4444/matches/likes/1/2",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "localhost:4444/matches/likes/1/2",
+					"host": [
+						"localhost"
+					],
+					"port": "4444",
+					"path": [
+						"matches",
+						"likes",
+						"1",
+						"2"
+					]
+				},
+				"description": "Unliking a given user"
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:4444/matches/dislikes/1",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "localhost:4444/matches/dislikes/1",
+					"host": [
+						"localhost"
+					],
+					"port": "4444",
+					"path": [
+						"matches",
+						"dislikes",
+						"1"
+					]
+				},
+				"description": "Gets users based off dislikes"
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:4444/matches/dislikes/1/2",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "localhost:4444/matches/dislikes/1/2",
+					"host": [
+						"localhost"
+					],
+					"port": "4444",
+					"path": [
+						"matches",
+						"dislikes",
+						"1",
+						"2"
+					]
+				},
+				"description": "Dislikes a user"
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:4444/matches/dislikes/1/2",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "localhost:4444/matches/dislikes/1/2",
+					"host": [
+						"localhost"
+					],
+					"port": "4444",
+					"path": [
+						"matches",
+						"dislikes",
+						"1",
+						"2"
+					]
+				},
+				"description": "Undislikes user"
+			},
+			"response": []
+		}
+	]
+}
