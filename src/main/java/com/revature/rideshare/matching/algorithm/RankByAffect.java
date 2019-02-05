@@ -10,7 +10,6 @@ import com.revature.rideshare.matching.beans.User;
 import com.revature.rideshare.matching.services.DislikeService;
 import com.revature.rideshare.matching.services.LikeService;
 
-// TODO: Auto-generated Javadoc
 /**
  * Class used to rank a rider-driver pair by affect (likes, dislikes).
  *

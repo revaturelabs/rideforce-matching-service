@@ -39,28 +39,24 @@ public class MatchService {
 	/**
 	 * The maximum number of matches to find. Configured in matching.properties.
 	 */
-	private static int maxMatches;
-
-	/**
-	 * The coefficients used to weight importance of matching features. These are
-	 * configured in matching.properties.
-	 */
+	private int maxMatches;
 
 	/**
 	 * Can change to impact weight of distance between rider and driver in algorithm
 	 */
-	private static double distanceCoefficient;
+	private double distanceCoefficient;
 
 	/** Can change to impact weight of batch end of rider compared to driver */
-	private static double batchEndCoefficient;
+	private double batchEndCoefficient;
 
 	/** Can change to impact weight of rider opinion of driver affect */
-	private static double affectCoefficient;
+	private double affectCoefficient;
 
 	/**
 	 * Can change to impact weight of daily start time of rider compared to driver
 	 */
-	private static double startTimeCoefficient;
+	private double startTimeCoefficient;
+
 
 	/**
 	 * The role corresponding to a potential driver.
@@ -71,7 +67,12 @@ public class MatchService {
 //	@Autowired
 	private UserClient userClient;
 
-//	@Autowired
+	/** 
+	 * The below four variables are the ranking criterion,
+	 * Each is to be weighted to allow for matches to be ranked
+	 * Weights are found in the properties file in resources
+	 */
+	@Autowired
 	private RankByAffect rankByAffect;
 	
 //	@Autowired
@@ -83,39 +84,9 @@ public class MatchService {
 //	@Autowired
 	private RankByStartTime rankByStartTime;
 
-//	{
-//		rankByAffect = new RankByAffect();
-//		rankByBatchEnd = new RankByBatchEnd();
-//		rankByDistance = new RankByDistance();
-//		rankByStartTime = new RankByStartTime();
-	
-//	public MatchService(RankByAffect rankByAffect) {
-//		rankByAffect.setWeight(affectCoefficient);
-//		rankByBatchEnd.setWeight(batchEndCoefficient);
-//		rankByDistance.setWeight(distanceCoefficient);
-//		rankByStartTime.setWeight(startTimeCoefficient);
-//	}
-
 	@Autowired
-	public MatchService(UserClient userClient, RankByAffect rankByAffect, RankByBatchEnd rankByBatchEnd,
-		RankByDistance rankByDistance, RankByStartTime rankByStartTime) {
-	super();
-	this.userClient = userClient;
-	this.rankByAffect = rankByAffect;
-	this.rankByBatchEnd = rankByBatchEnd;
-	this.rankByDistance = rankByDistance;
-	this.rankByStartTime = rankByStartTime;
-	rankByAffect.setWeight(affectCoefficient);
-	rankByBatchEnd.setWeight(batchEndCoefficient);
-	rankByDistance.setWeight(distanceCoefficient);
-	rankByStartTime.setWeight(startTimeCoefficient);
-	System.out.println("Printing from MatchService constructor: Affect: " + rankByAffect);
-	System.out.println("Printing from MatchService constructor: BatchEnd: " + rankByBatchEnd);
-	System.out.println("Printing from MatchService constructor: Distance: " + rankByDistance);
-	System.out.println("Printing from MatchService constructor: StartTime: " + rankByStartTime);
-}
 	public MatchService(){
-	super();
+		super();
 	}
 
 	/**
@@ -211,11 +182,9 @@ public class MatchService {
 		int officeId = officeLinkToId(rider.getOffice());
 		AggregateRankingBuilder arb = new AggregateRankingBuilder();
 		arb.addCriterion(rankByDistance);
-		System.out.println("ARB from findMatchesByDistance: " + arb.toString());
 		List<User> results = userClient.findByOfficeAndRole(officeId, DRIVER_ROLE).stream()
 				.map(driver -> new RankedUser(driver, arb.rankMatch(rider, driver))).sorted(Comparator.reverseOrder())
 				.limit(maxMatches).map(rankedUser -> rankedUser.user).collect(Collectors.toList());
-		System.out.println("Results from findMatchesByDistance: " + results.toString());
 		
 		//Filters out users marked as inactive
 		for(int i = 0; i < results.size(); i++){
@@ -223,6 +192,7 @@ public class MatchService {
 				results.remove(i);
 			}
 		}
+		System.out.println("Results from findMatchesByDistance: " + results.toString());
 		return results;
 	}
 
@@ -325,18 +295,15 @@ public class MatchService {
 			throw new NullPointerException();
 		}
 		int officeId = officeLinkToId(rider.getOffice());
-//		System.out.println("officeId from findMatches method: " + officeId);
+
 		AggregateRankingBuilder arb = new AggregateRankingBuilder();
 		arb.addCriterion(rankByAffect);
 		arb.addCriterion(rankByBatchEnd);
 		arb.addCriterion(rankByDistance);
 		arb.addCriterion(rankByStartTime);
-
-//		System.out.println("ARB from find Matches method: " + arb);
 		List<User> drivers = userClient.findByOfficeAndRole(officeId, DRIVER_ROLE).stream()
 				.map(driver -> new RankedUser(driver, arb.rankMatch(rider, driver))).sorted(Comparator.reverseOrder())
 				.limit(maxMatches).map(rankedUser -> rankedUser.user).collect(Collectors.toList());
-		
 		
 		//Filters out users marked as inactive
 		for(int i = 0; i < drivers.size(); i++){
@@ -399,23 +366,30 @@ public class MatchService {
 	}
 
 	/**
-	 * A function used to populate our property map with externally configured
-	 * values
-	 * 
-	 * @return a map of properties to use in this class
+	 * This function sets up the Matching service
+	 * It retrieves the properties file and pulls the values
+	 * from it and places them into the proper variables
+	 * It then sets those variables to the weights of the criterion
+	 * This function will run after the variables and constructor are run
 	 */
 	@PostConstruct
-	private static void setup() {
+	private void setup() {
 		Properties prop = new Properties();
 		String path = "src/main/resources/matching.properties";
 		try {
 			prop.load(new FileReader(path));
-			maxMatches = (int) Double.parseDouble(prop.getProperty("max_matches"));
-			distanceCoefficient = Double.parseDouble(prop.getProperty("distance_coefficient"));
-			affectCoefficient = Double.parseDouble(prop.getProperty("affect_coefficient"));
-			startTimeCoefficient = Double.parseDouble(prop.getProperty("start_time_coefficient"));
+			this.maxMatches = (int) Double.parseDouble(prop.getProperty("max_matches"));
+			this.distanceCoefficient = Double.parseDouble(prop.getProperty("distance_coefficient"));
+			this.batchEndCoefficient = Double.parseDouble(prop.getProperty("batch_end_coefficient"));
+			this.affectCoefficient = Double.parseDouble(prop.getProperty("affect_coefficient"));
+			this.startTimeCoefficient = Double.parseDouble(prop.getProperty("start_time_coefficient"));
 		} catch (IOException e) {
 			e.printStackTrace();
+		} finally {
+			rankByAffect.setWeight(affectCoefficient);
+			rankByBatchEnd.setWeight(batchEndCoefficient);
+			rankByDistance.setWeight(distanceCoefficient);
+			rankByStartTime.setWeight(startTimeCoefficient);
 		}
 	}
 }
