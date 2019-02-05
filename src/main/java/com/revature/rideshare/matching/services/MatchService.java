@@ -340,6 +340,7 @@ public class MatchService {
 	 * This function sets up the Matching service
 	 * It retrieves the properties file and pulls the values
 	 * from it and places them into the proper variables
+	 * It then sets those variables to the weights of the criterion
 	 * This function will run after the variables and constructor are run
 	 */
 	@PostConstruct
