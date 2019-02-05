@@ -61,6 +61,12 @@ import com.revature.rideshare.matching.beans.Filter;
 @EnableAsync
 public class MatchServiceTest {
 	
+	/**
+	 * Ensures the configuration is such that the match service can be
+	 * autowired for this test
+	 * @author Tyler Bade
+	 *
+	 */
 	@TestConfiguration
 	static class MatchServiceTestContextConfiguration {
 		@Bean
@@ -69,6 +75,11 @@ public class MatchServiceTest {
 		}
 	}
 	
+	/**
+	 * Mock beans are created here and the Match service is created.
+	 * All dependent classes must be made into mock beans, otherwise the program will
+	 * be unable to obtain the application context
+	 */
 	@InjectMocks
 	@Autowired private MatchService matchService;
 	@MockBean private LikeRepository likeRepository;
@@ -80,6 +91,13 @@ public class MatchServiceTest {
 	@MockBean private RankByDistance rankByDistance;
 	@MockBean private RankByStartTime rankByStartTime;
 	
+	/**
+	 * These are variables that will be needed in this file
+	 * Drivers will eventually hold the 4 drivers declared later
+	 * The four filters will test all possible branches of the getFilteredMatches method
+	 * The rider is a required variable for all methods in the match service
+	 * The list of likes and dislikes is for the affect methods, and is also used in weights
+	 */
 	private static List<User> drivers = new ArrayList<User>();
 	private static Filter fnone = new Filter();
 	private static Filter fbend = new Filter(true,false,false);
@@ -93,6 +111,12 @@ public class MatchServiceTest {
 	private static List<Integer> likedIds;
 	private static List<Integer> dislikedIds;
 	
+	/**
+	 * Initializes variables for use in testing
+	 * test values are given to all users, drivers are added to the list
+	 * The user and map clients are mocked here, as they are used in the Match service
+	 * @throws Exception
+	 */
 	@Before
 	public void init() throws Exception {
 		rider.setId(1);
@@ -122,10 +146,26 @@ public class MatchServiceTest {
 		Mockito.mock(MapsClient.class);
 	}
 	
+	/**
+	 * This test checks all of the methods in the MatchService class
+	 * It will run as though the rider is in the database, and returns an array of drivers
+	 * That driver array is pushed through the remaining operations and is compared to the original list
+	 * 
+	 * @throws Exception
+	 */
 	@Test
 	public void getMatchesInDatabase() throws Exception {
+		/**
+		 * This will force the userClient mock to act as if it found matches for the rider
+		 * This declaration makes sure we do not actually need the user service to test this
+		 */
 		Mockito.when(userClient.findByOfficeAndRole(Mockito.anyInt(), Mockito.anyString())).thenReturn(drivers);
 		
+		/**
+		 * Testing begins here, it goes through all of the methods in Match service
+		 * with the mock above, it will test as though the rider is in the database
+		 * These assertions test all branches of working calls to Match service
+		 */
 		Assert.assertEquals(drivers, matchService.findMatches(rider));
 		Assert.assertEquals(drivers, matchService.findFilteredMatches(fnone, rider));
 		Assert.assertEquals(drivers, matchService.findFilteredMatches(fbend, rider));

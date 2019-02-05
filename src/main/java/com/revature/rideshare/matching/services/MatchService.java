@@ -66,6 +66,11 @@ public class MatchService {
 	@Autowired
 	private UserClient userClient;
 
+	/** 
+	 * The below four variables are the ranking criterion,
+	 * Each is to be weighted to allow for matches to be ranked
+	 * Weights are found in the properties file in resources
+	 */
 	@Autowired
 	private RankByAffect rankByAffect;
 	
@@ -176,11 +181,9 @@ public class MatchService {
 		int officeId = officeLinkToId(rider.getOffice());
 		AggregateRankingBuilder arb = new AggregateRankingBuilder();
 		arb.addCriterion(rankByDistance);
-		System.out.println("ARB from findMatchesByDistance: " + arb.toString());
 		List<User> results = userClient.findByOfficeAndRole(officeId, DRIVER_ROLE).stream()
 				.map(driver -> new RankedUser(driver, arb.rankMatch(rider, driver))).sorted(Comparator.reverseOrder())
 				.limit(maxMatches).map(rankedUser -> rankedUser.user).collect(Collectors.toList());
-		System.out.println("Results from findMatchesByDistance: " + results.toString());
 		return results;
 	}
 
@@ -273,18 +276,15 @@ public class MatchService {
 			throw new NullPointerException();
 		}
 		int officeId = officeLinkToId(rider.getOffice());
-//		System.out.println("officeId from findMatches method: " + officeId);
+
 		AggregateRankingBuilder arb = new AggregateRankingBuilder();
 		arb.addCriterion(rankByAffect);
 		arb.addCriterion(rankByBatchEnd);
 		arb.addCriterion(rankByDistance);
 		arb.addCriterion(rankByStartTime);
-
-//		System.out.println("ARB from find Matches method: " + arb);
 		List<User> drivers = userClient.findByOfficeAndRole(officeId, DRIVER_ROLE).stream()
 				.map(driver -> new RankedUser(driver, arb.rankMatch(rider, driver))).sorted(Comparator.reverseOrder())
 				.limit(maxMatches).map(rankedUser -> rankedUser.user).collect(Collectors.toList());
-		//System.out.println("Returned drivers: " + drivers.toString());
 		return drivers;
 	}
 
@@ -337,10 +337,10 @@ public class MatchService {
 	}
 
 	/**
-	 * A function used to populate our property map with externally configured
-	 * values
-	 * 
-	 * @return a map of properties to use in this class
+	 * This function sets up the Matching service
+	 * It retrieves the properties file and pulls the values
+	 * from it and places them into the proper variables
+	 * This function will run after the variables and constructor are run
 	 */
 	@PostConstruct
 	private static void setup() {
@@ -350,6 +350,7 @@ public class MatchService {
 			prop.load(new FileReader(path));
 			maxMatches = (int) Double.parseDouble(prop.getProperty("max_matches"));
 			distanceCoefficient = Double.parseDouble(prop.getProperty("distance_coefficient"));
+			batchEndCoefficient = Double.parseDouble(prop.getProperty("distance_coefficient"));
 			affectCoefficient = Double.parseDouble(prop.getProperty("affect_coefficient"));
 			startTimeCoefficient = Double.parseDouble(prop.getProperty("start_time_coefficient"));
 		} catch (IOException e) {
