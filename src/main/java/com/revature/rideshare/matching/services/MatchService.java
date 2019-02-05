@@ -63,7 +63,7 @@ public class MatchService {
 	private static final String DRIVER_ROLE = "DRIVER";
 
 	/** Feign client to User Service */
-//	@Autowired
+	@Autowired
 	private UserClient userClient;
 
 	/** 
@@ -71,18 +71,15 @@ public class MatchService {
 	 * Each is to be weighted to allow for matches to be ranked
 	 * Weights are found in the properties file in resources
 	 */
-//	@Autowired
-	private RankByAffect rankByAffect;
-	
-//	@Autowired
-	private RankByBatchEnd rankByBatchEnd;
-	
-//	@Autowired
-	private RankByDistance rankByDistance;
-	
-//	@Autowired
-	private RankByStartTime rankByStartTime;
 
+	@Autowired
+	private RankByAffect rankByAffect;
+	@Autowired
+	private RankByBatchEnd rankByBatchEnd;
+	@Autowired
+	private RankByDistance rankByDistance;
+	@Autowired
+	private RankByStartTime rankByStartTime;
 	@Autowired
 	public MatchService(){
 		super();
@@ -294,6 +291,7 @@ public class MatchService {
 			throw new NullPointerException();
 		}
 		int officeId = officeLinkToId(rider.getOffice());
+		LOGGER.info("Office is: "+officeId);
 
 		AggregateRankingBuilder arb = new AggregateRankingBuilder();
 		arb.addCriterion(rankByAffect);
@@ -358,7 +356,9 @@ public class MatchService {
 	private int officeLinkToId(String link) {
 		AntPathMatcher matcher = new AntPathMatcher();
 		try {
-			return Integer.parseInt(matcher.extractUriTemplateVariables("/offices/{id}", link).get("id"));
+			int officeNum = Integer.parseInt(matcher.extractUriTemplateVariables("/offices/{id}", link).get("id"));
+			LOGGER.info("User works in office: "+officeNum );
+			return officeNum;
 		} catch (NumberFormatException e) {
 			throw new IllegalArgumentException(link + " is not a valid office link.");
 		}
@@ -374,9 +374,11 @@ public class MatchService {
 	@PostConstruct
 	private void setup() {
 		Properties prop = new Properties();
-		String path = "src/main/resources/matching.properties";
+ 		String path = "";
+    //String path = "matching.properties";
 		try {
-			prop.load(new FileReader(path));
+			//prop.load(new FileReader(path));
+      prop.load(MatchService.class.getResourceAsStream("/matching.properties"));
 			this.maxMatches = (int) Double.parseDouble(prop.getProperty("max_matches"));
 			this.distanceCoefficient = Double.parseDouble(prop.getProperty("distance_coefficient"));
 			this.batchEndCoefficient = Double.parseDouble(prop.getProperty("batch_end_coefficient"));

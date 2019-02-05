@@ -73,9 +73,12 @@ public class MatchingController {
 	 * @return list of matched drivers by their IDs
 	 */
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<String> getAll(@PathVariable int id) {
+	public List<String> getAll(@PathVariable int id, HttpServletRequest req) {
+		String authToken = req.getHeader("Authorization");
+		LOGGER.info(authToken);
 		LOGGER.info("getAll() for UserId: " + id);
-		User rider = userClient.findById(id);
+		
+		User rider = userClient.findById(id, authToken);
 		if (rider == null) {
 			LOGGER.error(NULL);
 			return new ArrayList<>();
@@ -98,8 +101,9 @@ public class MatchingController {
 	 * @return a list of drivers which are matched to the rider
 	 */
 	@RequestMapping(value = "/filtered/{id}", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<String> getAllFiltered(@RequestBody Filter filter, @PathVariable int id) {
-		User rider = userClient.findById(id);
+	public List<String> getAllFiltered(@RequestBody Filter filter, @PathVariable int id, HttpServletRequest req) {
+		String authToken = req.getHeader("Authorization");
+		User rider = userClient.findById(id, authToken);
 		if (rider == null) {
 			LOGGER.trace(NULL);
 			return new ArrayList<>();
@@ -120,8 +124,9 @@ public class MatchingController {
 	 * @return matched drivers minus liked and disliked drivers
 	 */
 	@RequestMapping(value = "/likes-dislikes/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<String> getAllMinusAffects(@PathVariable int id) {
-		User rider = userClient.findById(id);
+	public List<String> getAllMinusAffects(@PathVariable int id, HttpServletRequest req) {
+		String authToken = req.getHeader("Authorization");
+		User rider = userClient.findById(id, authToken);
 		if (rider == null) {
 			LOGGER.error(NULL);
 			return new ArrayList<>();
@@ -142,8 +147,9 @@ public class MatchingController {
 	 * @return list of matched drivers by distance to rider
 	 */
 	@RequestMapping(value = "/distance/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<String> getByDistance(@PathVariable int id) {
-		User rider = userClient.findById(id);
+	public List<String> getByDistance(@PathVariable int id, HttpServletRequest req) {
+		String authToken = req.getHeader("Authorization");
+		User rider = userClient.findById(id, authToken);
 		if (rider == null) {
 			LOGGER.error(NULL);
 			return new ArrayList<>();
@@ -164,8 +170,9 @@ public class MatchingController {
 	 * @return list of matched drivers by batch end date same as or after rider's
 	 */
 	@RequestMapping(value = "/batch-end/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<String> getByBatchEnd(@PathVariable int id) {
-		User rider = userClient.findById(id);
+	public List<String> getByBatchEnd(@PathVariable int id, HttpServletRequest req) {
+		String authToken = req.getHeader("Authorization");
+		User rider = userClient.findById(id, authToken);
 		if (rider == null) {
 			LOGGER.error(NULL);
 			return new ArrayList<>();
@@ -179,8 +186,9 @@ public class MatchingController {
 	}
 
 	@RequestMapping(value = "/start-time/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<String> getByStartTime(@PathVariable int id) {
-		User rider = userClient.findById(id);
+	public List<String> getByStartTime(@PathVariable int id, HttpServletRequest req) {
+		String authToken = req.getHeader("Authorization");
+		User rider = userClient.findById(id, authToken);
 		if (rider == null) {
 			LOGGER.trace(NULL);
 			return new ArrayList<>();

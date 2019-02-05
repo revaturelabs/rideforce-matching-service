@@ -75,6 +75,7 @@ public class MatchServiceTest {
 		}
 	}
 	
+
 	/**
 	 * Mock beans are created here and the Match service is created.
 	 * All dependent classes must be made into mock beans, otherwise the program will

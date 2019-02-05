@@ -19,7 +19,7 @@ public class TestUserClient implements UserClient {
 	}
 
 	@Override
-	public User findById(int id) {
+	public User findById(int id, String auth) {
 		Optional<User> user = users.stream()
 				.filter(u -> u.getId() == id)
 				.findFirst();
