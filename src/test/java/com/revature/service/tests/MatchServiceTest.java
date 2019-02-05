@@ -8,6 +8,7 @@ import static org.junit.Assert.assertTrue;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 import org.mockito.ArgumentMatchers.*;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
@@ -119,7 +120,6 @@ public class MatchServiceTest {
 		
 		Mockito.mock(UserClient.class);
 		Mockito.mock(MapsClient.class);
-		
 	}
 	
 	@Test
@@ -135,35 +135,5 @@ public class MatchServiceTest {
 		Assert.assertEquals(drivers, matchService.findMatchesByBatchEnd(rider));
 		Assert.assertEquals(drivers, matchService.findMatchesByStartTime(rider));
 		Assert.assertEquals(drivers, matchService.findMatchesByDistance(rider));
-	}
-	
-	@Test(expected=NullPointerException.class)
-	public void findMatchesByDistanceNullRiderTest() throws NullPointerException {
-		this.matchService.findMatchesByDistance(null);
-	}
-	
-	@Test(expected=NullPointerException.class)
-	public void findMatchesByAffectsNullRiderTest() throws NullPointerException {
-		this.matchService.findMatchesByAffects(null);
-	}
-	
-	@Test(expected=NullPointerException.class)
-	public void findMatchesByBatchEndNullRiderTest() throws NullPointerException {
-		this.matchService.findMatchesByBatchEnd(null);
-	}
-	
-	@Test(expected=NullPointerException.class)
-	public void findMatchesByStartTimeNullRiderTest() throws NullPointerException {
-		this.matchService.findMatchesByStartTime(null);
-	}
-	
-	@Test(expected=NullPointerException.class)
-	public void findMatchesNullRiderTest() throws NullPointerException {
-		this.matchService.findMatches(null);
-	}
-	
-	@Test(expected=NullPointerException.class)
-	public void findFilteredMatchesNullRiderTest() throws NullPointerException {
-		this.matchService.findFilteredMatches(fnone, null);
 	}
 }

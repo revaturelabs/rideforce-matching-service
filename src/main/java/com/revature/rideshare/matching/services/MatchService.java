@@ -42,11 +42,6 @@ public class MatchService {
 	private static int maxMatches;
 
 	/**
-	 * The coefficients used to weight importance of matching features. These are
-	 * configured in matching.properties.
-	 */
-
-	/**
 	 * Can change to impact weight of distance between rider and driver in algorithm
 	 */
 	private static double distanceCoefficient;
