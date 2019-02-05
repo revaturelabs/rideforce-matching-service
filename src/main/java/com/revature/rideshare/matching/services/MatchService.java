@@ -9,6 +9,8 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.stream.Collectors;
 
+import javax.annotation.PostConstruct;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,36 +63,24 @@ public class MatchService {
 	private static double startTimeCoefficient;
 
 	/**
-	 * The properties were configured in matching.properties file. See setup method.
-	 */
-	Map<String, Double> property = MatchService.setup();
-	{
-		maxMatches = property.get("max_matches").intValue();
-		distanceCoefficient = property.get("distance_coefficient");
-		batchEndCoefficient = property.get("batch_end_coefficient");
-		affectCoefficient = property.get("affect_coefficient");
-		startTimeCoefficient = property.get("start_time_coefficient");		
-	}
-
-	/**
 	 * The role corresponding to a potential driver.
 	 */
 	private static final String DRIVER_ROLE = "DRIVER";
 
 	/** Feign client to User Service */
-	@Autowired
+//	@Autowired
 	private UserClient userClient;
 
-	@Autowired
+//	@Autowired
 	private RankByAffect rankByAffect;
 	
-	@Autowired
+//	@Autowired
 	private RankByBatchEnd rankByBatchEnd;
 	
-	@Autowired
+//	@Autowired
 	private RankByDistance rankByDistance;
 	
-	@Autowired
+//	@Autowired
 	private RankByStartTime rankByStartTime;
 
 //	{
@@ -226,6 +216,13 @@ public class MatchService {
 				.map(driver -> new RankedUser(driver, arb.rankMatch(rider, driver))).sorted(Comparator.reverseOrder())
 				.limit(maxMatches).map(rankedUser -> rankedUser.user).collect(Collectors.toList());
 		System.out.println("Results from findMatchesByDistance: " + results.toString());
+		
+		//Filters out users marked as inactive
+		for(int i = 0; i < results.size(); i++){
+			if(results.get(i).isActive().contains("INACTIVE")){
+				results.remove(i);
+			}
+		}
 		return results;
 	}
 
@@ -272,9 +269,17 @@ public class MatchService {
 		AggregateRankingBuilder arb = new AggregateRankingBuilder();
 		arb.addCriterion(rankByBatchEnd);
 
-		return userClient.findByOfficeAndRole(officeId, DRIVER_ROLE).stream()
+		List<User> users = userClient.findByOfficeAndRole(officeId, DRIVER_ROLE).stream()
 				.map(driver -> new RankedUser(driver, arb.rankMatch(rider, driver))).sorted(Comparator.reverseOrder())
 				.limit(maxMatches).map(rankedUser -> rankedUser.user).collect(Collectors.toList());
+		
+		//Filters out users marked as inactive
+		for(int i = 0; i < users.size(); i++){
+			if(users.get(i).isActive().contains("INACTIVE")){
+				users.remove(i);
+			}
+		}
+		return users;
 	}
 
 	/**
@@ -286,19 +291,21 @@ public class MatchService {
 	 *         descending order
 	 */
 	public List<User> findMatchesByStartTime(User rider) {
-		if (rider != null) {
-			LOGGER.debug("findMatchesByBatchEnd recieved user: {}", rider.getFirstName());
-		} else {
-			LOGGER.error("RECIEVED A NULL USER: findMatchesByBatchEnd in matchService.");
-			throw new NullPointerException();
-		}
 		int officeId = officeLinkToId(rider.getOffice());
 		AggregateRankingBuilder arb = new AggregateRankingBuilder();
 		arb.addCriterion(rankByStartTime);
 
-		return userClient.findByOfficeAndRole(officeId, DRIVER_ROLE).stream()
+		List<User> users = userClient.findByOfficeAndRole(officeId, DRIVER_ROLE).stream()
 				.map(driver -> new RankedUser(driver, arb.rankMatch(rider, driver))).sorted(Comparator.reverseOrder())
 				.limit(maxMatches).map(rankedUser -> rankedUser.user).collect(Collectors.toList());
+		
+		//Filters out users marked as inactive
+		for(int i = 0; i < users.size(); i++){
+			if(users.get(i).isActive().contains("INACTIVE")){
+				users.remove(i);
+			}
+		}
+		return users;
 	}
 
 	/**
@@ -329,6 +336,14 @@ public class MatchService {
 		List<User> drivers = userClient.findByOfficeAndRole(officeId, DRIVER_ROLE).stream()
 				.map(driver -> new RankedUser(driver, arb.rankMatch(rider, driver))).sorted(Comparator.reverseOrder())
 				.limit(maxMatches).map(rankedUser -> rankedUser.user).collect(Collectors.toList());
+		
+		
+		//Filters out users marked as inactive
+		for(int i = 0; i < drivers.size(); i++){
+			if(drivers.get(i).isActive().contains("INACTIVE")){
+				drivers.remove(i);
+			}
+		}
 		System.out.println("Returned drivers: " + drivers.toString());
 		return drivers;
 	}
@@ -341,12 +356,6 @@ public class MatchService {
 	 * @return a list of drivers who fit our matching criteria
 	 */
 	public List<User> findFilteredMatches(Filter filter, User rider) {
-		if (rider != null) {
-			LOGGER.debug("findMatches recieved user: {}", rider.getFirstName());
-		} else {
-			LOGGER.error("RECIEVED A NULL USER: findMatches in matchService.");
-			throw new NullPointerException();
-		}
 		int officeId = officeLinkToId(rider.getOffice());
 		AggregateRankingBuilder arb = new AggregateRankingBuilder();
 		if (filter.isBatchEndChange()) {
@@ -360,9 +369,17 @@ public class MatchService {
 		}
 		arb.addCriterion(rankByAffect);
 
-		return userClient.findByOfficeAndRole(officeId, DRIVER_ROLE).stream()
+		List<User> users = userClient.findByOfficeAndRole(officeId, DRIVER_ROLE).stream()
 				.map(driver -> new RankedUser(driver, arb.rankMatch(rider, driver))).sorted(Comparator.reverseOrder())
 				.limit(maxMatches).map(rankedUser -> rankedUser.user).collect(Collectors.toList());
+		
+		//Filters out users marked as inactive
+		for(int i = 0; i < users.size(); i++){
+			if(users.get(i).isActive().contains("INACTIVE")){
+				users.remove(i);
+			}
+		}
+		return users;
 	}
 
 	/**
@@ -387,23 +404,18 @@ public class MatchService {
 	 * 
 	 * @return a map of properties to use in this class
 	 */
-	private static Map<String, Double> setup() {
+	@PostConstruct
+	private static void setup() {
 		Properties prop = new Properties();
 		String path = "src/main/resources/matching.properties";
 		try {
 			prop.load(new FileReader(path));
+			maxMatches = (int) Double.parseDouble(prop.getProperty("max_matches"));
+			distanceCoefficient = Double.parseDouble(prop.getProperty("distance_coefficient"));
+			affectCoefficient = Double.parseDouble(prop.getProperty("affect_coefficient"));
+			startTimeCoefficient = Double.parseDouble(prop.getProperty("start_time_coefficient"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
-		Map<String, Double> values = new HashMap<>();
-
-		values.put("max_matches", Double.parseDouble(prop.getProperty("max_matches")));
-		values.put("distance_coefficient", Double.parseDouble(prop.getProperty("distance_coefficient")));
-		values.put("batch_end_coefficient", Double.parseDouble(prop.getProperty("batch_end_coefficient")));
-		values.put("affect_coefficient", Double.parseDouble(prop.getProperty("affect_coefficient")));
-		values.put("start_time_coefficient", Double.parseDouble(prop.getProperty("start_time_coefficient")));
-
-		return values;
 	}
 }
