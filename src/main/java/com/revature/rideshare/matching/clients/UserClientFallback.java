@@ -26,7 +26,7 @@ public class UserClientFallback implements UserClient {
 	}
 
 	@Override
-	public User findById(int id) {
+	public User findById(int id, String authToken) {
 		// Note, a different, but similar exception is actually thrown if the 
 		// fallback throws an exception.
 		logger.info("findById() FALLBACK EXECUTED");
