@@ -74,16 +74,12 @@ public class MatchService {
 
 	@Autowired
 	private RankByAffect rankByAffect;
-	
 	@Autowired
 	private RankByBatchEnd rankByBatchEnd;
-	
 	@Autowired
 	private RankByDistance rankByDistance;
-	
 	@Autowired
 	private RankByStartTime rankByStartTime;
-
 	@Autowired
 	public MatchService(){
 		super();
@@ -185,6 +181,14 @@ public class MatchService {
 		List<User> results = userClient.findByOfficeAndRole(officeId, DRIVER_ROLE).stream()
 				.map(driver -> new RankedUser(driver, arb.rankMatch(rider, driver))).sorted(Comparator.reverseOrder())
 				.limit(maxMatches).map(rankedUser -> rankedUser.user).collect(Collectors.toList());
+		
+		//Filters out users marked as inactive
+		for(int i = 0; i < results.size(); i++){
+			if(results.get(i).isActive().contains("INACTIVE")){
+				results.remove(i);
+			}
+		}
+		System.out.println("Results from findMatchesByDistance: " + results.toString());
 		return results;
 	}
 
@@ -231,9 +235,17 @@ public class MatchService {
 		AggregateRankingBuilder arb = new AggregateRankingBuilder();
 		arb.addCriterion(rankByBatchEnd);
 
-		return userClient.findByOfficeAndRole(officeId, DRIVER_ROLE).stream()
+		List<User> users = userClient.findByOfficeAndRole(officeId, DRIVER_ROLE).stream()
 				.map(driver -> new RankedUser(driver, arb.rankMatch(rider, driver))).sorted(Comparator.reverseOrder())
 				.limit(maxMatches).map(rankedUser -> rankedUser.user).collect(Collectors.toList());
+		
+		//Filters out users marked as inactive
+		for(int i = 0; i < users.size(); i++){
+			if(users.get(i).isActive().contains("INACTIVE")){
+				users.remove(i);
+			}
+		}
+		return users;
 	}
 
 	/**
@@ -245,19 +257,21 @@ public class MatchService {
 	 *         descending order
 	 */
 	public List<User> findMatchesByStartTime(User rider) {
-		if (rider != null) {
-			LOGGER.debug("findMatchesByBatchEnd recieved user: {}", rider.getFirstName());
-		} else {
-			LOGGER.error("RECIEVED A NULL USER: findMatchesByBatchEnd in matchService.");
-			throw new NullPointerException();
-		}
 		int officeId = officeLinkToId(rider.getOffice());
 		AggregateRankingBuilder arb = new AggregateRankingBuilder();
 		arb.addCriterion(rankByStartTime);
 
-		return userClient.findByOfficeAndRole(officeId, DRIVER_ROLE).stream()
+		List<User> users = userClient.findByOfficeAndRole(officeId, DRIVER_ROLE).stream()
 				.map(driver -> new RankedUser(driver, arb.rankMatch(rider, driver))).sorted(Comparator.reverseOrder())
 				.limit(maxMatches).map(rankedUser -> rankedUser.user).collect(Collectors.toList());
+		
+		//Filters out users marked as inactive
+		for(int i = 0; i < users.size(); i++){
+			if(users.get(i).isActive().contains("INACTIVE")){
+				users.remove(i);
+			}
+		}
+		return users;
 	}
 
 	/**
@@ -277,6 +291,7 @@ public class MatchService {
 			throw new NullPointerException();
 		}
 		int officeId = officeLinkToId(rider.getOffice());
+		LOGGER.info("Office is: "+officeId);
 
 		AggregateRankingBuilder arb = new AggregateRankingBuilder();
 		arb.addCriterion(rankByAffect);
@@ -286,6 +301,14 @@ public class MatchService {
 		List<User> drivers = userClient.findByOfficeAndRole(officeId, DRIVER_ROLE).stream()
 				.map(driver -> new RankedUser(driver, arb.rankMatch(rider, driver))).sorted(Comparator.reverseOrder())
 				.limit(maxMatches).map(rankedUser -> rankedUser.user).collect(Collectors.toList());
+		
+		//Filters out users marked as inactive
+		for(int i = 0; i < drivers.size(); i++){
+			if(drivers.get(i).isActive().contains("INACTIVE")){
+				drivers.remove(i);
+			}
+		}
+		System.out.println("Returned drivers: " + drivers.toString());
 		return drivers;
 	}
 
@@ -297,12 +320,6 @@ public class MatchService {
 	 * @return a list of drivers who fit our matching criteria
 	 */
 	public List<User> findFilteredMatches(Filter filter, User rider) {
-		if (rider != null) {
-			LOGGER.debug("findMatches recieved user: {}", rider.getFirstName());
-		} else {
-			LOGGER.error("RECIEVED A NULL USER: findMatches in matchService.");
-			throw new NullPointerException();
-		}
 		int officeId = officeLinkToId(rider.getOffice());
 		AggregateRankingBuilder arb = new AggregateRankingBuilder();
 		if (filter.isBatchEndChange()) {
@@ -316,9 +333,17 @@ public class MatchService {
 		}
 		arb.addCriterion(rankByAffect);
 
-		return userClient.findByOfficeAndRole(officeId, DRIVER_ROLE).stream()
+		List<User> users = userClient.findByOfficeAndRole(officeId, DRIVER_ROLE).stream()
 				.map(driver -> new RankedUser(driver, arb.rankMatch(rider, driver))).sorted(Comparator.reverseOrder())
 				.limit(maxMatches).map(rankedUser -> rankedUser.user).collect(Collectors.toList());
+		
+		//Filters out users marked as inactive
+		for(int i = 0; i < users.size(); i++){
+			if(users.get(i).isActive().contains("INACTIVE")){
+				users.remove(i);
+			}
+		}
+		return users;
 	}
 
 	/**
@@ -331,7 +356,9 @@ public class MatchService {
 	private int officeLinkToId(String link) {
 		AntPathMatcher matcher = new AntPathMatcher();
 		try {
-			return Integer.parseInt(matcher.extractUriTemplateVariables("/offices/{id}", link).get("id"));
+			int officeNum = Integer.parseInt(matcher.extractUriTemplateVariables("/offices/{id}", link).get("id"));
+			LOGGER.info("User works in office: "+officeNum );
+			return officeNum;
 		} catch (NumberFormatException e) {
 			throw new IllegalArgumentException(link + " is not a valid office link.");
 		}

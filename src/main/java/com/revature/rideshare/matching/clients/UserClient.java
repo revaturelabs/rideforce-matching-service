@@ -6,6 +6,7 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.revature.rideshare.matching.beans.User;
@@ -22,10 +23,10 @@ public interface UserClient {
 	 * @param role     the role of the users to find
 	 * @return all users matching the office and role criteria
 	 */
-	@GetMapping(path = "/users", params = { "office", "role" }, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	List<User> findByOfficeAndRole(@RequestParam("office") int officeId, @RequestParam("role") String role);
+	@GetMapping(path = "/users/?office={office}&role={role}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	List<User> findByOfficeAndRole(@PathVariable("office") int office, @PathVariable("role") String role);
 	
 	@GetMapping(path = "/users/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	User findById(@PathVariable("id") int id);
+	User findById(@PathVariable("id") int id, @RequestHeader(value = "Authorization", required = true) String authorizationHeader);
 
 }

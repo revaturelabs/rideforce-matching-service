@@ -64,7 +64,7 @@ public class User {
 	 * User's batch end. Indicates when user will complete Revature training and no
 	 * longer need Rideshare services
 	 */
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "UTC")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "UTC")
 	@NotNull
 	private Date batchEnd;
 
