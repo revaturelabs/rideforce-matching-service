@@ -77,18 +77,18 @@ public class MatchingController {
 		String authToken = req.getHeader("Authorization");
 		LOGGER.info(authToken);
 		LOGGER.info("getAll() for UserId: " + id);
-		
+
 		User rider = userClient.findById(id, authToken);
 		if (rider == null) {
 			LOGGER.error(NULL);
 			return new ArrayList<>();
 		} else {
 			LOGGER.info(MSG, id, rider.getFirstName());
-			List<String> matches =  matchService.findMatches(rider).stream()
-				.map(driver -> UriComponentsBuilder.fromPath(USER_ID_URI).buildAndExpand(driver.getId()).toString())
-				.collect(Collectors.toList());
-		LOGGER.debug("Returning matches: " + matches.toString());
-		return matches;
+			List<String> matches = matchService.findMatches(rider).stream()
+					.map(driver -> UriComponentsBuilder.fromPath(USER_ID_URI).buildAndExpand(driver.getId()).toString())
+					.collect(Collectors.toList());
+			LOGGER.debug("Returning matches: " + matches.toString());
+			return matches;
 		}
 	}
 
@@ -214,10 +214,10 @@ public class MatchingController {
 
 		likes = likeService.getLikes(id).stream().map(like -> UriComponentsBuilder.fromPath(USER_ID_URI)
 				.buildAndExpand(like.getPair().getAffectedId()).toString()).collect(Collectors.toList());
-		if(likes == null) {
+		if (likes == null) {
 			LOGGER.error("Mapping process returned null");
 			return new ArrayList<>();
-		}else if (likes.isEmpty()) {
+		} else if (likes.isEmpty()) {
 			LOGGER.error("Mapping process did not return any URIs associated with this user id: {}", id);
 			return likes;
 		} else {
@@ -264,9 +264,9 @@ public class MatchingController {
 		List<String> dislikes = null;
 		dislikes = dislikeService.getDislikes(id).stream().map(dislike -> UriComponentsBuilder.fromPath(USER_ID_URI)
 				.buildAndExpand(dislike.getPair().getAffectedId()).toString()).collect(Collectors.toList());
-		if(dislikes == null) {
+		if (dislikes == null) {
 			return new ArrayList<>();
-		}else if (dislikes.isEmpty()) {
+		} else if (dislikes.isEmpty()) {
 			LOGGER.error("Mapping process did not return any URIs associated with this user id: {} ", id);
 			return dislikes;
 		} else {
@@ -320,8 +320,7 @@ public class MatchingController {
 
 		if (DEBUG) {
 			return new ResponseEntity<>(generateStackTrace(ex, false), HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-		else {
+		} else {
 			return new ResponseEntity<>("An error occurred processing the request", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}

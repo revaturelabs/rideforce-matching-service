@@ -33,4 +33,12 @@ public class UserClientFallback implements UserClient {
 		return null;
 	}
 
+	@Override
+	public List<User> findByRole(String role) {
+		// Note, a different, but similar exception is actually thrown if the 
+		// fallback throws an exception.
+		logger.info("findByRole() FALLBACK EXECUTED");
+		return null;
+	}
+
 }

@@ -23,8 +23,11 @@ public interface UserClient {
 	 * @param role     the role of the users to find
 	 * @return all users matching the office and role criteria
 	 */
-	@GetMapping(path = "/users/?office={office}&role={role}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@GetMapping(path = "/users?&office={office}&role={role}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	List<User> findByOfficeAndRole(@PathVariable("office") int office, @PathVariable("role") String role);
+	
+	@GetMapping(path = "/users?", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	List<User> findByRole(@PathVariable("role") String role);
 	
 	@GetMapping(path = "/users/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	User findById(@PathVariable("id") int id, @RequestHeader(value = "Authorization", required = true) String authorizationHeader);
