@@ -35,7 +35,7 @@ import com.revature.rideshare.matching.services.MatchService;
  */
 @CrossOrigin(origins = "*")
 @RestController
-@RequestMapping("matches")
+@RequestMapping("/matches")
 public class MatchingController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(MatchingController.class);
 	private static final String MSG = "Get request to matching controller made with UserId : {} passed. userClient called to find user by that id. userClient returned the user: {}";
