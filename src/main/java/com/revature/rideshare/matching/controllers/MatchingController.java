@@ -35,7 +35,7 @@ import com.revature.rideshare.matching.services.MatchService;
  */
 @CrossOrigin(origins = "*")
 @RestController
-@RequestMapping("matches")
+@RequestMapping("/matches")
 public class MatchingController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(MatchingController.class);
 	private static final String MSG = "Get request to matching controller made with UserId : {} passed. userClient called to find user by that id. userClient returned the user: {}";
@@ -64,6 +64,38 @@ public class MatchingController {
 	/** The dislike service. */
 	@Autowired
 	DislikeService dislikeService;
+
+	@RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public ResponseEntity<List<User>> getAllDrivers() {
+		return new ResponseEntity<List<User>>(matchService.findAll(), HttpStatus.OK);
+	}
+
+	/**
+	 * Gets all matched drivers to riders using rider's ID as input and driver's ID
+	 * to get drivers.
+	 *
+	 * @param id the rider's ID
+	 * @return list of matched drivers by their IDs
+	 */
+	@RequestMapping(value = "/test/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<String> getDrivers(@PathVariable int id, HttpServletRequest req) {
+		String authToken = req.getHeader("Authorization");
+		LOGGER.info("Token: {}", authToken);
+		LOGGER.info("getDrivers() for UserId: " + id);
+
+		User rider = userClient.findById(id, authToken);
+		if (rider == null) {
+			LOGGER.error(NULL);
+			return new ArrayList<>();
+		}
+
+		LOGGER.info(MSG, id, rider.getFirstName());
+		List<String> matches = matchService.findMatchesTest(rider).stream()
+				.map(driver -> UriComponentsBuilder.fromPath(USER_ID_URI).buildAndExpand(driver.getId()).toString())
+				.collect(Collectors.toList());
+		LOGGER.debug("Returning matches: " + matches.toString());
+		return matches;
+	}
 
 	/**
 	 * Gets all matched drivers to riders using rider's ID as input and driver's ID
@@ -113,7 +145,6 @@ public class MatchingController {
 					.map(driver -> UriComponentsBuilder.fromPath(USER_ID_URI).buildAndExpand(driver.getId()).toString())
 					.collect(Collectors.toList());
 		}
-
 	}
 
 	/**

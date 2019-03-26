@@ -169,9 +169,9 @@ public class MatchService {
 				&& driver.getBatchEnd().after(DateUtils.addWeeks(rider.getBatchEnd(), -weeks));
 	}
 
-	private double distance(User u1, User u2) {
-		return Math.sqrt(Math.pow(u1.getLocation().getLatitude() - u2.getLocation().getLatitude(), 2)
-				+ Math.pow(u1.getLocation().getLongitude() - u2.getLocation().getLongitude(), 2));
+	public List<User> findAll() {
+		return userClient.findByRole(DRIVER_ROLE).stream().filter(user -> user.getRole().equalsIgnoreCase(DRIVER_ROLE))
+				.collect(Collectors.toList());
 	}
 
 	/**
@@ -194,10 +194,12 @@ public class MatchService {
 		LOGGER.info("Office is: " + officeId);
 
 		Stream<User> driversStream = userClient.findByOfficeAndRole(officeId, DRIVER_ROLE).stream();
+		LOGGER.info("Drivers from user service: " + driversStream.collect(Collectors.toList()).toString());
 
 		// Pre-Filter Phase
-		driversStream.filter(driver -> driver.isActive().equalsIgnoreCase("inactive") && endDateFilter(driver, rider, 4)
-				&& distance(driver, rider) < 1);
+		driversStream
+				.filter(driver -> driver.getRole().equals(DRIVER_ROLE) && driver.isActive().equalsIgnoreCase("active")
+						&& endDateFilter(driver, rider, 2) && ProximityComparator.distance(driver, rider) < 50);
 
 		// Sort Phase
 		Stack<Comparator<User>> sort = new Stack<>();
@@ -205,9 +207,9 @@ public class MatchService {
 		sort.add(new BatchEndComparator(rider));
 		sort.add(new StartTimeComparator(rider));
 		while (!sort.isEmpty()) {
-			// Not sure if need to reassign
 			driversStream = driversStream.sorted(sort.pop());
 		}
+
 		List<User> drivers = driversStream.collect(Collectors.toList());
 
 		LOGGER.info("Returned drivers: " + drivers.toString());
@@ -427,18 +429,18 @@ public class MatchService {
 	@PostConstruct
 	private void setup() {
 		Properties prop = new Properties();
-		String path = "";
-		// String path = "matching.properties";
+//		String path = "";
+		String path = "/matching.properties";
 		try {
 			// prop.load(new FileReader(path));
-			prop.load(MatchService.class.getResourceAsStream("/matching.properties"));
+			prop.load(MatchService.class.getResourceAsStream(path));
 			this.maxMatches = (int) Double.parseDouble(prop.getProperty("max_matches"));
 			this.distanceCoefficient = Double.parseDouble(prop.getProperty("distance_coefficient"));
 			this.batchEndCoefficient = Double.parseDouble(prop.getProperty("batch_end_coefficient"));
 			this.affectCoefficient = Double.parseDouble(prop.getProperty("affect_coefficient"));
 			this.startTimeCoefficient = Double.parseDouble(prop.getProperty("start_time_coefficient"));
 		} catch (IOException e) {
-			e.printStackTrace();
+			LOGGER.error("Something went wrong in setup", e);
 		} finally {
 			rankByAffect.setWeight(affectCoefficient);
 			rankByBatchEnd.setWeight(batchEndCoefficient);
