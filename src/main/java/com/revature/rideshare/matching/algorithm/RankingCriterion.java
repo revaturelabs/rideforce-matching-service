@@ -43,10 +43,12 @@ public abstract class RankingCriterion {
 		if (rider == null || driver == null) {
 			throw new IllegalArgumentException("Rider and driver must not be null");
 		}
+
 		double driverRanking = rank(rider, driver);
 		if (driverRanking < 0 || driverRanking > 1) {
 			throw new ImproperRankingReturnedException("Return value from criterion should be between 0 and 1");
 		}
+
 		return weight * driverRanking;
 	}
 
@@ -69,7 +71,8 @@ public abstract class RankingCriterion {
 	}
 
 	/**
-	 * Used to allow different children classes to have different hashes if they have the same weight
+	 * Used to allow different children classes to have different hashes if they
+	 * have the same weight
 	 */
 	@Override
 	public int hashCode() {

@@ -13,7 +13,8 @@ import com.revature.rideshare.matching.beans.Dislike;
  */
 @Repository
 @Transactional
-public interface DislikeRepository extends JpaRepository<Dislike, Integer>{
+public interface DislikeRepository extends JpaRepository<Dislike, Integer> {
 
 	List<Dislike> findByPairUserId(int userId);
+
 }

@@ -26,6 +26,12 @@ public class TestUserClient implements UserClient {
 		return user.orElse(null);
 	}
 
+	@Override
+	public List<User> findByRole(String role) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	public Set<User> getUsers() {
 		return users;
 	}

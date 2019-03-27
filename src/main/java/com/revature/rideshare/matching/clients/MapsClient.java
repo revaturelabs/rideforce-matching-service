@@ -10,8 +10,9 @@ import com.revature.rideshare.matching.beans.Route;
 /**
  * A Feign client for accessing the Maps Service.
  */
-@FeignClient(name="maps-service", fallback=MapsClientFallback.class, url="${MAPS_URL}")
+@FeignClient(name = "maps-service", fallback = MapsClientFallback.class, url = "${MAPS_URL}")
 public interface MapsClient {
+
 	/**
 	 * Gets information for a route between two addresses.
 	 * 
@@ -22,4 +23,5 @@ public interface MapsClient {
 	 */
 	@GetMapping(path = "/route", params = { "start", "end" }, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	Route getRoute(@RequestParam("start") String start, @RequestParam("end") String end);
+
 }

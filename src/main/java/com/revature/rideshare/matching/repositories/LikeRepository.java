@@ -14,4 +14,5 @@ import com.revature.rideshare.matching.beans.Like;
 public interface LikeRepository extends JpaRepository<Like, Integer> {
 
 	List<Like> findByPairUserId(int userId);
+
 }

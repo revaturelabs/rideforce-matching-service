@@ -1,6 +1,5 @@
 package com.revature.bean.tests;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -8,7 +7,6 @@ import java.util.Set;
 
 import javax.validation.ConstraintViolation;
 
-import org.assertj.core.api.Assertions;
 import org.hibernate.validator.HibernateValidator;
 import org.junit.Assert;
 import org.junit.BeforeClass;

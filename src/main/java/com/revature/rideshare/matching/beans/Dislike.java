@@ -7,22 +7,23 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 /**
- * The Class Dislike. Represents the dislike affect of 
- * the relationship between a user and the affected user.
+ * The Class Dislike. Represents the dislike affect of the relationship between
+ * a user and the affected user.
  */
 @Entity
-@Table(name="DISLIKES")
+@Table(name = "DISLIKES")
 public class Dislike {
 
 	/** The pair. */
 	@NotNull
 	@EmbeddedId
 	private Pair pair;
-	
+
 	/**
 	 * Instantiates a new dislike.
 	 */
-	public Dislike() {}
+	public Dislike() {
+	}
 
 	/**
 	 * Instantiates a new dislike.
@@ -46,13 +47,15 @@ public class Dislike {
 	/**
 	 * Sets the rider-driver pair.
 	 *
-	 * @param pair the new  rider-driver pair
+	 * @param pair the new rider-driver pair
 	 */
 	public void setPair(Pair pair) {
 		this.pair = pair;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
@@ -60,7 +63,9 @@ public class Dislike {
 		return "Dislike [" + pair.toString() + "]";
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
@@ -71,7 +76,9 @@ public class Dislike {
 		return result;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override
@@ -94,5 +101,5 @@ public class Dislike {
 			return false;
 		}
 		return true;
-	}	
+	}
 }
