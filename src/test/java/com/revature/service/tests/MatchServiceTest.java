@@ -1,58 +1,39 @@
 package com.revature.service.tests;
 
-import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
-import static org.assertj.core.api.Assertions.assertThatNullPointerException;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
-import org.mockito.ArgumentMatchers.*;
-import org.springframework.boot.test.mock.mockito.MockBean;
-
-import java.lang.reflect.Field;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.assertj.core.api.Assertions;
-import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import com.revature.algorithm.tests.TestMapsClient;
-import com.revature.algorithm.tests.TestUserClient;
 import com.revature.rideshare.matching.Application;
 import com.revature.rideshare.matching.algorithm.RankByAffect;
 import com.revature.rideshare.matching.algorithm.RankByBatchEnd;
 import com.revature.rideshare.matching.algorithm.RankByDistance;
 import com.revature.rideshare.matching.algorithm.RankByStartTime;
-import com.revature.rideshare.matching.beans.Like;
-import com.revature.rideshare.matching.beans.Pair;
+import com.revature.rideshare.matching.beans.Filter;
 import com.revature.rideshare.matching.beans.User;
 import com.revature.rideshare.matching.clients.MapsClient;
 import com.revature.rideshare.matching.clients.UserClient;
 import com.revature.rideshare.matching.repositories.DislikeRepository;
 import com.revature.rideshare.matching.repositories.LikeRepository;
 import com.revature.rideshare.matching.services.MatchService;
-import com.revature.rideshare.matching.beans.Filter;
 
 @SpringBootTest(classes= Application.class)
 @RunWith(SpringRunner.class)

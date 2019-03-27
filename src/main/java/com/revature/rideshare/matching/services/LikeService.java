@@ -14,16 +14,16 @@ import com.revature.rideshare.matching.repositories.LikeRepository;
  */
 @Service
 public class LikeService {
-	
+
 	/** The like repository. */
 	@Autowired
 	LikeRepository likeRepository;
-	
+
 	/**
 	 * Save like.
 	 *
 	 * @param userId the userId
-	 * @param liked the affectedId
+	 * @param liked  the affectedId
 	 */
 	public void saveLike(int userId, int liked) {
 		Like newLike = new Like(new Pair(userId, liked));
@@ -41,12 +41,12 @@ public class LikeService {
 		likes = likeRepository.findByPairUserId(userId);
 		return likes;
 	}
-	
+
 	/**
 	 * Delete like.
 	 *
 	 * @param userId the userId
-	 * @param liked the affectedId
+	 * @param liked  the affectedId
 	 */
 	public void deleteLike(int userId, int liked) {
 		Like like = new Like(new Pair(userId, liked));
