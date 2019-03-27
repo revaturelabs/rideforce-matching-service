@@ -4,11 +4,9 @@ import javax.validation.constraints.NotNull;
 
 import org.springframework.stereotype.Component;
 
-import com.revature.rideshare.matching.beans.interfaces.Identifiable;
-
 @Component
-public class CachedLocation implements Identifiable {
-	
+public class CachedLocation {
+
 	@NotNull
 	Integer id;
 

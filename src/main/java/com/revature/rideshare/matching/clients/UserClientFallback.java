@@ -10,36 +10,37 @@ import org.springframework.stereotype.Component;
 
 import com.revature.rideshare.matching.beans.User;
 
-/** This class is the fallback implementation for when a service cannot 
- * make a successful connection with a UserClient. The general behavior
- * is to give a ResponseError stating that a connection could not be 
- * made. */
+/**
+ * This class is the fallback implementation for when a service cannot make a
+ * successful connection with a UserClient. The general behavior is to give a
+ * ResponseError stating that a connection could not be made.
+ */
 @Component
 public class UserClientFallback implements UserClient {
 	static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
 	@Override
-	public List<User> findByOfficeAndRole(int officeId, String role) {
-		// Note, a different, but similar exception is actually thrown if the 
-		// fallback throws an exception.
-		logger.info("findByOfficeAndRole() FALLBACK EXECUTED");
-		return Collections.emptyList();
-	}
-
-	@Override
 	public User findById(int id, String authToken) {
-		// Note, a different, but similar exception is actually thrown if the 
+		// Note, a different, but similar exception is actually thrown if the
 		// fallback throws an exception.
 		logger.info("findById() FALLBACK EXECUTED");
 		return null;
 	}
 
 	@Override
+	public List<User> findByOfficeAndRole(int officeId, String role) {
+		// Note, a different, but similar exception is actually thrown if the
+		// fallback throws an exception.
+		logger.info("findByOfficeAndRole() FALLBACK EXECUTED");
+		return Collections.emptyList();
+	}
+
+	@Override
 	public List<User> findByRole(String role) {
-		// Note, a different, but similar exception is actually thrown if the 
+		// Note, a different, but similar exception is actually thrown if the
 		// fallback throws an exception.
 		logger.info("findByRole() FALLBACK EXECUTED");
-		return null;
+		return Collections.emptyList();
 	}
 
 }

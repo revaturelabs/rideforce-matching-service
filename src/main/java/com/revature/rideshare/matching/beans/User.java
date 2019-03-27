@@ -40,6 +40,9 @@ public class User {
 	/** User's photo url. */
 	private String photoUrl;
 
+	/** User's bio */
+	private String bio;
+
 	/**
 	 * User's active status. Indicates whether rider is searching for ride or driver
 	 * is available to give ride
@@ -56,9 +59,13 @@ public class User {
 	@NotEmpty
 	private String office;
 
-	/** User's address. Indicates user's home address */
-	@NotEmpty
-	private String address;
+	/** User's location. Indicates the the coordinates of where the user lives */
+	@NotNull
+	private CachedLocation location;
+
+	/** User's start time. */
+	@Min(value = 1)
+	private float startTime;
 
 	/**
 	 * User's batch end. Indicates when user will complete Revature training and no
@@ -71,13 +78,6 @@ public class User {
 	/** User's cars. */
 	@NotNull
 	private Set<String> cars;
-//	private Set<Car> cars;
-
-	@NotNull
-	private CachedLocation location;
-
-	/** User's venmo. */
-	private String venmo;
 
 	/**
 	 * User's contact info. Indicates user's preferred means and methods of being
@@ -85,10 +85,6 @@ public class User {
 	 */
 	@NotNull
 	private Set<String> contactInfo;
-
-	/** User's start time. */
-	@Min(value = 1)
-	private float startTime;
 
 	/**
 	 * Instantiates a new user.
@@ -106,20 +102,20 @@ public class User {
 	 * @param email       user's email
 	 * @param password    user's password
 	 * @param photoUrl    user's photo url
+	 * @param bio         user's bio
 	 * @param active      active status
 	 * @param role        user, trainer, admin, rider, driver
 	 * @param office      user's Revature worksite
-	 * @param address     user's home address
+	 * @param location    user's home address
+	 * @param startTime   user's daily start time for training
 	 * @param batchEnd    predicted end of service for user
 	 * @param cars        user's cars
-	 * @param venmo       user's venmo
 	 * @param contactInfo user's contact info
-	 * @param startTime   user's daily start time for training
 	 */
 	public User(int id, @NotEmpty String firstName, @NotEmpty String lastName, @NotEmpty String email, String password,
-			String photoUrl, String active, @NotEmpty String role, @NotEmpty String office, @NotEmpty String address,
-			@NotNull Date batchEnd, @NotNull Set<String> cars, String venmo, @NotNull Set<String> contactInfo,
-			@Min(value = 1) float startTime) {
+			String photoUrl, String bio, String active, @NotEmpty String role, @NotEmpty String office,
+			@NotNull CachedLocation location, @Min(value = 1) float startTime, @NotNull Date batchEnd,
+			@NotNull Set<String> cars, @NotNull Set<String> contactInfo) {
 		super();
 		this.id = id;
 		this.firstName = firstName;
@@ -127,15 +123,15 @@ public class User {
 		this.email = email;
 		this.password = password;
 		this.photoUrl = photoUrl;
+		this.bio = bio;
 		this.active = active;
 		this.role = role;
 		this.office = office;
-		this.address = address;
+		this.location = location;
+		this.startTime = startTime;
 		this.batchEnd = batchEnd;
 		this.cars = cars;
-		this.venmo = venmo;
 		this.contactInfo = contactInfo;
-		this.startTime = startTime;
 	}
 
 	/**
@@ -154,8 +150,9 @@ public class User {
 	 * @param startTime   user's start time
 	 */
 	public User(int id, @NotEmpty String firstName, @NotEmpty String lastName, @NotEmpty String email,
-			@NotEmpty String role, @NotEmpty String office, @NotEmpty String address, @NotNull Date batchEnd,
-			@NotNull Set<String> cars, @NotNull Set<String> contactInfo, @Min(value = 1) float startTime) {
+			@NotEmpty String role, @NotEmpty String office, @NotNull CachedLocation location,
+			@Min(value = 1) float startTime, @NotNull Date batchEnd, @NotNull Set<String> cars,
+			@NotNull Set<String> contactInfo) {
 		super();
 		this.id = id;
 		this.firstName = firstName;
@@ -163,11 +160,11 @@ public class User {
 		this.email = email;
 		this.role = role;
 		this.office = office;
-		this.address = address;
+		this.location = location;
+		this.startTime = startTime;
 		this.batchEnd = batchEnd;
 		this.cars = cars;
 		this.contactInfo = contactInfo;
-		this.startTime = startTime;
 	}
 
 	/**
@@ -333,24 +330,6 @@ public class User {
 	}
 
 	/**
-	 * Gets user address.
-	 *
-	 * @return user address
-	 */
-	public String getAddress() {
-		return address;
-	}
-
-	/**
-	 * Sets user address.
-	 *
-	 * @param address the new address
-	 */
-	public void setAddress(String address) {
-		this.address = address;
-	}
-
-	/**
 	 * Gets user batch end.
 	 *
 	 * @return user batch end
@@ -384,24 +363,6 @@ public class User {
 	 */
 	public void setCars(Set<String> cars) {
 		this.cars = cars;
-	}
-
-	/**
-	 * Gets user venmo.
-	 *
-	 * @return user venmo
-	 */
-	public String getVenmo() {
-		return venmo;
-	}
-
-	/**
-	 * Sets user venmo.
-	 *
-	 * @param venmo the new venmo
-	 */
-	public void setVenmo(String venmo) {
-		this.venmo = venmo;
 	}
 
 	/**
@@ -456,9 +417,9 @@ public class User {
 	@Override
 	public String toString() {
 		return "User [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email
-				+ ", password=" + password + ", photoUrl=" + photoUrl + ", active=" + active + ", role=" + role
-				+ ", office=" + office + ", address=" + address + ", batchEnd=" + batchEnd + ", cars=" + cars
-				+ ", venmo=" + venmo + ", contactInfo=" + contactInfo + ", startTime=" + startTime + "]";
+				+ ", password=" + password + ", photoUrl=" + photoUrl + ", bio=" + bio + ", active=" + active
+				+ ", role=" + role + ", office=" + office + ", location=" + location + ", startTime=" + startTime
+				+ ", batchEnd=" + batchEnd + ", cars=" + cars + ", contactInfo=" + contactInfo + "]";
 	}
 
 	/*
@@ -471,7 +432,7 @@ public class User {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((active == null) ? 0 : active.hashCode());
-		result = prime * result + ((address == null) ? 0 : address.hashCode());
+		result = prime * result + ((location == null) ? 0 : location.hashCode());
 		result = prime * result + ((batchEnd == null) ? 0 : batchEnd.hashCode());
 		result = prime * result + ((cars == null) ? 0 : cars.hashCode());
 		result = prime * result + ((contactInfo == null) ? 0 : contactInfo.hashCode());
@@ -481,10 +442,10 @@ public class User {
 		result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
 		result = prime * result + ((office == null) ? 0 : office.hashCode());
 		result = prime * result + ((password == null) ? 0 : password.hashCode());
+		result = prime * result + ((bio == null) ? 0 : bio.hashCode());
 		result = prime * result + ((photoUrl == null) ? 0 : photoUrl.hashCode());
 		result = prime * result + ((role == null) ? 0 : role.hashCode());
 		result = prime * result + Float.floatToIntBits(startTime);
-		result = prime * result + ((venmo == null) ? 0 : venmo.hashCode());
 		return result;
 	}
 
@@ -507,11 +468,11 @@ public class User {
 		} else if (!active.equals(other.active)) {
 			return false;
 		}
-		if (address == null) {
-			if (other.address != null) {
+		if (location == null) {
+			if (other.location != null) {
 				return false;
 			}
-		} else if (!address.equals(other.address)) {
+		} else if (!location.equals(other.location)) {
 			return false;
 		}
 		if (batchEnd == null) {
@@ -573,6 +534,13 @@ public class User {
 		} else if (!password.equals(other.password)) {
 			return false;
 		}
+		if (bio == null) {
+			if (other.bio != null) {
+				return false;
+			}
+		} else if (!bio.equals(other.bio)) {
+			return false;
+		}
 		if (photoUrl == null) {
 			if (other.photoUrl != null) {
 				return false;
@@ -588,13 +556,6 @@ public class User {
 			return false;
 		}
 		if (Float.floatToIntBits(startTime) != Float.floatToIntBits(other.startTime)) {
-			return false;
-		}
-		if (venmo == null) {
-			if (other.venmo != null) {
-				return false;
-			}
-		} else if (!venmo.equals(other.venmo)) {
 			return false;
 		}
 		return true;

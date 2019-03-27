@@ -37,6 +37,7 @@ import com.revature.rideshare.matching.services.MatchService;
 @RestController
 @RequestMapping("/matches")
 public class MatchingController {
+
 	private static final Logger LOGGER = LoggerFactory.getLogger(MatchingController.class);
 	private static final String MSG = "Get request to matching controller made with UserId : {} passed. userClient called to find user by that id. userClient returned the user: {}";
 	private static final String NULL = "userClient returned a null user object.";
@@ -380,4 +381,5 @@ public class MatchingController {
 
 		return stackTrace;
 	}
+
 }

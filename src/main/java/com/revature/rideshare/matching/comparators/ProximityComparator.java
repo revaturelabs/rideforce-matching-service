@@ -26,7 +26,7 @@ public class ProximityComparator implements Comparator<User> {
 		} else if (unit == "N") {
 			dist = dist * 0.8684;
 		}
-		return (dist);
+		return dist;
 	}
 
 	private User rider;

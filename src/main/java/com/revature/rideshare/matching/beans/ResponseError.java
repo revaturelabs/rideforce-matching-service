@@ -25,13 +25,13 @@ import org.springframework.http.ResponseEntity;
  * </pre>
  */
 public class ResponseError {
-	
+
 	/**
 	 * The primary message describing the error.
 	 */
 	@NotEmpty
 	private String message;
-	
+
 	/**
 	 * Any additional details that may be relevant to the error (can be empty).
 	 */
@@ -85,25 +85,28 @@ public class ResponseError {
 		return new ResponseEntity<>(this, status);
 	}
 
-	/** 
-	 * Returns the string message describing the error that occurred. 
-	 * @return a string describing the error. 
+	/**
+	 * Returns the string message describing the error that occurred.
+	 * 
+	 * @return a string describing the error.
 	 */
 	public String getMessage() {
 		return message;
 	}
-	
+
 	/**
 	 * Sets the string message describing the error that occurred.
-	 * @param message a string describing the error. 
+	 * 
+	 * @param message a string describing the error.
 	 */
 	public void setMessage(String message) {
 		this.message = message;
 	}
 
 	/**
-	 * Gets the string array of details about the error that occurred. The array 
-	 * might not contain any detail strings. 
+	 * Gets the string array of details about the error that occurred. The array
+	 * might not contain any detail strings.
+	 * 
 	 * @return Array of strings holding details of the error
 	 */
 	public String[] getDetails() {
@@ -112,14 +115,17 @@ public class ResponseError {
 
 	/**
 	 * Sets the details of this {@code ResponseError} object.
-	 * @param details - the details to associate with this error. These will 
-	 * 					overwrite any existing details that were specified earlier.
+	 * 
+	 * @param details - the details to associate with this error. These will
+	 *                overwrite any existing details that were specified earlier.
 	 */
 	public void setDetails(String[] details) {
 		this.details = details;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
@@ -131,7 +137,9 @@ public class ResponseError {
 		return result;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	public boolean equals(Object obj) {
@@ -154,8 +162,9 @@ public class ResponseError {
 	}
 
 	/**
-	 * Returns a string representation of this object. 
-	 * @return A string representation of this object. 
+	 * Returns a string representation of this object.
+	 * 
+	 * @return A string representation of this object.
 	 */
 	@Override
 	public String toString() {

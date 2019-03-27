@@ -15,6 +15,17 @@ import com.revature.rideshare.matching.beans.User;
  */
 @FeignClient(name = "user-service", fallback = UserClientFallback.class, url = "${USER_URL}")
 public interface UserClient {
+
+	/**
+	 * Finds the users given the id.
+	 * 
+	 * @param id the user id
+	 * @return the user matching the id
+	 */
+	@GetMapping(path = "/users/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	User findById(@PathVariable("id") int id,
+			@RequestHeader(value = "Authorization", required = true) String authorizationHeader);
+
 	/**
 	 * Finds all the users who work at the given office and have the given role.
 	 * 
@@ -25,11 +36,13 @@ public interface UserClient {
 	@GetMapping(path = "/users?office={office}&role={role}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	List<User> findByOfficeAndRole(@PathVariable("office") int office, @PathVariable("role") String role);
 
+	/**
+	 * Finds all the users who have the given role.
+	 * 
+	 * @param role the role of the users to find
+	 * @return all users matching the role criteria
+	 */
 	@GetMapping(path = "/users?role={role}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	List<User> findByRole(@PathVariable("role") String role);
-
-	@GetMapping(path = "/users/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	User findById(@PathVariable("id") int id,
-			@RequestHeader(value = "Authorization", required = true) String authorizationHeader);
 
 }

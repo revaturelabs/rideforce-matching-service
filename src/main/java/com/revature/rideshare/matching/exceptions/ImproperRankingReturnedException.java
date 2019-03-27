@@ -1,7 +1,7 @@
 package com.revature.rideshare.matching.exceptions;
 
 public class ImproperRankingReturnedException extends RuntimeException {
-	
+
 	/**
 	 * Thrown when ranks returned from RankingCriterion are not between 0 and 1
 	 */

@@ -7,8 +7,8 @@ import javax.persistence.Embeddable;
 import javax.validation.constraints.Min;
 
 /**
- * The Class Pair. Holds the IDs of two users, representing a user and an affected
- * user; maps affect of second user as set by the first user.
+ * The Class Pair. Holds the IDs of two users, representing a user and an
+ * affected user; maps affect of second user as set by the first user.
  */
 @Embeddable
 public class Pair implements Serializable {
@@ -79,7 +79,9 @@ public class Pair implements Serializable {
 		this.affectedId = affectedId;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
@@ -91,7 +93,9 @@ public class Pair implements Serializable {
 		return result;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override
@@ -123,4 +127,3 @@ public class Pair implements Serializable {
 		return "userId=" + userId + ", affectedId=" + affectedId;
 	}
 }
-
