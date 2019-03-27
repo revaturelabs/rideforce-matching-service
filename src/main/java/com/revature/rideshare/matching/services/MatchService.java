@@ -1,16 +1,16 @@
 package com.revature.rideshare.matching.services;
 
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Properties;
+import java.util.Stack;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.annotation.PostConstruct;
 
+import org.apache.commons.lang.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +25,9 @@ import com.revature.rideshare.matching.algorithm.RankByStartTime;
 import com.revature.rideshare.matching.beans.Filter;
 import com.revature.rideshare.matching.beans.User;
 import com.revature.rideshare.matching.clients.UserClient;
+import com.revature.rideshare.matching.comparators.BatchEndComparator;
+import com.revature.rideshare.matching.comparators.ProximityComparator;
+import com.revature.rideshare.matching.comparators.StartTimeComparator;
 
 /**
  * The main service class for finding drivers who match a given rider.
@@ -66,10 +69,10 @@ public class MatchService {
 	@Autowired
 	private UserClient userClient;
 
-	/** 
-	 * The below four variables are the ranking criterion,
-	 * Each is to be weighted to allow for matches to be ranked
-	 * Weights are found in the properties file in resources
+	/**
+	 * The below four variables are the ranking criterion, Each is to be weighted to
+	 * allow for matches to be ranked Weights are found in the properties file in
+	 * resources
 	 */
 
 	@Autowired
@@ -80,8 +83,9 @@ public class MatchService {
 	private RankByDistance rankByDistance;
 	@Autowired
 	private RankByStartTime rankByStartTime;
+
 	@Autowired
-	public MatchService(){
+	public MatchService() {
 		super();
 	}
 
@@ -160,6 +164,96 @@ public class MatchService {
 
 	}
 
+	private boolean endDateFilter(User driver, User rider, int weeks) {
+		return driver.getBatchEnd().before(DateUtils.addWeeks(rider.getBatchEnd(), weeks))
+				&& driver.getBatchEnd().after(DateUtils.addWeeks(rider.getBatchEnd(), -weeks));
+	}
+
+	public List<User> findAll() {
+		return userClient.findByRole(DRIVER_ROLE).stream().filter(user -> user.getRole().equalsIgnoreCase(DRIVER_ROLE))
+				.collect(Collectors.toList());
+	}
+
+	/**
+	 * Finds matched drivers for rider based on a weighted rank from distance, batch
+	 * end, daily start time, and whether they are liked or disliked drivers
+	 * (affected drivers).
+	 * 
+	 * @param rider the user for whom to find a driver
+	 * @return list of matched drivers, sorted by nearest distance and closest batch
+	 *         end date in descending order (up to {@link #maxMatches})
+	 */
+	public List<User> findMatchesTest(User rider) {
+		if (rider != null) {
+			LOGGER.debug("findMatches recieved user: {}", rider.getFirstName());
+		} else {
+			LOGGER.error("RECIEVED A NULL USER: findMatches in matchService.");
+			throw new NullPointerException();
+		}
+		int officeId = officeLinkToId(rider.getOffice());
+		LOGGER.info("Office is: " + officeId);
+
+		Stream<User> driversStream = userClient.findByOfficeAndRole(officeId, DRIVER_ROLE).stream();
+		LOGGER.info("Drivers from user service: " + driversStream.collect(Collectors.toList()).toString());
+
+		// Pre-Filter Phase
+		driversStream
+				.filter(driver -> driver.getRole().equals(DRIVER_ROLE) && driver.isActive().equalsIgnoreCase("active")
+						&& endDateFilter(driver, rider, 2) && ProximityComparator.distance(driver, rider) < 50);
+
+		// Sort Phase
+		Stack<Comparator<User>> sort = new Stack<>();
+		sort.add(new ProximityComparator(rider));
+		sort.add(new BatchEndComparator(rider));
+		sort.add(new StartTimeComparator(rider));
+		while (!sort.isEmpty()) {
+			driversStream = driversStream.sorted(sort.pop());
+		}
+
+		List<User> drivers = driversStream.collect(Collectors.toList());
+
+		LOGGER.info("Returned drivers: " + drivers.toString());
+		return drivers;
+	}
+
+	/**
+	 * Finds matched drivers for rider based on a weighted rank from distance, batch
+	 * end, daily start time, and whether they are liked or disliked drivers
+	 * (affected drivers).
+	 * 
+	 * @param rider the user for whom to find a driver
+	 * @return list of matched drivers, sorted by nearest distance and closest batch
+	 *         end date in descending order (up to {@link #maxMatches})
+	 */
+	public List<User> findMatches(User rider) {
+		if (rider != null) {
+			LOGGER.debug("findMatches recieved user: {}", rider.getFirstName());
+		} else {
+			LOGGER.error("RECIEVED A NULL USER: findMatches in matchService.");
+			throw new NullPointerException();
+		}
+		int officeId = officeLinkToId(rider.getOffice());
+		LOGGER.info("Office is: " + officeId);
+
+		AggregateRankingBuilder arb = new AggregateRankingBuilder();
+		arb.addCriterion(rankByAffect);
+		arb.addCriterion(rankByBatchEnd);
+		arb.addCriterion(rankByDistance);
+		arb.addCriterion(rankByStartTime);
+		List<User> drivers = userClient.findByOfficeAndRole(officeId, DRIVER_ROLE).stream()
+				.map(driver -> new RankedUser(driver, arb.rankMatch(rider, driver))).sorted(Comparator.reverseOrder())
+				.limit(maxMatches).map(rankedUser -> rankedUser.user).collect(Collectors.toList());
+
+		// Filters out users marked as inactive
+		for (int i = 0; i < drivers.size(); i++) {
+			if (drivers.get(i).isActive().contains("INACTIVE")) {
+				drivers.remove(i);
+			}
+		}
+		LOGGER.info("Returned drivers: " + drivers.toString());
+		return drivers;
+	}
+
 	/**
 	 * Finds matched drivers for given riders by distance. Association formed
 	 * between driver and a ranking, with ranking discarded after sorting.
@@ -181,14 +275,14 @@ public class MatchService {
 		List<User> results = userClient.findByOfficeAndRole(officeId, DRIVER_ROLE).stream()
 				.map(driver -> new RankedUser(driver, arb.rankMatch(rider, driver))).sorted(Comparator.reverseOrder())
 				.limit(maxMatches).map(rankedUser -> rankedUser.user).collect(Collectors.toList());
-		
-		//Filters out users marked as inactive
-		for(int i = 0; i < results.size(); i++){
-			if(results.get(i).isActive().contains("INACTIVE")){
+
+		// Filters out users marked as inactive
+		for (int i = 0; i < results.size(); i++) {
+			if (results.get(i).isActive().contains("INACTIVE")) {
 				results.remove(i);
 			}
 		}
-		System.out.println("Results from findMatchesByDistance: " + results.toString());
+		LOGGER.info("Results from findMatchesByDistance: " + results.toString());
 		return results;
 	}
 
@@ -238,10 +332,10 @@ public class MatchService {
 		List<User> users = userClient.findByOfficeAndRole(officeId, DRIVER_ROLE).stream()
 				.map(driver -> new RankedUser(driver, arb.rankMatch(rider, driver))).sorted(Comparator.reverseOrder())
 				.limit(maxMatches).map(rankedUser -> rankedUser.user).collect(Collectors.toList());
-		
-		//Filters out users marked as inactive
-		for(int i = 0; i < users.size(); i++){
-			if(users.get(i).isActive().contains("INACTIVE")){
+
+		// Filters out users marked as inactive
+		for (int i = 0; i < users.size(); i++) {
+			if (users.get(i).isActive().contains("INACTIVE")) {
 				users.remove(i);
 			}
 		}
@@ -264,52 +358,14 @@ public class MatchService {
 		List<User> users = userClient.findByOfficeAndRole(officeId, DRIVER_ROLE).stream()
 				.map(driver -> new RankedUser(driver, arb.rankMatch(rider, driver))).sorted(Comparator.reverseOrder())
 				.limit(maxMatches).map(rankedUser -> rankedUser.user).collect(Collectors.toList());
-		
-		//Filters out users marked as inactive
-		for(int i = 0; i < users.size(); i++){
-			if(users.get(i).isActive().contains("INACTIVE")){
+
+		// Filters out users marked as inactive
+		for (int i = 0; i < users.size(); i++) {
+			if (users.get(i).isActive().contains("INACTIVE")) {
 				users.remove(i);
 			}
 		}
 		return users;
-	}
-
-	/**
-	 * Finds matched drivers for rider based on a weighted rank from distance, batch
-	 * end, daily start time, and whether they are liked or disliked drivers
-	 * (affected drivers).
-	 * 
-	 * @param rider the user for whom to find a driver
-	 * @return list of matched drivers, sorted by nearest distance and closest batch
-	 *         end date in descending order (up to {@link #maxMatches})
-	 */
-	public List<User> findMatches(User rider) {
-		if (rider != null) {
-			LOGGER.debug("findMatches recieved user: {}", rider.getFirstName());
-		} else {
-			LOGGER.error("RECIEVED A NULL USER: findMatches in matchService.");
-			throw new NullPointerException();
-		}
-		int officeId = officeLinkToId(rider.getOffice());
-		LOGGER.info("Office is: "+officeId);
-
-		AggregateRankingBuilder arb = new AggregateRankingBuilder();
-		arb.addCriterion(rankByAffect);
-		arb.addCriterion(rankByBatchEnd);
-		arb.addCriterion(rankByDistance);
-		arb.addCriterion(rankByStartTime);
-		List<User> drivers = userClient.findByOfficeAndRole(officeId, DRIVER_ROLE).stream()
-				.map(driver -> new RankedUser(driver, arb.rankMatch(rider, driver))).sorted(Comparator.reverseOrder())
-				.limit(maxMatches).map(rankedUser -> rankedUser.user).collect(Collectors.toList());
-		
-		//Filters out users marked as inactive
-		for(int i = 0; i < drivers.size(); i++){
-			if(drivers.get(i).isActive().contains("INACTIVE")){
-				drivers.remove(i);
-			}
-		}
-		System.out.println("Returned drivers: " + drivers.toString());
-		return drivers;
 	}
 
 	/**
@@ -336,10 +392,10 @@ public class MatchService {
 		List<User> users = userClient.findByOfficeAndRole(officeId, DRIVER_ROLE).stream()
 				.map(driver -> new RankedUser(driver, arb.rankMatch(rider, driver))).sorted(Comparator.reverseOrder())
 				.limit(maxMatches).map(rankedUser -> rankedUser.user).collect(Collectors.toList());
-		
-		//Filters out users marked as inactive
-		for(int i = 0; i < users.size(); i++){
-			if(users.get(i).isActive().contains("INACTIVE")){
+
+		// Filters out users marked as inactive
+		for (int i = 0; i < users.size(); i++) {
+			if (users.get(i).isActive().contains("INACTIVE")) {
 				users.remove(i);
 			}
 		}
@@ -357,7 +413,7 @@ public class MatchService {
 		AntPathMatcher matcher = new AntPathMatcher();
 		try {
 			int officeNum = Integer.parseInt(matcher.extractUriTemplateVariables("/offices/{id}", link).get("id"));
-			LOGGER.info("User works in office: "+officeNum );
+			LOGGER.info("User works in office: " + officeNum);
 			return officeNum;
 		} catch (NumberFormatException e) {
 			throw new IllegalArgumentException(link + " is not a valid office link.");
@@ -365,27 +421,26 @@ public class MatchService {
 	}
 
 	/**
-	 * This function sets up the Matching service
-	 * It retrieves the properties file and pulls the values
-	 * from it and places them into the proper variables
-	 * It then sets those variables to the weights of the criterion
-	 * This function will run after the variables and constructor are run
+	 * This function sets up the Matching service It retrieves the properties file
+	 * and pulls the values from it and places them into the proper variables It
+	 * then sets those variables to the weights of the criterion This function will
+	 * run after the variables and constructor are run
 	 */
 	@PostConstruct
 	private void setup() {
 		Properties prop = new Properties();
- 		String path = "";
-    //String path = "matching.properties";
+//		String path = "";
+		String path = "/matching.properties";
 		try {
-			//prop.load(new FileReader(path));
-      prop.load(MatchService.class.getResourceAsStream("/matching.properties"));
+			// prop.load(new FileReader(path));
+			prop.load(MatchService.class.getResourceAsStream(path));
 			this.maxMatches = (int) Double.parseDouble(prop.getProperty("max_matches"));
 			this.distanceCoefficient = Double.parseDouble(prop.getProperty("distance_coefficient"));
 			this.batchEndCoefficient = Double.parseDouble(prop.getProperty("batch_end_coefficient"));
 			this.affectCoefficient = Double.parseDouble(prop.getProperty("affect_coefficient"));
 			this.startTimeCoefficient = Double.parseDouble(prop.getProperty("start_time_coefficient"));
 		} catch (IOException e) {
-			e.printStackTrace();
+			LOGGER.error("Something went wrong in setup", e);
 		} finally {
 			rankByAffect.setWeight(affectCoefficient);
 			rankByBatchEnd.setWeight(batchEndCoefficient);

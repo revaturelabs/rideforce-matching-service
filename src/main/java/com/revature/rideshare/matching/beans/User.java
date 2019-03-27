@@ -71,6 +71,10 @@ public class User {
 	/** User's cars. */
 	@NotNull
 	private Set<String> cars;
+//	private Set<Car> cars;
+
+	@NotNull
+	private CachedLocation location;
 
 	/** User's venmo. */
 	private String venmo;
@@ -425,6 +429,14 @@ public class User {
 	 */
 	public float getStartTime() {
 		return startTime;
+	}
+
+	public CachedLocation getLocation() {
+		return location;
+	}
+
+	public void setLocation(CachedLocation location) {
+		this.location = location;
 	}
 
 	/**

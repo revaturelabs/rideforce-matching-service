@@ -7,14 +7,13 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import com.revature.rideshare.matching.beans.User;
 
 /**
  * A Feign client for accessing the user service.
  */
-@FeignClient(name="user-service", fallback=UserClientFallback.class, url="${USER_URL}")
+@FeignClient(name = "user-service", fallback = UserClientFallback.class, url = "${USER_URL}")
 public interface UserClient {
 	/**
 	 * Finds all the users who work at the given office and have the given role.
@@ -23,10 +22,14 @@ public interface UserClient {
 	 * @param role     the role of the users to find
 	 * @return all users matching the office and role criteria
 	 */
-	@GetMapping(path = "/users/?office={office}&role={role}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@GetMapping(path = "/users?office={office}&role={role}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	List<User> findByOfficeAndRole(@PathVariable("office") int office, @PathVariable("role") String role);
-	
+
+	@GetMapping(path = "/users?role={role}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	List<User> findByRole(@PathVariable("role") String role);
+
 	@GetMapping(path = "/users/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	User findById(@PathVariable("id") int id, @RequestHeader(value = "Authorization", required = true) String authorizationHeader);
+	User findById(@PathVariable("id") int id,
+			@RequestHeader(value = "Authorization", required = true) String authorizationHeader);
 
 }

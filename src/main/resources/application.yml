@@ -2,6 +2,8 @@ server:
   port: 4444
 
 spring:
+  profiles:
+    active: production
   datasource:
     url: ${JDBC_URL}
     username: ${JDBC_USERNAME}

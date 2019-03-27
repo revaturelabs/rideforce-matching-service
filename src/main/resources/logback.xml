@@ -6,18 +6,20 @@
 	<appender name="Console"
 		class="ch.qos.logback.core.ConsoleAppender">
 		<layout class="ch.qos.logback.classic.PatternLayout">
+			<!--
 			<Pattern>
 				%green(%d{ISO8601}) %highlight(%-5level) [%blue(%t)]
 				%yellow(%C{1.}): %msg%n%throwable
 			</Pattern>
+			-->
+			<Pattern>%d{ISO8601} %-5level [%t] %C{1.}: %msg%n%throwable</Pattern>
 		</layout>
 	</appender>
 
-	<!-- This configuration is for tracking INFO and WARN messgaes from the operations 
-		of SpringBoot. If you want to add to the INFO output use: 
-		logger.info("An INFO Message");
-		logger.warn("A WARN Message");  
-		to create custom info or warn messages -->
+	<!-- This configuration is for tracking INFO and WARN messgaes from the 
+		operations of SpringBoot. If you want to add to the INFO output use: logger.info("An 
+		INFO Message"); logger.warn("A WARN Message"); to create custom info or warn 
+		messages -->
 	<appender name="InfoFile"
 		class="ch.qos.logback.core.rolling.RollingFileAppender">
 		<file>${LOGS}/info-logger.log</file>
@@ -37,12 +39,9 @@
 		</rollingPolicy>
 	</appender>
 
-	<!-- This configuration is for tracking DEBUG messgaes we add. 
-	If you want to add to the DEBUG output use: 
-		logger.debug("A DEBUG Message"); 
-		logger.trace("A TRACE Message");
-		to create custom DEBUG 
-		messages -->
+	<!-- This configuration is for tracking DEBUG messgaes we add. If you want 
+		to add to the DEBUG output use: logger.debug("A DEBUG Message"); logger.trace("A 
+		TRACE Message"); to create custom DEBUG messages -->
 	<appender name="DebugFile"
 		class="ch.qos.logback.core.rolling.RollingFileAppender">
 		<file>${LOGS}/debug-logger.log</file>
@@ -64,15 +63,15 @@
 	</appender>
 
 	<!-- Logging has been moved to a file to clean up the console so it isn't 
-		 flooded with messages.
-		 LOG everything at INFO level for Spring Boot. Change the root level to see
-		 SpringBoot debugging-->
+		flooded with messages. LOG everything at INFO level for Spring Boot. Change 
+		the root level to see SpringBoot debugging -->
 	<root level="trace">
 		<appender-ref ref="InfoFile" />
-<!-- 		<appender-ref ref="Console" /> -->
+		<!-- <appender-ref ref="Console" /> -->
 	</root>
 
-	<!-- LOG "com.revature*" at TRACE level (error, warn, debug, trace) for our logging purposes; debugging and errors-->
+	<!-- LOG "com.revature*" at TRACE level (error, warn, debug, trace) for 
+		our logging purposes; debugging and errors -->
 	<logger name="com.revature" level="trace" additivity="false">
 		<appender-ref ref="DebugFile" />
 		<appender-ref ref="Console" />
