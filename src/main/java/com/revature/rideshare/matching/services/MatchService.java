@@ -1,12 +1,12 @@
 package com.revature.rideshare.matching.services;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Properties;
 import java.util.Stack;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import javax.annotation.PostConstruct;
 
@@ -196,17 +196,17 @@ public class MatchService {
 		int officeId = officeLinkToId(rider.getOffice());
 		LOGGER.info("Office is: " + officeId);
 
-		Stream<User> driversStream = userClient.findByOfficeAndRole(officeId, DRIVER_ROLE).stream();
-		LOGGER.info("Drivers from user service: " + driversStream.collect(Collectors.toList()).toString());
-
 		// Pre-Filter Phase
-		driversStream.filter(driver -> driver.getRole().equals(DRIVER_ROLE)
-				// filter active drivers
-				&& driver.isActive().equalsIgnoreCase("active")
-				// filter drivers outside of batch end date range
-				&& endDateFilter(driver, rider, 2)
-				// filter by radius limit
-				&& ProximityComparator.distance(driver, rider) < 50);
+		List<User> drivers = userClient.findByOfficeAndRole(officeId, DRIVER_ROLE).stream()
+				.filter(driver -> driver.getRole().equals(DRIVER_ROLE)
+						// filter active drivers
+						&& driver.isActive().equalsIgnoreCase("active")
+						// filter drivers outside of batch end date range
+						&& endDateFilter(driver, rider, 20)
+						// filter by radius limit
+						&& ProximityComparator.distance(driver, rider) < 2000)
+				.collect(Collectors.toList());
+		LOGGER.info("Drivers from user service: " + drivers);
 
 		// Setup for the sorting
 		// Place Comparators in the order of priority
@@ -217,13 +217,11 @@ public class MatchService {
 
 		// Sort Phase
 		while (!sort.isEmpty()) {
-			driversStream.sorted(sort.pop());
+			Collections.sort(drivers, sort.pop());
 		}
 
 		// Optional Post-filter Phase
 //		driversStream.limit(maxMatches);
-
-		List<User> drivers = driversStream.collect(Collectors.toList());
 
 		LOGGER.info("Returned drivers: " + drivers.toString());
 		return drivers;
