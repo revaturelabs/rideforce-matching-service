@@ -170,7 +170,10 @@ public class MatchService {
 	}
 
 	public List<User> findAll() {
-		return userClient.findByRole(DRIVER_ROLE).stream().filter(user -> user.getRole().equalsIgnoreCase(DRIVER_ROLE))
+		return userClient.findByRole(DRIVER_ROLE).stream()
+				// Filter
+				.filter(user -> user.getRole().equalsIgnoreCase(DRIVER_ROLE)
+						&& user.isActive().equalsIgnoreCase("active"))
 				.collect(Collectors.toList());
 	}
 
@@ -197,18 +200,28 @@ public class MatchService {
 		LOGGER.info("Drivers from user service: " + driversStream.collect(Collectors.toList()).toString());
 
 		// Pre-Filter Phase
-		driversStream
-				.filter(driver -> driver.getRole().equals(DRIVER_ROLE) && driver.isActive().equalsIgnoreCase("active")
-						&& endDateFilter(driver, rider, 2) && ProximityComparator.distance(driver, rider) < 50);
+		driversStream.filter(driver -> driver.getRole().equals(DRIVER_ROLE)
+				// filter active drivers
+				&& driver.isActive().equalsIgnoreCase("active")
+				// filter drivers outside of batch end date range
+				&& endDateFilter(driver, rider, 2)
+				// filter by radius limit
+				&& ProximityComparator.distance(driver, rider) < 50);
 
-		// Sort Phase
+		// Setup for the sorting
+		// Place Comparators in the order of priority
 		Stack<Comparator<User>> sort = new Stack<>();
 		sort.add(new ProximityComparator(rider));
 		sort.add(new BatchEndComparator(rider));
 		sort.add(new StartTimeComparator(rider));
+
+		// Sort Phase
 		while (!sort.isEmpty()) {
-			driversStream = driversStream.sorted(sort.pop());
+			driversStream.sorted(sort.pop());
 		}
+
+		// Optional Post-filter Phase
+//		driversStream.limit(maxMatches);
 
 		List<User> drivers = driversStream.collect(Collectors.toList());
 

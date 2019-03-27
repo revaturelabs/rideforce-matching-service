@@ -20,7 +20,8 @@ public class RankByStartTime extends RankingCriterion {
 	 *
 	 * @param rider  the user looking for a ride
 	 * @param driver the potential driver being ranked
-	 * @return a double between 0 and 1 representing a rider-driver ranking value; higher is better
+	 * @return a double between 0 and 1 representing a rider-driver ranking value;
+	 *         higher is better
 	 */
 
 	@Override
@@ -34,29 +35,30 @@ public class RankByStartTime extends RankingCriterion {
 		} else if (rider.getStartTime() == driver.getStartTime()) {
 			return 1;
 		}
+
 		return 0;
 	}
-	
-	
+
 	/**
-	 * Returns a hash code for this object. The hashcode functionality is 
-	 * specified in the parent class, as the exact algorithm for differentiating 
-	 * different subclasses is defined there. 
-	 * This method is still provided here to avoid code smells. 
+	 * Returns a hash code for this object. The hashcode functionality is specified
+	 * in the parent class, as the exact algorithm for differentiating different
+	 * subclasses is defined there. This method is still provided here to avoid code
+	 * smells.
 	 */
 	@Override
 	public int hashCode() {
 		return super.hashCode();
 	}
-	
+
 	/**
 	 * Used to constrain that all instances of a child class are viewed as equal.
-	 * This allows for only unique criterion to be stored as set items and map keys. 
-	 * The super class method is used to define the functionality. 
-	 * This method is still provided here to avoid code smells. 
+	 * This allows for only unique criterion to be stored as set items and map keys.
+	 * The super class method is used to define the functionality. This method is
+	 * still provided here to avoid code smells.
 	 */
 	@Override
 	public boolean equals(Object obj) {
 		return super.equals(obj);
 	}
+	
 }

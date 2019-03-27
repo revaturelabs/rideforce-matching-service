@@ -38,6 +38,7 @@ public class RankByDistance extends RankingCriterion {
 		if (riderToDriver == null) {
 			return 0;
 		}
+
 		return 1 / ((double) riderToDriver.getDistance() + 1);
 	}
 
@@ -62,4 +63,5 @@ public class RankByDistance extends RankingCriterion {
 	public boolean equals(Object obj) {
 		return super.equals(obj);
 	}
+
 }
