@@ -6,7 +6,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Stack;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 import com.revature.rideshare.matching.interfaces.ListFilter;
 
