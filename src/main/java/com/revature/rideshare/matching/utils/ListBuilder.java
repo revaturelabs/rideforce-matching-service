@@ -105,7 +105,7 @@ public class ListBuilder<T> {
 		try {
 			return list;
 		} finally {
-			list.clear();
+			list = Collections.emptyList();
 			filters.clear();
 			sorters.clear();
 		}
