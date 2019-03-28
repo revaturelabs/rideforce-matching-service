@@ -30,8 +30,8 @@ public class BatchEndFilter implements ListFilter<User> {
 		// red = rider end date
 		Date red = rider.getBatchEnd();
 
-		return ded.equals(red)
-				|| ded.after(DateUtils.addWeeks(red, -weekRange)) && ded.before(DateUtils.addWeeks(red, weekRange));
+		return (ded.equals(DateUtils.addWeeks(red, -weekRange)) || ded.after(DateUtils.addWeeks(red, -weekRange)))
+				&& (ded.equals(DateUtils.addWeeks(red, weekRange)) || ded.before(DateUtils.addWeeks(red, weekRange)));
 	}
 
 }

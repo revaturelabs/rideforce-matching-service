@@ -8,7 +8,8 @@ public class UtilityTest {
 
 	@Test
 	public void testDistanceDoubleDoubleDoubleDoubleString() {
-		//fail("Not yet implemented");
+		double actual = Utility.distance(0, 0, 50, 70, "m");
+		assertTrue(5337 - 10 < actual && actual < 5337 + 10);
 	}
 
 }

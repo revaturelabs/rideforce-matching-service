@@ -18,18 +18,20 @@ public class StatusFilterTest {
 	@BeforeClass
 	public static void settup( ) {
 		driver1 = new User();
-		driver1.setRole("Driver");
+		driver1.setActive("Active");
 
 		driver2 = new User();
-		driver2.setRole("Driver");
+		driver2.setActive("Active");
 		rider = new User();
-		rider.setRole("Rider");		
+		rider.setActive("InActive");		
 	}
 	
 	@Test
 	public void testFilter() {
-		StatusFilter sf = new StatusFilter("Rider");
-		
+		StatusFilter sf = new StatusFilter("Active");
+		assertTrue(sf.filter(driver1));
+		assertFalse(sf.filter(rider));
+		assertTrue(sf.filter(driver2));
 	}
 
 }
