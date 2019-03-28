@@ -45,7 +45,6 @@ public class PairBeanTest {
 		assertSame("Pair constructor accepting two ints did not create obj as expected.", 1, pair.getUserId());
 		assertSame("Pair constructor accepting two ints did not create obj as expected.", 2, pair.getAffectedId());
 	}
-	
 
 	/**
 	 * Test Pair equals.
@@ -112,19 +111,20 @@ public class PairBeanTest {
 		Set<ConstraintViolation<Pair>> violations = localValidatorFactory.validate(p);
 		assertTrue(violations.size() == 0);
 	}
-	
+
 	/**
 	 * Test userId setter.
 	 */
 	@Test
 	public void testUserIdSetter() {
 		Pair p = new Pair(1, 1);
-		p.setUserId(100);;
-		
+		p.setUserId(100);
+		;
+
 		assertTrue("Setter did not work: affectedId did not change as expected", p.getUserId() == 100);
-		
+
 	}
-	
+
 	/**
 	 * Test affectedId setter.
 	 */
@@ -132,22 +132,22 @@ public class PairBeanTest {
 	public void testAffectedIdSetter() {
 		Pair p = new Pair(1, 1);
 		p.setAffectedId(200);
-		
+
 		assertTrue("Setter did not work: affectedId did not change as expected", p.getAffectedId() == 200);
-		
+
 	}
-	
+
 	/**
 	 * Test Pair toString.
 	 */
 	@Test
 	public void testPairToString() {
 
-		Pair p = new Pair(1,2);
+		Pair p = new Pair(1, 2);
 
 		assertTrue(p.toString().equals("userId=" + 1 + ", affectedId=" + 2));
 	}
-	
+
 	/**
 	 * Test Pair hash code.
 	 */
@@ -155,8 +155,8 @@ public class PairBeanTest {
 	public void testHash() {
 		Pair p = new Pair(1, 1);
 		Pair p1 = new Pair(1, 1);
-		
+
 		assertTrue(p.hashCode() == p1.hashCode());
-		
+
 	}
 }

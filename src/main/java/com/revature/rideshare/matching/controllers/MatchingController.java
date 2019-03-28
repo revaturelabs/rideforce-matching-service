@@ -66,36 +66,19 @@ public class MatchingController {
 	@Autowired
 	DislikeService dislikeService;
 
+	/**
+	 * This method is not intended to be used in production please comment out if
+	 * you see this. This method was used to see what we were getting from the feign
+	 * client
+	 * 
+	 * @return
+	 */
 	@RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResponseEntity<List<User>> getAllDrivers() {
-		return new ResponseEntity<List<User>>(matchService.findAll(), HttpStatus.OK);
-	}
-
-	/**
-	 * Gets all matched drivers to riders using rider's ID as input and driver's ID
-	 * to get drivers.
-	 *
-	 * @param id the rider's ID
-	 * @return list of matched drivers by their IDs
-	 */
-	@RequestMapping(value = "/test/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<String> getDrivers(@PathVariable int id, HttpServletRequest req) {
-		String authToken = req.getHeader("Authorization");
-		LOGGER.info("Token: {}", authToken);
-		LOGGER.info("getDrivers() for UserId: " + id);
-
-		User rider = userClient.findById(id, authToken);
-		if (rider == null) {
-			LOGGER.error(NULL);
-			return new ArrayList<>();
+		if (!DEBUG) {
+			return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 		}
-
-		LOGGER.info(MSG, id, rider.getFirstName());
-		List<String> matches = matchService.findMatchesTest(rider).stream()
-				.map(driver -> UriComponentsBuilder.fromPath(USER_ID_URI).buildAndExpand(driver.getId()).toString())
-				.collect(Collectors.toList());
-		LOGGER.debug("Returning matches: " + matches.toString());
-		return matches;
+		return new ResponseEntity<>(matchService.findAll(), HttpStatus.OK);
 	}
 
 	/**
@@ -106,6 +89,32 @@ public class MatchingController {
 	 * @return list of matched drivers by their IDs
 	 */
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<User>> getDrivers(@PathVariable int id, HttpServletRequest req) {
+		String authToken = req.getHeader("Authorization");
+		LOGGER.info("Token: {}", authToken);
+		LOGGER.info("getDrivers() for UserId: " + id);
+
+		User rider = userClient.findById(id, authToken);
+		if (rider == null) {
+			LOGGER.error(NULL);
+			return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+		}
+
+		LOGGER.info(MSG, id, rider.getFirstName());
+		List<User> matches = matchService.findMatches(rider);
+		LOGGER.debug("Returning matches: " + matches);
+		return new ResponseEntity<>(matches, HttpStatus.OK);
+	}
+
+	/**
+	 * Gets all matched drivers to riders using rider's ID as input and driver's ID
+	 * to get drivers.
+	 *
+	 * @param id the rider's ID
+	 * @return list of matched drivers by their IDs
+	 */
+	@Deprecated
+	@RequestMapping(value = "/old/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<String> getAll(@PathVariable int id, HttpServletRequest req) {
 		String authToken = req.getHeader("Authorization");
 		LOGGER.info(authToken);
@@ -115,14 +124,14 @@ public class MatchingController {
 		if (rider == null) {
 			LOGGER.error(NULL);
 			return new ArrayList<>();
-		} else {
-			LOGGER.info(MSG, id, rider.getFirstName());
-			List<String> matches = matchService.findMatches(rider).stream()
-					.map(driver -> UriComponentsBuilder.fromPath(USER_ID_URI).buildAndExpand(driver.getId()).toString())
-					.collect(Collectors.toList());
-			LOGGER.debug("Returning matches: " + matches.toString());
-			return matches;
 		}
+
+		LOGGER.info(MSG, id, rider.getFirstName());
+		List<String> matches = matchService.findMatches(rider).stream()
+				.map(driver -> UriComponentsBuilder.fromPath(USER_ID_URI).buildAndExpand(driver.getId()).toString())
+				.collect(Collectors.toList());
+		LOGGER.debug("Returning matches: " + matches.toString());
+		return matches;
 	}
 
 	/**

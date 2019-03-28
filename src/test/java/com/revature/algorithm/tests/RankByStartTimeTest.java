@@ -83,7 +83,7 @@ public class RankByStartTimeTest {
 
 		Assertions.failBecauseExceptionWasNotThrown(IllegalArgumentException.class);
 	}
-	
+
 	/**
 	 * Tests that driver having same start time returns 1, the highest ranking.
 	 */
@@ -92,7 +92,7 @@ public class RankByStartTimeTest {
 		double resultSameStartTime = invokeRank(rider, driver1);
 		assertThat(resultSameStartTime).isEqualTo(1.0);
 	}
-	
+
 	/**
 	 * Tests that driver having later start time returns 0, the lowest ranking.
 	 */
@@ -101,22 +101,23 @@ public class RankByStartTimeTest {
 		double resultLaterStartTime = invokeRank(rider, driver2);
 		assertThat(resultLaterStartTime).isEqualTo(0);
 	}
-	
+
 	/**
-	 * Tests that driver having earlier start time returns less than 1, the middle ranking.
+	 * Tests that driver having earlier start time returns less than 1, the middle
+	 * ranking.
 	 */
 	@Test
 	public void testRankByStartTime_withDriverEarlierStartTime_returnsLessThan1() {
 		double resultEarlierStartTime = invokeRank(rider, driver3);
 		assertThat(resultEarlierStartTime).isEqualTo(0.5);
 	}
-		
 
 	/**
-	 * Invoke rank. Method uses reflection to access private rank method from RankByStartTime.
+	 * Invoke rank. Method uses reflection to access private rank method from
+	 * RankByStartTime.
 	 *
 	 * @param rider the rider
-	 * @param the double value representing rider-driver ranking
+	 * @param the   double value representing rider-driver ranking
 	 * @return the double
 	 * @throws IllegalArgumentException the illegal argument exception
 	 */
@@ -139,4 +140,5 @@ public class RankByStartTimeTest {
 
 		return result;
 	}
+	
 }

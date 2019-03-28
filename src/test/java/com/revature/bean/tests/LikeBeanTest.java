@@ -1,4 +1,5 @@
 package com.revature.bean.tests;
+
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
@@ -19,24 +20,24 @@ import com.revature.rideshare.matching.beans.Pair;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Class LikeTest. 
+ * The Class LikeTest.
  */
 public class LikeBeanTest {
-	
+
 	/** The local validator factory. */
 	private static LocalValidatorFactoryBean localValidatorFactory;
-	
-	/**  Test data objects. */
+
+	/** Test data objects. */
 	private Like like;
-	
+
 	/** The pair. */
 	private Pair pair;
-	
+
 	/**
 	 * Setup validator factory.
 	 */
 	@BeforeClass
-	public static void setupValidatorFactory () {
+	public static void setupValidatorFactory() {
 		localValidatorFactory = new LocalValidatorFactoryBean();
 		localValidatorFactory.setProviderClass(HibernateValidator.class);
 		localValidatorFactory.afterPropertiesSet();
@@ -49,34 +50,34 @@ public class LikeBeanTest {
 	public void testLikeConstructor() {
 		pair = new Pair(100, 200);
 		like = new Like(pair);
-		
-		assertTrue("should be same", like.getPair().equals(pair));	
+
+		assertTrue("should be same", like.getPair().equals(pair));
 	}
-	
+
 	/**
 	 * Test Like with empty pair.
 	 */
 	@Test
 	public void testLikeWithEmptyPair() {
 		like = new Like(new Pair());
-		
+
 		Validator validator = localValidatorFactory.getValidator();
 		Set<ConstraintViolation<Like>> violations = validator.validate(like);
 		Assertions.assertThat(violations.size()).isEqualTo(0);
 	}
-	
+
 	/**
 	 * Test Like with null pair.
 	 */
 	@Test
 	public void testLikeWithNullPair() {
 		like = new Like(null);
-		
+
 		Validator validator = localValidatorFactory.getValidator();
 		Set<ConstraintViolation<Like>> violations = validator.validate(like);
-		Assertions.assertThat(violations.size()).isEqualTo(1);		
+		Assertions.assertThat(violations.size()).isEqualTo(1);
 	}
-	
+
 	/**
 	 * Test Like equals.
 	 */
@@ -86,12 +87,12 @@ public class LikeBeanTest {
 		Pair pairEq = new Pair(100, 200);
 		Pair pairNotEq1 = new Pair(200, 300);
 		Pair pairNotEq2 = new Pair(100, 300);
-		
+
 		Like like = new Like(pair);
 		Like likeEq = new Like(pairEq);
 		Like likeNotEq1 = new Like(pairNotEq1);
 		Like likeNotEq2 = new Like(pairNotEq2);
-		
+
 		assertTrue("Like equals override not functioning properly; should be true", like.equals(likeEq));
 		assertTrue("Like equals override not functioning properly; should be true", like.equals(like));
 		assertFalse("Like equals override not functioning properly; should be false", like.equals(likeNotEq1));
@@ -99,7 +100,7 @@ public class LikeBeanTest {
 		assertFalse("Like equals override not functioning properly; should be false", like.equals(pair));
 		assertFalse("Like equals override not functioning properly; should be false", like.equals(null));
 	}
-	
+
 	/**
 	 * Test Like setPair.
 	 */
@@ -108,20 +109,20 @@ public class LikeBeanTest {
 		Like like = new Like();
 		Pair pair = new Pair(100, 200);
 		like.setPair(pair);
-		
+
 		assertSame(like.getPair(), pair);
 	}
-	
+
 	/**
 	 * Test Like toString.
 	 */
 	@Test
 	public void testLikeToString() {
 		Like like = new Like(new Pair(100, 200));
-		
+
 		assertTrue(like.toString().equals("Like [userId=" + 100 + ", affectedId=" + 200 + "]"));
 	}
-	
+
 	/**
 	 * Test Like hash code.
 	 */
