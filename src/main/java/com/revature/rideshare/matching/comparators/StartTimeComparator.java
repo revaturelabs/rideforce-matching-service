@@ -16,7 +16,7 @@ public class StartTimeComparator implements Comparator<User> {
 	public int compare(User driver1, User driver2) {
 		float st1 = Math.abs(driver1.getStartTime() - riderStartTime);
 		float st2 = Math.abs(driver2.getStartTime() - riderStartTime);
-
+		System.out.println("st1" + st1 + "\nst2" + st2);
 		return (st1 > st2) ? 1 : ((st1 < st2) ? -1 : 0);
 	}
 
