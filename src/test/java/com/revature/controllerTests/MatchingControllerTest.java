@@ -24,16 +24,15 @@ import com.revature.rideshare.matching.repositories.LikeRepository;
 @SpringBootTest(classes = Application.class)
 @AutoConfigureMockMvc
 @DirtiesContext(classMode = ClassMode.AFTER_CLASS)
+@SuppressWarnings({ "unused" })
 public class MatchingControllerTest {
 	@Autowired
 	private MockMvc mockMvc;
 
 	@Autowired
-	@SuppressWarnings({ "unused" })
 	private LikeRepository likeRepository;
 
 	@Autowired
-	@SuppressWarnings({ "unused" })
 	private DislikeRepository dislikeRepository;
 
 	@Before

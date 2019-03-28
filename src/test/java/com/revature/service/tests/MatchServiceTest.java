@@ -40,6 +40,7 @@ import com.revature.rideshare.matching.services.MatchService;
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = Replace.NONE)
 @EnableAsync
+@SuppressWarnings({ "unused" })
 public class MatchServiceTest {
 
 	/**
@@ -99,9 +100,7 @@ public class MatchServiceTest {
 	private static User driver2 = new User();
 	private static User driver3 = new User();
 	private static User driver4 = new User();
-	@SuppressWarnings({ "unused" })
 	private static List<Integer> likedIds;
-	@SuppressWarnings({ "unused" })
 	private static List<Integer> dislikedIds;
 
 	/**
