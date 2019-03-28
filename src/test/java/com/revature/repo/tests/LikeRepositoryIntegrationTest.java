@@ -24,8 +24,8 @@ import com.revature.rideshare.matching.beans.Pair;
 import com.revature.rideshare.matching.repositories.LikeRepository;
 
 /**
- * The Class LikeRepositoryRegressionTest. Repo regression tests are done only to check that
- * repo is empty and on custom repo methods.
+ * The Class LikeRepositoryRegressionTest. Repo regression tests are done only
+ * to check that repo is empty and on custom repo methods.
  */
 @SpringBootTest(classes = Application.class)
 @RunWith(SpringRunner.class)
@@ -33,21 +33,21 @@ import com.revature.rideshare.matching.repositories.LikeRepository;
 @AutoConfigureTestDatabase(replace = Replace.NONE)
 @DirtiesContext(classMode = ClassMode.AFTER_CLASS)
 public class LikeRepositoryIntegrationTest {
-	
+
 	/** The entity manager. */
 	@Autowired
 	TestEntityManager testEntityManager;
-	
+
 	/** The like repository. */
 	@Autowired
 	private LikeRepository likeRepo;
-	
+
 	@Before
 	public void setUp() {
 		likeRepo.deleteAll();
 		testEntityManager.persist(new Like(new Pair(1, 2)));
 	}
-	
+
 	@Test
 	public void validate() {
 		assertNotNull(testEntityManager);
@@ -62,7 +62,7 @@ public class LikeRepositoryIntegrationTest {
 		List<Like> likes = likeRepo.findAll();
 		assertThat(likes).hasSize(1);
 	}
-	
+
 	/**
 	 * Test find pair by user id.
 	 */
@@ -71,7 +71,7 @@ public class LikeRepositoryIntegrationTest {
 		List<Like> likes = likeRepo.findByPairUserId(1);
 		assertThat(likes).size().isEqualTo(1);
 	}
-	
+
 	/**
 	 * Test empty pair by user id. If given an invalid user id, returns empty value.
 	 */

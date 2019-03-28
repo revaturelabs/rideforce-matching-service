@@ -31,7 +31,7 @@ import com.revature.rideshare.matching.repositories.DislikeRepository;
 @SpringBootTest(classes = Application.class)
 @RunWith(SpringRunner.class)
 @DataJpaTest
-@AutoConfigureTestDatabase(replace = Replace.NONE) 
+@AutoConfigureTestDatabase(replace = Replace.NONE)
 @DirtiesContext(classMode = ClassMode.AFTER_CLASS)
 public class DislikeIntegrationRepoTest {
 

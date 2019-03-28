@@ -18,12 +18,11 @@ import com.revature.rideshare.matching.beans.Pair;
 
 // TODO: Auto-generated Javadoc
 /**
- * This test, DislikeBeanTest, will act as 
- * regression testing to ensure the stability of our 
- * dislike bean.
+ * This test, DislikeBeanTest, will act as regression testing to ensure the
+ * stability of our dislike bean.
  */
 public class DislikeBeanTest {
-	
+
 	/** The local validator factory. */
 	private static LocalValidatorFactoryBean localValidatorFactory;
 
@@ -31,12 +30,11 @@ public class DislikeBeanTest {
 	 * Setup validator factory.
 	 */
 	@BeforeClass
-	static public void setupValidatorFactory () {
+	static public void setupValidatorFactory() {
 		localValidatorFactory = new LocalValidatorFactoryBean();
 		localValidatorFactory.setProviderClass(HibernateValidator.class);
 		localValidatorFactory.afterPropertiesSet();
 	}
-	
 
 	/**
 	 * Test dislike constructor.
@@ -46,11 +44,10 @@ public class DislikeBeanTest {
 
 		Pair pair = new Pair(100, 200);
 		Dislike dis = new Dislike(pair);
-		
 
 		assertTrue("Pair constructor accepting two ints did not create obj as expected.", dis.getPair().equals(pair));
 	}
-	
+
 	/**
 	 * Test dislike constructor when a null is passed.
 	 */
@@ -65,7 +62,7 @@ public class DislikeBeanTest {
 		assertTrue(violations.size() == 1);
 		assertTrue(violations1.size() == 1);
 	}
-	
+
 	/**
 	 * Test dislike constructor with an empty pair.
 	 */
@@ -77,39 +74,39 @@ public class DislikeBeanTest {
 		Set<ConstraintViolation<Dislike>> violations = localValidatorFactory.validate(dis);
 		assertTrue(violations.size() == 0);
 	}
-	
+
 	/**
 	 * Test dislike toString.
 	 */
 	@Test
 	public void testDislikeToString() {
 
-		Dislike dis = new Dislike(new Pair(1,2));
+		Dislike dis = new Dislike(new Pair(1, 2));
 
 		assertTrue(dis.toString().equals("Dislike [userId=" + 1 + ", affectedId=" + 2 + "]"));
 	}
-	
+
 	/**
 	 * Test dislike setter.
 	 */
 	@Test
 	public void testDislikeSetter() {
 
-		Dislike dis = new Dislike(new Pair(1,2));
-		Pair p = new Pair(3,4);
+		Dislike dis = new Dislike(new Pair(1, 2));
+		Pair p = new Pair(3, 4);
 		dis.setPair(p);
 
 		assertTrue(dis.getPair().equals(p));
 	}
-	
+
 	/**
 	 * Test dislike hash.
 	 */
 	@Test
 	public void testHash() {
 
-		Dislike dis = new Dislike(new Pair(1,2));
-		Dislike dis1 = new Dislike(new Pair(1,2));
+		Dislike dis = new Dislike(new Pair(1, 2));
+		Dislike dis1 = new Dislike(new Pair(1, 2));
 
 		assertTrue(dis.hashCode() == dis1.hashCode());
 	}

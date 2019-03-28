@@ -36,16 +36,16 @@ import com.revature.rideshare.matching.services.LikeService;
 @RunWith(SpringRunner.class)
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = Replace.NONE)
-@DirtiesContext(classMode= ClassMode.AFTER_CLASS)
+@DirtiesContext(classMode = ClassMode.AFTER_CLASS)
 @EnableAsync
 public class LikeServiceIntegrationTest {
-	
+
 	/**
 	 * The Class LikeServiceImplTestContextConfiguration.
 	 */
 	@TestConfiguration
 	static class LikeServiceImplTestContextConfiguration {
-		
+
 		/**
 		 * Like service.
 		 *
@@ -58,39 +58,40 @@ public class LikeServiceIntegrationTest {
 	}
 
 	/** The test entity manager. */
-	@Autowired 
+	@Autowired
 	TestEntityManager testEntityManager;
-	
+
 	/** The like repo. */
-	@Autowired 
+	@Autowired
 	LikeRepository likeRepo;
-	
+
 	/** The like service. */
 	@Autowired
-	LikeService likeService;	
-	
+	LikeService likeService;
+
 	/** The thrown. */
 	@Rule
-    public ExpectedException thrown = ExpectedException.none();
-	
+	public ExpectedException thrown = ExpectedException.none();
+
 	/**
 	 * Validate.
 	 */
 	@Before
 	public void setUp() {
-		
+
 		likeRepo.deleteAll();
 		testEntityManager.persist(new Like(new Pair(1, 2)));
 		testEntityManager.persist(new Like(new Pair(2, 3)));
 		testEntityManager.persist(new Like(new Pair(3, 4)));
 	}
+
 	@Test
 	public void validate() {
 		assertNotNull(testEntityManager);
 		assertNotNull(likeRepo);
 		assertNotNull(likeService);
 	}
-	
+
 	/**
 	 * Test get likes.
 	 */
@@ -99,7 +100,7 @@ public class LikeServiceIntegrationTest {
 		List<Like> likes = likeService.getLikes(1);
 		assertThat(likes).hasSize(1);
 	}
-	
+
 	/**
 	 * Test save like.
 	 */
@@ -107,12 +108,12 @@ public class LikeServiceIntegrationTest {
 	public void testSaveLike() {
 		Like like = new Like(new Pair(4, 5));
 		likeService.saveLike(4, 5);
-		
+
 		List<Like> likes = likeService.getLikes(4);
-		
+
 		assertThat(likes.get(0)).isEqualTo(like);
 	}
-		
+
 	/**
 	 * Test delete like.
 	 */
