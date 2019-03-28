@@ -89,7 +89,7 @@ public class MatchingController {
 	 * @return list of matched drivers by their IDs
 	 */
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<String> getDrivers(@PathVariable int id, HttpServletRequest req) {
+	public ResponseEntity<List<User>> getDrivers(@PathVariable int id, HttpServletRequest req) {
 		String authToken = req.getHeader("Authorization");
 		LOGGER.info("Token: {}", authToken);
 		LOGGER.info("getDrivers() for UserId: " + id);
@@ -97,15 +97,13 @@ public class MatchingController {
 		User rider = userClient.findById(id, authToken);
 		if (rider == null) {
 			LOGGER.error(NULL);
-			return new ArrayList<>();
+			return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 		}
 
 		LOGGER.info(MSG, id, rider.getFirstName());
-		List<String> matches = matchService.findMatches(rider).stream()
-				.map(driver -> UriComponentsBuilder.fromPath(USER_ID_URI).buildAndExpand(driver.getId()).toString())
-				.collect(Collectors.toList());
+		List<User> matches = matchService.findMatches(rider);
 		LOGGER.debug("Returning matches: " + matches);
-		return matches;
+		return new ResponseEntity<>(matches, HttpStatus.OK);
 	}
 
 	/**
