@@ -18,6 +18,12 @@
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
+				<groupId>org.assertj</groupId>
+				<artifactId>assertj-core</artifactId>
+				<version>3.11.1</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
 				<groupId>org.springframework.cloud</groupId>
 				<artifactId>spring-cloud-dependencies</artifactId>
 				<version>Finchley.RELEASE</version>
@@ -159,6 +165,7 @@
 			<artifactId>ojdbc6</artifactId>
 			<version>11.2.0</version>
 		</dependency>
+
 	</dependencies>
 	<build>
 		<finalName>rideshare-matching-service</finalName>
