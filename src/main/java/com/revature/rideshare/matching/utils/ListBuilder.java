@@ -102,7 +102,13 @@ public class ListBuilder<T> {
 			list.sort(sorters.pop());
 		}
 
-		return list;
+		try {
+			return list;
+		} finally {
+			list.clear();
+			filters.clear();
+			sorters.clear();
+		}
 	}
 
 }
