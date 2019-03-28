@@ -43,18 +43,20 @@ public class ListBuilder<T> {
 	}
 
 	public List<T> build() {
-		if (!list.isEmpty()) {
-			list = list.stream().filter(e -> {
-				boolean val = true;
-				for (ListFilter<T> f : filters) {
-					val = val && f.filter(e);
-				}
-				return val;
-			}).collect(Collectors.toList());
-		}
+		if (list == null || list.isEmpty())
+			return list;
+
+		list.removeIf(e -> {
+			for (ListFilter<T> f : filters)
+				if (!f.filter(e))
+					return false;
+			return true;
+		});
+
 		while (!sorters.isEmpty()) {
 			Collections.sort(this.list, sorters.pop());
 		}
+
 		return this.list;
 	}
 
