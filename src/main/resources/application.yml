@@ -3,7 +3,7 @@ server:
 
 spring:
   profiles:
-    active: production
+    active: development
   datasource:
     url: ${JDBC_URL}
     username: ${JDBC_USERNAME}

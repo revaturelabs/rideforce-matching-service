@@ -25,9 +25,9 @@ import com.revature.rideshare.matching.clients.UserClient;
 import com.revature.rideshare.matching.comparators.BatchEndComparator;
 import com.revature.rideshare.matching.comparators.ProximityComparator;
 import com.revature.rideshare.matching.comparators.StartTimeComparator;
-import com.revature.rideshare.matching.filters.ActivityFilter;
 import com.revature.rideshare.matching.filters.BatchEndFilter;
 import com.revature.rideshare.matching.filters.ProximityFilter;
+import com.revature.rideshare.matching.filters.StatusFilter;
 import com.revature.rideshare.matching.filters.UserRoleFilter;
 import com.revature.rideshare.matching.utils.ListBuilder;
 
@@ -81,7 +81,14 @@ public class MatchService {
 	 */
 	private static final String DRIVER_ROLE = "DRIVER";
 
-	/** Feign client to User Service */
+	/**
+	 * The status that corresponds to an active user;
+	 */
+	private static final String ACTIVE_USER = "ACTIVE";
+
+	/**
+	 * Feign client to User Service
+	 */
 	@Autowired
 	private UserClient userClient;
 
@@ -90,7 +97,6 @@ public class MatchService {
 	 * allow for matches to be ranked Weights are found in the properties file in
 	 * resources
 	 */
-
 	@Autowired
 	private RankByAffect rankByAffect;
 	@Autowired
@@ -184,18 +190,18 @@ public class MatchService {
 		return userClient.findByRole(DRIVER_ROLE).stream()
 				// Filter
 				.filter(user -> user.getRole().equalsIgnoreCase(DRIVER_ROLE)
-						&& user.isActive().equalsIgnoreCase("active"))
+						&& user.isActive().equalsIgnoreCase(ACTIVE_USER))
 				.collect(Collectors.toList());
 	}
 
 	/**
-	 * Finds matched drivers for rider based on a weighted rank from distance, batch
-	 * end, daily start time, and whether they are liked or disliked drivers
-	 * (affected drivers).
+	 * Finds a list of drivers for a rider based on from distance, batch end, daily
+	 * start time, and whether they are liked or disliked drivers (affected
+	 * drivers).
 	 * 
-	 * @param rider the user for whom to find a driver
-	 * @return list of matched drivers, sorted by nearest distance and closest batch
-	 *         end date in descending order (up to {@link #maxMatches})
+	 * @param rider the user who wishes to find a driver
+	 * @return the list of matched drivers, sorted by nearest distance and closest
+	 *         batch end date in descending order (up to {@link #maxMatches})
 	 */
 	public List<User> findMatches(User rider) {
 		if (rider != null) {
@@ -207,15 +213,19 @@ public class MatchService {
 		int officeId = officeLinkToId(rider.getOffice());
 		LOGGER.info("Office is: " + officeId);
 
-//		private double maxRadius;
-//
-//		private int batchEndWeeksRange;
-		// Pre-Filter Phase
 		List<User> drivers = new ListBuilder<User>(userClient.findByOfficeAndRole(officeId, DRIVER_ROLE))
-				.addFilter(new UserRoleFilter(DRIVER_ROLE)).addFilter(new ActivityFilter())
-				.addFilter(new BatchEndFilter(rider, batchEndWeeksRange)).addFilter(new ProximityFilter(rider, maxRadius))
-				.addComparator(new ProximityComparator(rider)).addComparator(new BatchEndComparator(rider))
+				
+				// Filters
+				.addFilter(new UserRoleFilter(DRIVER_ROLE))
+				.addFilter(new StatusFilter(ACTIVE_USER))
+				.addFilter(new BatchEndFilter(rider, batchEndWeeksRange))
+				.addFilter(new ProximityFilter(rider, maxRadius))
+
+				// Comparators
+				.addComparator(new ProximityComparator(rider))
+				.addComparator(new BatchEndComparator(rider))
 				.addComparator(new StartTimeComparator(rider)).build();
+		
 		LOGGER.info("Drivers from user service: " + drivers);
 
 		// Optional Post-filter Phase
