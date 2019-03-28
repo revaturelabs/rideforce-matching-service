@@ -7,6 +7,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Stack;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import com.revature.rideshare.matching.interfaces.ListFilter;
 
@@ -111,12 +112,12 @@ public class ListBuilder<T> {
 		if (list == null || list.isEmpty())
 			return list;
 
-		list.removeIf(e -> {
+		list = list.stream().filter(e -> {
 			for (ListFilter<T> f : filters)
 				if (!f.filter(e))
 					return false;
 			return true;
-		});
+		}).collect(Collectors.toList());
 
 		while (!sorters.isEmpty()) {
 			list.sort(sorters.pop());
