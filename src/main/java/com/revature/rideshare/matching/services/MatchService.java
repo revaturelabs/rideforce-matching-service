@@ -234,7 +234,7 @@ public class MatchService {
 				.addComparator(new StartTimeComparator(rider)).build();
 
 		// Optional Post-filter Phase
-//		LOGGER.info("Drivers after build: " + drivers);
+//		LOGGER.debug("Drivers after build: {}", drivers);
 //		drivers = drivers.stream().limit(maxMatches).collect(Collectors.toList());
 
 		LOGGER.debug("Returned drivers: {}", drivers);
