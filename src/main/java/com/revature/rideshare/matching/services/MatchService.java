@@ -80,6 +80,7 @@ public class MatchService {
 	 * The role corresponding to a potential driver.
 	 */
 	private static final String DRIVER_ROLE = "DRIVER";
+	private static final String RIDER_ROLE = "RIDER";
 
 	/**
 	 * The status that corresponds to an active user;
@@ -214,11 +215,17 @@ public class MatchService {
 		List<User> fromUserService = userClient.findByOfficeAndRole(officeId, DRIVER_ROLE);
 
 		LOGGER.debug("Attempted Filtering from User Service: {}", fromUserService);
-
+		
+		String role = DRIVER_ROLE;
+		
+		if(rider.getRole().equalsIgnoreCase(DRIVER_ROLE)) {
+			role = RIDER_ROLE;
+		}
+		
 		List<User> drivers = new ListBuilder<User>(fromUserService)
 
 				/* Filters */
-				.addFilter(new UserRoleFilter(DRIVER_ROLE))
+				.addFilter(new UserRoleFilter(role))
 
 				.addFilter(new StatusFilter(ACTIVE_USER))
 
