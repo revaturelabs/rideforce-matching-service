@@ -204,34 +204,40 @@ public class MatchService {
 	 *         batch end date in descending order (up to {@link #maxMatches})
 	 */
 	public List<User> findMatches(User rider) {
-		if (rider != null) {
-			LOGGER.debug("findMatches recieved user: {}", rider.getFirstName());
-		} else {
+		LOGGER.debug("findMatches() recieved rider: {}", rider);
+		if (rider == null) {
 			LOGGER.error("RECIEVED A NULL USER: findMatches in matchService.");
 			throw new NullPointerException();
 		}
-		int officeId = officeLinkToId(rider.getOffice());
-		LOGGER.info("Office is: " + officeId);
 
-		List<User> drivers = new ListBuilder<User>(userClient.findByOfficeAndRole(officeId, DRIVER_ROLE))
-				
-				// Filters
+		int officeId = officeLinkToId(rider.getOffice());
+		List<User> fromUserService = userClient.findByOfficeAndRole(officeId, DRIVER_ROLE);
+
+		LOGGER.debug("Attempted Filtering from User Service: {}", fromUserService);
+
+		List<User> drivers = new ListBuilder<User>(fromUserService)
+
+				/* Filters */
 				.addFilter(new UserRoleFilter(DRIVER_ROLE))
+
 				.addFilter(new StatusFilter(ACTIVE_USER))
+
 				.addFilter(new BatchEndFilter(rider, batchEndWeeksRange))
+
 				.addFilter(new ProximityFilter(rider, maxRadius))
 
-				// Comparators
+				/* Comparators */
 				.addComparator(new ProximityComparator(rider))
+
 				.addComparator(new BatchEndComparator(rider))
+
 				.addComparator(new StartTimeComparator(rider)).build();
-		
-		LOGGER.info("Drivers from user service: " + drivers);
 
 		// Optional Post-filter Phase
+//		LOGGER.debug("Drivers after build: {}", drivers);
 //		drivers = drivers.stream().limit(maxMatches).collect(Collectors.toList());
 
-		LOGGER.info("Returned drivers: " + drivers.toString());
+		LOGGER.debug("Returned drivers: {}", drivers);
 		return drivers;
 	}
 

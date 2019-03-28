@@ -3,6 +3,12 @@ package com.revature.rideshare.matching.filters;
 import com.revature.rideshare.matching.beans.User;
 import com.revature.rideshare.matching.interfaces.ListFilter;
 
+/**
+ * TODO: Javadoc
+ * 
+ * @author Sanford
+ *
+ */
 public class StatusFilter implements ListFilter<User> {
 
 	private String status;

@@ -4,6 +4,12 @@ import com.revature.rideshare.matching.beans.User;
 import com.revature.rideshare.matching.interfaces.ListFilter;
 import com.revature.rideshare.matching.utils.Utility;
 
+/**
+ * TODO: Javadoc
+ * 
+ * @author Sanford
+ *
+ */
 public class ProximityFilter implements ListFilter<User> {
 
 	private User rider;

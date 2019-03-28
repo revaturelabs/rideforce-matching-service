@@ -26,7 +26,7 @@ public class RouteBeanTest {
 	 * As the Route class currently doesn't have any annotations besides Component
 	 */
 	private static LocalValidatorFactoryBean localValidatorFactory;
-	
+
 	/** Sets up the validator factory for the tests. */
 	@BeforeClass
 	public static void setupValidatorFactory() {
@@ -34,8 +34,7 @@ public class RouteBeanTest {
 		localValidatorFactory.setProviderClass(HibernateValidator.class);
 		localValidatorFactory.afterPropertiesSet();
 	}
-	
-	
+
 	/** test Get Distance method in Route Class. */
 	@Test
 	public void testGetDistance() {
@@ -46,8 +45,7 @@ public class RouteBeanTest {
 		route = new Route(1, 2);
 		Assert.assertEquals(1L, route.getDistance());
 	}
-	
-	
+
 	/** test Set Distance method in Route Class. */
 	@Test
 	public void testSetDistance() {
@@ -62,9 +60,7 @@ public class RouteBeanTest {
 		route.setDistance(-5);
 		Assert.assertEquals(-5L, route.getDistance());
 	}
-	
-	
-	
+
 	/** test Get Duration method in Route Class. */
 	@Test
 	public void testGetDuration() {
@@ -75,8 +71,7 @@ public class RouteBeanTest {
 		route = new Route(1, 2);
 		Assert.assertEquals(2L, route.getDuration());
 	}
-	
-	
+
 	/** test Set Duration method in Route Class. */
 	@Test
 	public void testSetDuration() {
@@ -91,8 +86,7 @@ public class RouteBeanTest {
 		route.setDuration(-5);
 		Assert.assertEquals(-5L, route.getDuration());
 	}
-	
-	
+
 	/** test that Routes made with an empty constructor are equal. */
 	@Test
 	public void testEqualsWithEmptyConstructor() {
@@ -105,7 +99,7 @@ public class RouteBeanTest {
 		Assert.assertNotEquals(null, route);
 
 	}
-	
+
 	/** test Set Duration method in Route Class. */
 	@Test
 	public void testEquals() {
@@ -128,7 +122,7 @@ public class RouteBeanTest {
 		Assert.assertNotEquals(testFirstParamDiff, testRoute);
 		Assert.assertNotEquals(testSecondParamDiff, testRoute);
 	}
-	
+
 	@Test
 	public void hashCodeTest() {
 		Route testRoute = new Route(2, 4);
@@ -141,13 +135,13 @@ public class RouteBeanTest {
 		String toString = "Route [distance=0, duration=1]";
 		assertTrue(testRoute.toString().equals(toString));
 	}
-	
+
 	@Test
 	public void equalsTest() {
 		Route testRoute = new Route(0, 1);
 		assertFalse(testRoute.equals(null));
 	}
-	
+
 	@Test
 	public void equalsTest2() {
 		Route testRoute = new Route(0, 1);

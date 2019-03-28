@@ -233,7 +233,7 @@ public class AggregateRankingBuilderTest {
 				/ (CRITERION_A_WEIGHT + CRITERION_B_WEIGHT + CRITERION_C_WEIGHT);
 		Assertions.assertThat(result).isEqualTo(expectedResult);
 	}
-	
+
 	@Test
 	public void addCriterionWeightTest() {
 		AggregateRankingBuilder arb = new AggregateRankingBuilder();
@@ -243,7 +243,7 @@ public class AggregateRankingBuilderTest {
 		double result = arb.getScaleVariable();
 		Assertions.assertThat(result).isEqualTo(weight);
 	}
-	
+
 	@Test
 	public void addCriterionWeightTest_Same() {
 		AggregateRankingBuilder arb = new AggregateRankingBuilder();

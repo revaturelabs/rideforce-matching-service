@@ -4,6 +4,12 @@ import java.util.Comparator;
 
 import com.revature.rideshare.matching.beans.User;
 
+/**
+ * TODO: Javadoc
+ * 
+ * @author Sanford
+ *
+ */
 public class StartTimeComparator implements Comparator<User> {
 
 	private float riderStartTime;

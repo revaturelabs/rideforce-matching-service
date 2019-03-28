@@ -5,6 +5,12 @@ import java.util.Comparator;
 import com.revature.rideshare.matching.beans.User;
 import com.revature.rideshare.matching.utils.Utility;
 
+/**
+ * TODO: Javadoc
+ * 
+ * @author Sanford
+ *
+ */
 public class ProximityComparator implements Comparator<User> {
 
 	private User rider;
