@@ -47,14 +47,28 @@ public class MatchService {
 	private int maxMatches;
 
 	/**
+	 * The maximum radial distance from the rider to find drivers in
+	 */
+	private double maxRadius;
+
+	/**
+	 * The range of weeks before and after rider's batch end date
+	 */
+	private int batchEndWeeksRange;
+
+	/**
 	 * Can change to impact weight of distance between rider and driver in algorithm
 	 */
 	private double distanceCoefficient;
 
-	/** Can change to impact weight of batch end of rider compared to driver */
+	/**
+	 * Can change to impact weight of batch end of rider compared to driver
+	 */
 	private double batchEndCoefficient;
 
-	/** Can change to impact weight of rider opinion of driver affect */
+	/**
+	 * Can change to impact weight of rider opinion of driver affect
+	 */
 	private double affectCoefficient;
 
 	/**
@@ -183,7 +197,7 @@ public class MatchService {
 	 * @return list of matched drivers, sorted by nearest distance and closest batch
 	 *         end date in descending order (up to {@link #maxMatches})
 	 */
-	public List<User> findMatchesTest(User rider) {
+	public List<User> findMatches(User rider) {
 		if (rider != null) {
 			LOGGER.debug("findMatches recieved user: {}", rider.getFirstName());
 		} else {
@@ -193,16 +207,19 @@ public class MatchService {
 		int officeId = officeLinkToId(rider.getOffice());
 		LOGGER.info("Office is: " + officeId);
 
+//		private double maxRadius;
+//
+//		private int batchEndWeeksRange;
 		// Pre-Filter Phase
 		List<User> drivers = new ListBuilder<User>(userClient.findByOfficeAndRole(officeId, DRIVER_ROLE))
 				.addFilter(new UserRoleFilter(DRIVER_ROLE)).addFilter(new ActivityFilter())
-				.addFilter(new BatchEndFilter(rider, 4)).addFilter(new ProximityFilter(rider, 50))
+				.addFilter(new BatchEndFilter(rider, batchEndWeeksRange)).addFilter(new ProximityFilter(rider, maxRadius))
 				.addComparator(new ProximityComparator(rider)).addComparator(new BatchEndComparator(rider))
 				.addComparator(new StartTimeComparator(rider)).build();
 		LOGGER.info("Drivers from user service: " + drivers);
 
 		// Optional Post-filter Phase
-//		driversStream.limit(maxMatches);
+//		drivers = drivers.stream().limit(maxMatches).collect(Collectors.toList());
 
 		LOGGER.info("Returned drivers: " + drivers.toString());
 		return drivers;
@@ -217,7 +234,8 @@ public class MatchService {
 	 * @return list of matched drivers, sorted by nearest distance and closest batch
 	 *         end date in descending order (up to {@link #maxMatches})
 	 */
-	public List<User> findMatches(User rider) {
+	@Deprecated
+	public List<User> findMatchesOld(User rider) {
 		if (rider != null) {
 			LOGGER.debug("findMatches recieved user: {}", rider.getFirstName());
 		} else {
@@ -426,13 +444,16 @@ public class MatchService {
 		try {
 			// prop.load(new FileReader(path));
 			prop.load(MatchService.class.getResourceAsStream(path));
-			this.maxMatches = (int) Double.parseDouble(prop.getProperty("max_matches"));
+			this.maxMatches = Integer.parseInt(prop.getProperty("max_matches"));
+			this.maxRadius = Double.parseDouble(prop.getProperty("max_radius"));
+			this.batchEndWeeksRange = Integer.parseInt(prop.getProperty("batch_end_weeks_range"));
+
 			this.distanceCoefficient = Double.parseDouble(prop.getProperty("distance_coefficient"));
 			this.batchEndCoefficient = Double.parseDouble(prop.getProperty("batch_end_coefficient"));
 			this.affectCoefficient = Double.parseDouble(prop.getProperty("affect_coefficient"));
 			this.startTimeCoefficient = Double.parseDouble(prop.getProperty("start_time_coefficient"));
 		} catch (IOException e) {
-			LOGGER.error("Something went wrong in setup", e);
+			LOGGER.error("Something went wrong in setup/nPath: " + MatchService.class.getResourceAsStream(path), e);
 		} finally {
 			rankByAffect.setWeight(affectCoefficient);
 			rankByBatchEnd.setWeight(batchEndCoefficient);
