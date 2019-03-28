@@ -5,6 +5,12 @@ import org.apache.commons.lang.time.DateUtils;
 import com.revature.rideshare.matching.beans.User;
 import com.revature.rideshare.matching.interfaces.ListFilter;
 
+/**
+ * TODO: Javadoc
+ * 
+ * @author Sanford
+ *
+ */
 public class BatchEndFilter implements ListFilter<User> {
 
 	private User rider;

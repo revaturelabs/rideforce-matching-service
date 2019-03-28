@@ -5,6 +5,12 @@ import java.util.Date;
 
 import com.revature.rideshare.matching.beans.User;
 
+/**
+ * TODO: Javadoc
+ * 
+ * @author Sanford
+ *
+ */
 public class BatchEndComparator implements Comparator<User> {
 
 	private Date riderEnd;

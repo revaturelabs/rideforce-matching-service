@@ -8,6 +8,12 @@ import java.util.stream.Collectors;
 
 import com.revature.rideshare.matching.interfaces.ListFilter;
 
+/**
+ * TODO: Javadoc
+ * 
+ * @author Sanford
+ *
+ */
 public class ListBuilder<T> {
 
 	private List<T> list;
