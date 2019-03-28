@@ -1,5 +1,6 @@
 package com.revature.rideshare.matching.utils;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -24,12 +25,18 @@ public class ListBuilder<T> {
 	public ListBuilder() {
 		super();
 		this.list = Collections.emptyList();
-		this.sorters = new Stack<>();
+		setup();
 	}
 
 	public ListBuilder(List<T> list) {
 		super();
 		this.list = list;
+		setup();
+	}
+
+	private void setup() {
+		this.sorters = new Stack<>();
+		this.filters = new ArrayList<>();
 	}
 
 	public void setList(List<T> list) {
@@ -101,7 +108,7 @@ public class ListBuilder<T> {
 	}
 
 	public List<T> build() {
-		if (list.isEmpty())
+		if (list == null || list.isEmpty())
 			return list;
 
 		list.removeIf(e -> {
