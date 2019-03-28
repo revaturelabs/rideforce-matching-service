@@ -1,5 +1,7 @@
 package com.revature.rideshare.matching.filters;
 
+import java.util.Date;
+
 import org.apache.commons.lang.time.DateUtils;
 
 import com.revature.rideshare.matching.beans.User;
@@ -23,8 +25,13 @@ public class BatchEndFilter implements ListFilter<User> {
 
 	@Override
 	public boolean filter(User e) {
-		return e.getBatchEnd().after(DateUtils.addWeeks(rider.getBatchEnd(), -weekRange))
-				&& e.getBatchEnd().before(DateUtils.addWeeks(rider.getBatchEnd(), weekRange));
+		// ded = driver end date
+		Date ded = e.getBatchEnd();
+		// red = rider end date
+		Date red = rider.getBatchEnd();
+
+		return ded.equals(red)
+				|| ded.after(DateUtils.addWeeks(red, -weekRange)) && ded.before(DateUtils.addWeeks(red, weekRange));
 	}
 
 }
