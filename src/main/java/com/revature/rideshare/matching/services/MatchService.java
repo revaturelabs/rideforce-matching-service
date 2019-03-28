@@ -213,25 +213,35 @@ public class MatchService {
 		int officeId = officeLinkToId(rider.getOffice());
 		LOGGER.info("Office is: " + officeId);
 
-		List<User> drivers = new ListBuilder<User>(userClient.findByOfficeAndRole(officeId, DRIVER_ROLE))
-				
-				// Filters
+		List<User> fromUserService = userClient.findByOfficeAndRole(officeId, DRIVER_ROLE);
+
+		LOGGER.info("Attempted Filtering: " + fromUserService);
+
+		List<User> drivers = new ListBuilder<User>(fromUserService)
+
+				/* Filters */
+				//
 				.addFilter(new UserRoleFilter(DRIVER_ROLE))
+				//
 				.addFilter(new StatusFilter(ACTIVE_USER))
+				//
 				.addFilter(new BatchEndFilter(rider, batchEndWeeksRange))
+				//
 				.addFilter(new ProximityFilter(rider, maxRadius))
 
-				// Comparators
+				/* Comparators */
+				//
 				.addComparator(new ProximityComparator(rider))
+				//
 				.addComparator(new BatchEndComparator(rider))
+				//
 				.addComparator(new StartTimeComparator(rider)).build();
-		
-		LOGGER.info("Drivers from user service: " + drivers);
 
 		// Optional Post-filter Phase
+//		LOGGER.info("Drivers after build: " + drivers);
 //		drivers = drivers.stream().limit(maxMatches).collect(Collectors.toList());
 
-		LOGGER.info("Returned drivers: " + drivers.toString());
+		LOGGER.info("Returned drivers: " + drivers);
 		return drivers;
 	}
 
