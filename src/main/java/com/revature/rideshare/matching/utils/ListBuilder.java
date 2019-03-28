@@ -91,12 +91,12 @@ public class ListBuilder<T> {
 		if (list.isEmpty())
 			return list;
 
-		list = list.stream().filter(e -> {
+		list.removeIf(e -> {
 			for (ListFilter<T> f : filters)
 				if (!f.filter(e))
 					return false;
 			return true;
-		}).collect(Collectors.toList());
+		});
 
 		while (!sorters.isEmpty()) {
 			list.sort(sorters.pop());
