@@ -1,16 +1,13 @@
 package com.revature.rideshare.matching.services;
 
 import java.io.IOException;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Properties;
-import java.util.Stack;
 import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 
-import org.apache.commons.lang.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +25,11 @@ import com.revature.rideshare.matching.clients.UserClient;
 import com.revature.rideshare.matching.comparators.BatchEndComparator;
 import com.revature.rideshare.matching.comparators.ProximityComparator;
 import com.revature.rideshare.matching.comparators.StartTimeComparator;
+import com.revature.rideshare.matching.filters.ActivityFilter;
+import com.revature.rideshare.matching.filters.BatchEndFilter;
+import com.revature.rideshare.matching.filters.ProximityFilter;
+import com.revature.rideshare.matching.filters.UserRoleFilter;
+import com.revature.rideshare.matching.utils.ListBuilder;
 
 /**
  * The main service class for finding drivers who match a given rider.
@@ -164,11 +166,6 @@ public class MatchService {
 
 	}
 
-	private boolean endDateFilter(User driver, User rider, int weeks) {
-		return driver.getBatchEnd().before(DateUtils.addWeeks(rider.getBatchEnd(), weeks))
-				&& driver.getBatchEnd().after(DateUtils.addWeeks(rider.getBatchEnd(), -weeks));
-	}
-
 	public List<User> findAll() {
 		return userClient.findByRole(DRIVER_ROLE).stream()
 				// Filter
@@ -197,28 +194,12 @@ public class MatchService {
 		LOGGER.info("Office is: " + officeId);
 
 		// Pre-Filter Phase
-		List<User> drivers = userClient.findByOfficeAndRole(officeId, DRIVER_ROLE).stream()
-				.filter(driver -> driver.getRole().equals(DRIVER_ROLE)
-						// filter active drivers
-						&& driver.isActive().equalsIgnoreCase("active")
-						// filter drivers outside of batch end date range
-						&& endDateFilter(driver, rider, 20)
-						// filter by radius limit
-						&& ProximityComparator.distance(driver, rider) < 2000)
-				.collect(Collectors.toList());
+		List<User> drivers = new ListBuilder<User>(userClient.findByOfficeAndRole(officeId, DRIVER_ROLE))
+				.addFilter(new UserRoleFilter(DRIVER_ROLE)).addFilter(new ActivityFilter())
+				.addFilter(new BatchEndFilter(rider, 4)).addFilter(new ProximityFilter(rider, 50))
+				.addComparator(new ProximityComparator(rider)).addComparator(new BatchEndComparator(rider))
+				.addComparator(new StartTimeComparator(rider)).build();
 		LOGGER.info("Drivers from user service: " + drivers);
-
-		// Setup for the sorting
-		// Place Comparators in the order of priority
-		Stack<Comparator<User>> sort = new Stack<>();
-		sort.add(new ProximityComparator(rider));
-		sort.add(new BatchEndComparator(rider));
-		sort.add(new StartTimeComparator(rider));
-
-		// Sort Phase
-		while (!sort.isEmpty()) {
-			Collections.sort(drivers, sort.pop());
-		}
 
 		// Optional Post-filter Phase
 //		driversStream.limit(maxMatches);
