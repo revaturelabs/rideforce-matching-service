@@ -76,11 +76,25 @@ public class ListBuilder<T> {
 		return this;
 	}
 
+	/**
+	 * Adds a ListFilter to be used in filtering the elements of the list and
+	 * removing them.
+	 * 
+	 * @param filter
+	 * @return the {@link ListBuilder} to be operated upon again
+	 */
 	public ListBuilder<T> addFilter(ListFilter<T> filter) {
 		filters.add(filter);
 		return this;
 	}
 
+	/**
+	 * Adds a comparator to be used to sort the elements in the list the first one
+	 * gets the highest priority in terms of order the list
+	 * 
+	 * @param comparator
+	 * @return the {@link ListBuilder} to be operated upon again
+	 */
 	public ListBuilder<T> addComparator(Comparator<T> comparator) {
 		sorters.push(comparator);
 		return this;
