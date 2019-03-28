@@ -6,24 +6,25 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 /**
- * The Class Like. Represents the like affect of 
- * the relationship between a user and the affected user.
+ * The Class Like. Represents the like affect of the relationship between a user
+ * and the affected user.
  */
 
 @Entity
-@Table(name="LIKES")
+@Table(name = "LIKES")
 public class Like {
-	
+
 	/** The pair. */
 	@EmbeddedId
 	@NotNull
 	private Pair pair;
-	
+
 	/**
 	 * Instantiates a new like.
 	 */
-	public Like() {}
-	
+	public Like() {
+	}
+
 	/**
 	 * Instantiates a new like.
 	 *
@@ -52,7 +53,9 @@ public class Like {
 		this.pair = pair;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
@@ -60,7 +63,9 @@ public class Like {
 		return "Like [" + pair.toString() + "]";
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
@@ -71,7 +76,9 @@ public class Like {
 		return result;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override

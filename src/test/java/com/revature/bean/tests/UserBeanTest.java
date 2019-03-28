@@ -5,14 +5,12 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
 import javax.validation.ConstraintViolation;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 
 import org.assertj.core.api.Assertions;
 import org.hibernate.validator.HibernateValidator;
@@ -20,7 +18,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
-import com.github.andrewoma.dexx.collection.TreeSet;
+import com.revature.rideshare.matching.beans.CachedLocation;
 import com.revature.rideshare.matching.beans.User;
 
 // TODO: Auto-generated Javadoc
@@ -51,8 +49,9 @@ public class UserBeanTest {
 
 	@Test
 	public void testUserValid() {
-		user = new User(100, "firstName", "lastName", "email@email.com", "password", "pic-url.com", "true", "role",
-				"office", "home", new Date(2018), new HashSet<String>(), "venmo", new HashSet<String>(), 8.5f);
+		user = new User(100, "firstName", "lastName", "email@email.com", "password", "pic-url.com", "bio", "true",
+				"role", "office", new CachedLocation("home", 0, 0), 8.5f, new Date(2018), new HashSet<String>(),
+				new HashSet<String>());
 
 		Set<ConstraintViolation<User>> violations = localValidatorFactory.validate(user);
 		int counter = 0;
@@ -80,8 +79,9 @@ public class UserBeanTest {
 	 */
 	@Test
 	public void testUserFirstNameEmpty() {
-		user = new User(100, "", "lastName", "email@email.com", "password", "pic-url.com", "true", "role", "office",
-				"home", new Date(2018), new HashSet<String>(), "venmo", new HashSet<String>(), 8.5f);
+		user = new User(100, "", "lastName", "email@email.com", "password", "pic-url.com", "bio", "true", "role",
+				"office", new CachedLocation("home", 0, 0), 8.5f, new Date(2018), new HashSet<String>(),
+				new HashSet<String>());
 
 		Set<ConstraintViolation<User>> violations = localValidatorFactory.validate(user);
 		int counter = 0;
@@ -99,8 +99,9 @@ public class UserBeanTest {
 	 */
 	@Test
 	public void testUserFirstNameNull() {
-		user = new User(100, null, "lastName", "email@email.com", "password", "pic-url.com", "true", "role", "office",
-				"home", new Date(2018), new HashSet<String>(), "venmo", new HashSet<String>(), 8.5f);
+		user = new User(100, null, "lastName", "email@email.com", "password", "pic-url.com", "bio", "true", "role",
+				"office", new CachedLocation("home", 0, 0), 8.5f, new Date(2018), new HashSet<String>(),
+				new HashSet<String>());
 
 		Set<ConstraintViolation<User>> violations = localValidatorFactory.validate(user);
 		int counter = 0;
@@ -118,8 +119,9 @@ public class UserBeanTest {
 	 */
 	@Test
 	public void testUserLastNameEmpty() {
-		user = new User(100, "firstName", "", "email@email.com", "password", "pic-url.com", "true", "role", "office",
-				"home", new Date(2018), new HashSet<String>(), "venmo", new HashSet<String>(), 8.5f);
+		user = new User(100, "firstName", "", "email@email.com", "password", "pic-url.com", "bio", "true", "role",
+				"office", new CachedLocation("home", 0, 0), 8.5f, new Date(2018), new HashSet<String>(),
+				new HashSet<String>());
 
 		Set<ConstraintViolation<User>> violations = localValidatorFactory.validate(user);
 		int counter = 0;
@@ -137,8 +139,9 @@ public class UserBeanTest {
 	 */
 	@Test
 	public void testUserLastNameNull() {
-		user = new User(100, "firstName", null, "email@email.com", "password", "pic-url.com", "true", "role", "office",
-				"home", new Date(2018), new HashSet<String>(), "venmo", new HashSet<String>(), 8.5f);
+		user = new User(100, "firstName", null, "email@email.com", "password", "pic-url.com", "bio", "true", "role",
+				"office", new CachedLocation("home", 0, 0), 8.5f, new Date(2018), new HashSet<String>(),
+				new HashSet<String>());
 
 		Set<ConstraintViolation<User>> violations = localValidatorFactory.validate(user);
 		int counter = 0;
@@ -156,8 +159,8 @@ public class UserBeanTest {
 	 */
 	@Test
 	public void testUserEmailEmpty() {
-		user = new User(100, "firstName", "lastName", "", "password", "pic-url.com", "true", "role", "office", "home",
-				new Date(2018), new HashSet<String>(), "venmo", new HashSet<String>(), 8.5f);
+		user = new User(100, "firstName", "lastName", "", "password", "pic-url.com", "bio", "true", "role", "office",
+				new CachedLocation("home", 0, 0), 8.5f, new Date(2018), new HashSet<String>(), new HashSet<String>());
 
 		Set<ConstraintViolation<User>> violations = localValidatorFactory.validate(user);
 		int counter = 0;
@@ -175,8 +178,8 @@ public class UserBeanTest {
 	 */
 	@Test
 	public void testUserEmailNull() {
-		user = new User(100, "firstName", "lastName", null, "password", "pic-url.com", "true", "role", "office", "home",
-				new Date(2018), new HashSet<String>(), "venmo", new HashSet<String>(), 8.5f);
+		user = new User(100, "firstName", "lastName", null, "password", "pic-url.com", "bio", "true", "role", "office",
+				new CachedLocation("home", 0, 0), 8.5f, new Date(2018), new HashSet<String>(), new HashSet<String>());
 
 		Set<ConstraintViolation<User>> violations = localValidatorFactory.validate(user);
 		int counter = 0;
@@ -194,8 +197,9 @@ public class UserBeanTest {
 	 */
 	@Test
 	public void testUserRoleEmpty() {
-		user = new User(100, "firstName", "lastName", "email@email.com", "password", "pic-url.com", "true", "",
-				"office", "home", new Date(2018), new HashSet<String>(), "venmo", new HashSet<String>(), 8.5f);
+		user = new User(100, "firstName", "lastName", "email@email.com", "password", "pic-url.com", "bio", "true", "",
+				"office", new CachedLocation("home", 0, 0), 8.5f, new Date(2018), new HashSet<String>(),
+				new HashSet<String>());
 
 		Set<ConstraintViolation<User>> violations = localValidatorFactory.validate(user);
 		int counter = 0;
@@ -213,8 +217,9 @@ public class UserBeanTest {
 	 */
 	@Test
 	public void testUserRoleNull() {
-		user = new User(100, "firstName", "lastName", "email@email.com", "password", "pic-url.com", "true", null,
-				"office", "home", new Date(2018), new HashSet<String>(), "venmo", new HashSet<String>(), 8.5f);
+		user = new User(100, "firstName", "lastName", "email@email.com", "password", "pic-url.com", "bio", "true", null,
+				"office", new CachedLocation("home", 0, 0), 8.5f, new Date(2018), new HashSet<String>(),
+				new HashSet<String>());
 
 		Set<ConstraintViolation<User>> violations = localValidatorFactory.validate(user);
 		int counter = 0;
@@ -232,8 +237,9 @@ public class UserBeanTest {
 	 */
 	@Test
 	public void testUserOfficeEmpty() {
-		user = new User(100, "firstName", "lastName", "email@email.com", "password", "pic-url.com", "true", "role", "",
-				"home", new Date(2018), new HashSet<String>(), "venmo", new HashSet<String>(), 8.5f);
+		user = new User(100, "firstName", "lastName", "email@email.com", "password", "pic-url.com", "bio", "true",
+				"role", "", new CachedLocation("home", 0, 0), 8.5f, new Date(2018), new HashSet<String>(),
+				new HashSet<String>());
 
 		Set<ConstraintViolation<User>> violations = localValidatorFactory.validate(user);
 		int counter = 0;
@@ -251,8 +257,9 @@ public class UserBeanTest {
 	 */
 	@Test
 	public void testUserOfficeNull() {
-		user = new User(100, "firstName", "lastName", "email@email.com", "password", "pic-url.com", "true", "role",
-				null, "home", new Date(2018), new HashSet<String>(), "venmo", new HashSet<String>(), 8.5f);
+		user = new User(100, "firstName", "lastName", "email@email.com", "password", "pic-url.com", "bio", "true",
+				"role", null, new CachedLocation("home", 0, 0), 8.5f, new Date(2018), new HashSet<String>(),
+				new HashSet<String>());
 
 		Set<ConstraintViolation<User>> violations = localValidatorFactory.validate(user);
 		int counter = 0;
@@ -270,8 +277,9 @@ public class UserBeanTest {
 	 */
 	@Test
 	public void testUserAddressEmpty() {
-		user = new User(100, "firstName", "lastName", "email@email.com", "password", "pic-url.com", "true", "role",
-				"office", "", new Date(2018), new HashSet<String>(), "venmo", new HashSet<String>(), 8.5f);
+		user = new User(100, "firstName", "lastName", "email@email.com", "password", "pic-url.com", "bio", "true",
+				"role", "office", new CachedLocation("", 0, 0), 8.5f, new Date(2018), new HashSet<String>(),
+				new HashSet<String>());
 
 		Set<ConstraintViolation<User>> violations = localValidatorFactory.validate(user);
 		int counter = 0;
@@ -289,8 +297,8 @@ public class UserBeanTest {
 	 */
 	@Test
 	public void testUserAddressNull() {
-		user = new User(100, "firstName", "lastName", "email@email.com", "password", "pic-url.com", "true", "role",
-				"office", null, new Date(2018), new HashSet<String>(), "venmo", new HashSet<String>(), 8.5f);
+		user = new User(100, "firstName", "lastName", "email@email.com", "password", "pic-url.com", "bio", "true",
+				"role", "office", null, 8.5f, new Date(2018), new HashSet<String>(), new HashSet<String>());
 
 		Set<ConstraintViolation<User>> violations = localValidatorFactory.validate(user);
 		int counter = 0;
@@ -308,8 +316,9 @@ public class UserBeanTest {
 	 */
 	@Test
 	public void testUserDateNull() {
-		user = new User(100, "firstName", "lastName", "email@email.com", "password", "pic-url.com", "true", "role",
-				"office", "home", null, new HashSet<String>(), "venmo", new HashSet<String>(), 8.5f);
+		user = new User(100, "firstName", "lastName", "email@email.com", "password", "pic-url.com", "bio", "true",
+				"role", "office", new CachedLocation("home", 0, 0), 8.5f, null, new HashSet<String>(),
+				new HashSet<String>());
 
 		Set<ConstraintViolation<User>> violations = localValidatorFactory.validate(user);
 		int counter = 0;
@@ -327,8 +336,8 @@ public class UserBeanTest {
 	 */
 	@Test
 	public void testUserCarsSetNull() {
-		user = new User(100, "firstName", "lastName", "email@email.com", "password", "pic-url.com", "true", "role",
-				"office", "home", new Date(2018), null, "venmo", new HashSet<String>(), 8.5f);
+		user = new User(100, "firstName", "lastName", "email@email.com", "password", "pic-url.com", "bio", "true",
+				"role", "office", new CachedLocation("home", 0, 0), 8.5f, new Date(2018), null, new HashSet<String>());
 
 		Set<ConstraintViolation<User>> violations = localValidatorFactory.validate(user);
 		int counter = 0;
@@ -346,8 +355,8 @@ public class UserBeanTest {
 	 */
 	@Test
 	public void testUserContactInfoSetNull() {
-		user = new User(100, "firstName", "lastName", "email@email.com", "password", "pic-url.com", "true", "role",
-				"office", "home", new Date(2018), new HashSet<String>(), "venmo", null, 8.5f);
+		user = new User(100, "firstName", "lastName", "email@email.com", "password", "pic-url.com", "bio", "true",
+				"role", "office", new CachedLocation("home", 0, 0), 8.5f, new Date(2018), new HashSet<String>(), null);
 
 		Set<ConstraintViolation<User>> violations = localValidatorFactory.validate(user);
 		int counter = 0;
@@ -365,8 +374,8 @@ public class UserBeanTest {
 	 */
 	@Test
 	public void testUserRequiredOnlyConstructor() {
-		user = new User(100, "firstName", "lastName", "email@email.com", "role", "office", "home", new Date(2018),
-				new HashSet<String>(), new HashSet<String>(), 8.5f);
+		user = new User(100, "firstName", "lastName", "email@email.com", "role", "office",
+				new CachedLocation("home", 0, 0), 8.5f, new Date(2018), new HashSet<String>(), new HashSet<String>());
 
 		Set<ConstraintViolation<User>> violations = localValidatorFactory.validate(user);
 		int counter = 0;
@@ -473,9 +482,9 @@ public class UserBeanTest {
 	@Test
 	public void testUserAddressGetterSetter() {
 		user = new User();
-		user.setAddress("home");
+		user.setLocation(new CachedLocation("home", 1, 1));
 
-		assertSame("home", user.getAddress());
+		assertSame("home", user.getLocation().getAddress());
 	}
 
 	/**
@@ -490,17 +499,6 @@ public class UserBeanTest {
 		user.setCars(cars);
 
 		assertTrue(user.getCars().size() == 2);
-	}
-
-	/**
-	 * Tests user venmo getter and setter.
-	 */
-	@Test
-	public void testUserVenmoGetterSetter() {
-		user = new User();
-		user.setVenmo("venmo");
-
-		assertSame("venmo", user.getVenmo());
 	}
 
 	/**
@@ -523,8 +521,9 @@ public class UserBeanTest {
 	 */
 	@Test
 	public void testUserToString() {
-		user = new User(100, "firstName", "lastName", "email@email.com", "password", "pic-url.com", "true", "role",
-				"office", "home", new Date(2018), new HashSet<String>(), "venmo", new HashSet<String>(), 8.5f);
+		user = new User(100, "firstName", "lastName", "email@email.com", "password", "pic-url.com", "bio", "true",
+				"role", "office", new CachedLocation("home", 0, 0), 8.5f, new Date(2018), new HashSet<String>(),
+				new HashSet<String>());
 
 		assertTrue(user.toString().equals(
 				"User [id=100, firstName=firstName, lastName=lastName, email=email@email.com, password=password, photoUrl=pic-url.com, active=true, role=role, office=office, address=home, batchEnd=Wed Dec 31 19:00:02 EST 1969, cars=[], venmo=venmo, contactInfo=[], startTime=8.5]"));
@@ -535,77 +534,102 @@ public class UserBeanTest {
 	 */
 	@Test
 	public void testUserHashCode() {
-		user = new User(100, "firstName", "lastName", "email@email.com", "password", "pic-url.com", "true", "role",
-				"office", "home", new Date(2018), new HashSet<String>(), "venmo", new HashSet<String>(), 8.5f);
-		User user1 = new User(100, "firstName", "lastName", "email@email.com", "password", "pic-url.com", "true", "role",
-				"office", "home", new Date(2018), new HashSet<String>(), "venmo", new HashSet<String>(), 8.5f);
-		
+		user = new User(100, "firstName", "lastName", "email@email.com", "password", "pic-url.com", "bio", "true",
+				"role", "office", new CachedLocation("home", 0, 0), 8.5f, new Date(2018), new HashSet<String>(),
+				new HashSet<String>());
+		User user1 = new User(100, "firstName", "lastName", "email@email.com", "password", "pic-url.com", "bio", "true",
+				"role", "office", new CachedLocation("home", 0, 0), 8.5f, new Date(2018), new HashSet<String>(),
+				new HashSet<String>());
+
 		assertTrue(user.hashCode() == user1.hashCode());
 	}
-	
+
 	/**
 	 * Tests user equals.
 	 */
 	@Test
 	public void testUserEquals() {
-		user = new User(100, "firstName", "lastName", "email@email.com", "password", "pic-url.com", "true", "role",
-				"office", "home", new Date(2018), new HashSet<String>(), "venmo", new HashSet<String>(), 8.5f);
-		User user1 = new User(100, "firstName", "lastName", "email@email.com", "password", "pic-url.com", "true", "role",
-				"office", "home", new Date(2018), new HashSet<String>(), "venmo", new HashSet<String>(), 8.5f);
-		User user2 = new User(200, "firstName", "lastName", "email@email.com", "password", "pic-url.com", "true", "role",
-				"office", "home", new Date(2018), new HashSet<String>(), "venmo", new HashSet<String>(), 8.5f);
-		User user3 = new User(100, "abc", "lastName", "email@email.com", "password", "pic-url.com", "true", "role",
-				"office", "home", new Date(2018), new HashSet<String>(), "venmo", new HashSet<String>(), 8.5f);
-		User user4 = new User(100, "firstName", "abc", "email@email.com", "password", "pic-url.com", "true", "role",
-				"office", "home", new Date(2018), new HashSet<String>(), "venmo", new HashSet<String>(), 8.5f);
-		User user5 = new User(100, "firstName", "lastName", "abc", "password", "pic-url.com", "true", "role",
-				"office", "home", new Date(2018), new HashSet<String>(), "venmo", new HashSet<String>(), 8.5f);
-		User user6 = new User(100, "firstName", "lastName", "email@email.com", "abc", "pic-url.com", "true", "role",
-				"office", "home", new Date(2018), new HashSet<String>(), "venmo", new HashSet<String>(), 8.5f);
-		User user7 = new User(100, "firstName", "lastName", "email@email.com", "password", "abc", "true", "role",
-				"office", "home", new Date(2018), new HashSet<String>(), "venmo", new HashSet<String>(), 8.5f);
-		User user8 = new User(100, "firstName", "lastName", "email@email.com", "password", "pic-url.com", "abc", "role",
-				"office", "home", new Date(2018), new HashSet<String>(), "venmo", new HashSet<String>(), 8.5f);
-		User user9 = new User(100, "firstName", "lastName", "email@email.com", "password", "pic-url.com", "true", "abc",
-				"office", "home", new Date(2018), new HashSet<String>(), "venmo", new HashSet<String>(), 8.5f);
-		User user10 = new User(100, "firstName", "lastName", "email@email.com", "password", "pic-url.com", "true", "role",
-				"abc", "home", new Date(2018), new HashSet<String>(), "venmo", new HashSet<String>(), 8.5f);
-		User user11 = new User(100, "firstName", "lastName", "email@email.com", "password", "pic-url.com", "true", "role",
-				"office", "abc", new Date(2018), new HashSet<String>(), "venmo", new HashSet<String>(), 8.5f);
-		User user12 = new User(100, "firstName", "lastName", "email@email.com", "password", "pic-url.com", "true", "role",
-				"office", "home", null, new HashSet<String>(), "venmo", new HashSet<String>(), 8.5f);
-		User user13 = new User(100, "firstName", "lastName", "email@email.com", "password", "pic-url.com", "true", "role",
-				"office", "home", new Date(2018), null, "venmo", new HashSet<String>(), 8.5f);
-		User user14 = new User(100, "firstName", "lastName", "email@email.com", "password", "pic-url.com", "true", "role",
-				"office", "home", new Date(2018), new HashSet<String>(), "abc", new HashSet<String>(), 8.5f);
-		User user15 = new User(100, "firstName", "lastName", "email@email.com", "password", "pic-url.com", "true", "role",
-				"office", "home", new Date(2018), new HashSet<String>(), "venmo", null, 8.5f);
-		User user16 = new User(100, null, "lastName", "email@email.com", "password", "pic-url.com", "true", "role",
-				"office", "home", new Date(2018), new HashSet<String>(), "venmo", new HashSet<String>(), 8.5f);
-		User user17 = new User(100, "firstName", null, "email@email.com", "password", "pic-url.com", "true", "role",
-				"office", "home", new Date(2018), new HashSet<String>(), "venmo", new HashSet<String>(), 8.5f);
-		User user18 = new User(100, "firstName", "lastName", null, "password", "pic-url.com", "true", "role",
-				"office", "home", new Date(2018), new HashSet<String>(), "venmo", new HashSet<String>(), 8.5f);
-		User user19 = new User(100, "firstName", "lastName", "email@email.com", null, "pic-url.com", "true", "role",
-				"office", "home", new Date(2018), new HashSet<String>(), "venmo", new HashSet<String>(), 8.5f);
-		User user20 = new User(100, "firstName", "lastName", "email@email.com", "password", null, "true", "role",
-				"office", "home", new Date(2018), new HashSet<String>(), "venmo", new HashSet<String>(), 8.5f);
-		User user21 = new User(100, "firstName", "lastName", "email@email.com", "password", "pic-url.com", null, "role",
-				"office", "home", new Date(2018), new HashSet<String>(), "venmo", new HashSet<String>(), 8.5f);
-		User user22 = new User(100, "firstName", "lastName", "email@email.com", "password", "pic-url.com", "true", null,
-				"office", "home", new Date(2018), new HashSet<String>(), "venmo", new HashSet<String>(), 8.5f);
-		User user23 = new User(100, "firstName", "lastName", "email@email.com", "password", "pic-url.com", "true", "role",
-				null, "home", new Date(2018), new HashSet<String>(), "venmo", new HashSet<String>(), 8.5f);
-		User user24 = new User(100, "firstName", "lastName", "email@email.com", "password", "pic-url.com", "true", "role",
-				"office", null, new Date(2018), new HashSet<String>(), "venmo", new HashSet<String>(), 8.5f);
-		User user25 = new User(100, "firstName", "lastName", "email@email.com", "password", "pic-url.com", "true", "role",
-				"office", "home", new Date(2017), new HashSet<String>(), "venmo", new HashSet<String>(), 8.5f);
-		User user26 = new User(100, "firstName", "lastName", "email@email.com", "password", "pic-url.com", "true", "role",
-				"office", "home", new Date(2018), new HashSet<String>(), null, new HashSet<String>(), 8.5f);
+		user = new User(100, "firstName", "lastName", "email@email.com", "password", "pic-url.com", "bio", "true",
+				"role", "office", new CachedLocation("home", 0, 0), 8.5f, new Date(2018), new HashSet<String>(),
+				new HashSet<String>());
+		User user1 = new User(100, "firstName", "lastName", "email@email.com", "password", "pic-url.com", "bio", "true",
+				"role", "office", new CachedLocation("home", 0, 0), 8.5f, new Date(2018), new HashSet<String>(),
+				new HashSet<String>());
+		User user2 = new User(200, "firstName", "lastName", "email@email.com", "password", "pic-url.com", "bio", "true",
+				"role", "office", new CachedLocation("home", 0, 0), 8.5f, new Date(2018), new HashSet<String>(),
+				new HashSet<String>());
+		User user3 = new User(100, "abc", "lastName", "email@email.com", "password", "pic-url.com", "bio", "true",
+				"role", "office", new CachedLocation("home", 0, 0), 8.5f, new Date(2018), new HashSet<String>(),
+				new HashSet<String>());
+		User user4 = new User(100, "firstName", "abc", "email@email.com", "password", "pic-url.com", "bio", "true",
+				"role", "office", new CachedLocation("home", 0, 0), 8.5f, new Date(2018), new HashSet<String>(),
+				new HashSet<String>());
+		User user5 = new User(100, "firstName", "lastName", "abc", "password", "pic-url.com", "bio", "true", "role",
+				"office", new CachedLocation("home", 0, 0), 8.5f, new Date(2018), new HashSet<String>(),
+				new HashSet<String>());
+		User user6 = new User(100, "firstName", "lastName", "email@email.com", "abc", "pic-url.com", "bio", "true",
+				"role", "office", new CachedLocation("home", 0, 0), 8.5f, new Date(2018), new HashSet<String>(),
+				new HashSet<String>());
+		User user7 = new User(100, "firstName", "lastName", "email@email.com", "password", "abc", "bio", "true", "role",
+				"office", new CachedLocation("home", 0, 0), 8.5f, new Date(2018), new HashSet<String>(),
+				new HashSet<String>());
+		User user8 = new User(100, "firstName", "lastName", "email@email.com", "password", "pic-url.com", "bio", "abc",
+				"role", "office", new CachedLocation("home", 0, 0), 8.5f, new Date(2018), new HashSet<String>(),
+				new HashSet<String>());
+		User user9 = new User(100, "firstName", "lastName", "email@email.com", "password", "pic-url.com", "bio", "true",
+				"abc", "office", new CachedLocation("home", 0, 0), 8.5f, new Date(2018), new HashSet<String>(),
+				new HashSet<String>());
+		User user10 = new User(100, "firstName", "lastName", "email@email.com", "password", "pic-url.com", "bio",
+				"true", "role", "abc", new CachedLocation("home", 0, 0), 8.5f, new Date(2018), new HashSet<String>(),
+				new HashSet<String>());
+		User user11 = new User(100, "firstName", "lastName", "email@email.com", "password", "pic-url.com", "bio",
+				"true", "role", "office", new CachedLocation("abc", 0, 0), 8.5f, new Date(2018), new HashSet<String>(),
+				new HashSet<String>());
+		User user12 = new User(100, "firstName", "lastName", "email@email.com", "password", "pic-url.com", "bio",
+				"true", "role", "office", new CachedLocation("home", 0, 0), 8.5f, null, new HashSet<String>(),
+				new HashSet<String>());
+		User user13 = new User(100, "firstName", "lastName", "email@email.com", "password", "pic-url.com", "bio",
+				"true", "role", "office", new CachedLocation("home", 0, 0), 8.5f, new Date(2018), null,
+				new HashSet<String>());
+		User user14 = new User(100, "firstName", "lastName", "email@email.com", "password", "pic-url.com", "bio",
+				"true", "role", "office", new CachedLocation("home", 0, 0), 8.5f, new Date(2018), new HashSet<String>(),
+				new HashSet<String>(Arrays.asList("abc")));
+		User user15 = new User(100, "firstName", "lastName", "email@email.com", "password", "pic-url.com", "bio",
+				"true", "role", "office", new CachedLocation("home", 0, 0), 8.5f, new Date(2018), new HashSet<String>(),
+				null);
+		User user16 = new User(100, null, "lastName", "email@email.com", "password", "pic-url.com", "bio", "true",
+				"role", "office", new CachedLocation("home", 0, 0), 8.5f, new Date(2018), new HashSet<String>(),
+				new HashSet<String>());
+		User user17 = new User(100, "firstName", null, "email@email.com", "password", "pic-url.com", "bio", "true",
+				"role", "office", new CachedLocation("home", 0, 0), 8.5f, new Date(2018), new HashSet<String>(),
+				new HashSet<String>());
+		User user18 = new User(100, "firstName", "lastName", null, "password", "pic-url.com", "bio", "true", "role",
+				"office", new CachedLocation("home", 0, 0), 8.5f, new Date(2018), new HashSet<String>(),
+				new HashSet<String>());
+		User user19 = new User(100, "firstName", "lastName", "email@email.com", null, "pic-url.com", "bio", "true",
+				"role", "office", new CachedLocation("home", 0, 0), 8.5f, new Date(2018), new HashSet<String>(),
+				new HashSet<String>());
+		User user20 = new User(100, "firstName", "lastName", "email@email.com", "password", null, "bio", "true", "role",
+				"office", new CachedLocation("home", 0, 0), 8.5f, new Date(2018), new HashSet<String>(),
+				new HashSet<String>());
+		User user21 = new User(100, "firstName", "lastName", "email@email.com", "password", "pic-url.com", "bio", null,
+				"role", "office", new CachedLocation("home", 0, 0), 8.5f, new Date(2018), new HashSet<String>(),
+				new HashSet<String>());
+		User user22 = new User(100, "firstName", "lastName", "email@email.com", "password", "pic-url.com", "bio",
+				"true", null, "office", new CachedLocation("home", 0, 0), 8.5f, new Date(2018), new HashSet<String>(),
+				new HashSet<String>());
+		User user23 = new User(100, "firstName", "lastName", "email@email.com", "password", "pic-url.com", "bio",
+				"true", "role", null, new CachedLocation("home", 0, 0), 8.5f, new Date(2018), new HashSet<String>(),
+				new HashSet<String>());
+		User user24 = new User(100, "firstName", "lastName", "email@email.com", "password", "pic-url.com", "bio",
+				"true", "role", "office", null, 8.5f, new Date(2018), new HashSet<String>(), new HashSet<String>());
+		User user25 = new User(100, "firstName", "lastName", "email@email.com", "password", "pic-url.com", "bio",
+				"true", "role", "office", new CachedLocation("home", 0, 0), 8.5f, new Date(2017), new HashSet<String>(),
+				new HashSet<String>());
+		User user26 = new User(100, "firstName", "lastName", "email@email.com", "password", "pic-url.com", "bio",
+				"true", "role", "office", new CachedLocation("home", 0, 0), 8.5f, new Date(2018), new HashSet<String>(),
+				new HashSet<String>());
 
-		
-
-		
 		assertTrue("User equals override not functioning properly; should be true", user.equals(user));
 		assertTrue("User equals override not functioning properly; should be true", user.equals(user1));
 		assertFalse("User equals override not functioning properly; should be false", user.equals(user2));

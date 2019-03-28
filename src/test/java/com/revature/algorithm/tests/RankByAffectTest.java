@@ -281,4 +281,5 @@ public class RankByAffectTest {
 
 		return result;
 	}
+
 }

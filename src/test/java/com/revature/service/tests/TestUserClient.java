@@ -11,26 +11,28 @@ import com.revature.rideshare.matching.clients.UserClient;
 public class TestUserClient implements UserClient {
 
 	private Set<User> users;
-	
+
 	@Override
 	public List<User> findByOfficeAndRole(int officeId, String role) {
-		return users.stream()
-				.collect(Collectors.toList());
+		return users.stream().collect(Collectors.toList());
 	}
 
 	@Override
 	public User findById(int id, String auth) {
-		Optional<User> user =  users.stream()
-				.filter(u -> u.getId() == id)
-				.findFirst();
+		Optional<User> user = users.stream().filter(u -> u.getId() == id).findFirst();
 		return user.orElse(null);
 	}
 
-	public void setDrivers(List<User> users) {
-		this.users = users.stream()
-				.collect(Collectors.toSet());
+	@Override
+	public List<User> findByRole(String role) {
+		// TODO Auto-generated method stub
+		return null;
 	}
-	
+
+	public void setDrivers(List<User> users) {
+		this.users = users.stream().collect(Collectors.toSet());
+	}
+
 	public void addUsers(User user) {
 		users.add(user);
 	}

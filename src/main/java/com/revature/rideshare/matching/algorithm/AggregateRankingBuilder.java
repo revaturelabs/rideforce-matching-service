@@ -5,6 +5,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.revature.rideshare.matching.beans.User;
 import com.revature.rideshare.matching.exceptions.DuplicateRankingCriteriaException;
 import com.revature.rideshare.matching.exceptions.NoRankingCriteriaException;
@@ -17,6 +20,9 @@ import com.revature.rideshare.matching.exceptions.NoRankingCriteriaException;
  *
  */
 public class AggregateRankingBuilder {
+
+	@Autowired
+	private Logger log;
 
 	/**
 	 * Ranking criteria. Includes each criterion for ranking and its associated
@@ -50,11 +56,11 @@ public class AggregateRankingBuilder {
 	}
 
 	/**
-	 * Adds a new ranking criterion to the algorithm along with its associated weight. It
-	 * will accept only unique criterion; repeats will be ignored.
+	 * Adds a new ranking criterion to the algorithm along with its associated
+	 * weight. It will accept only unique criterion; repeats will be ignored.
 	 * 
 	 * @param criterion criterion to be added into the algorithm
-	 * @param weight the weight to be associated with the criterion
+	 * @param weight    the weight to be associated with the criterion
 	 */
 	public void addCriterion(RankingCriterion criterion, double weight) {
 		criterion.setWeight(weight);
@@ -72,7 +78,8 @@ public class AggregateRankingBuilder {
 	 * 
 	 * @param rider  the rider for whom we are finding a match
 	 * @param driver the candidate driver for the match
-	 * @return double value between 0 and 1 that represents a driver's rank; higher is better
+	 * @return double value between 0 and 1 that represents a driver's rank; higher
+	 *         is better
 	 */
 	public double rankMatch(User rider, User driver) {
 		if (rider == null || driver == null) {
@@ -82,24 +89,25 @@ public class AggregateRankingBuilder {
 			throw new NoRankingCriteriaException("At least one criterion required to run algorithm");
 		}
 		double totalWeightedRank = 0;
-//		System.out.println("Initial totalWeightedRank in rankMatch: " + totalWeightedRank);
+		log.info("Initial totalWeightedRank in rankMatch: " + totalWeightedRank);
 		List<Double> weightedRanks = this.criteria.stream().map(criterion -> {
-//					System.out.println("Executing criterion: " + criterion.getClass().getSimpleName());
-					double result = criterion.getWeightedRank(rider, driver);
-//					System.out.println("Results from " + criterion.getClass().getSimpleName() + " is " + result);
-					return result;
+			log.info("Executing criterion: " + criterion.getClass().getSimpleName());
+			double result = criterion.getWeightedRank(rider, driver);
+			log.info("Results from " + criterion.getClass().getSimpleName() + " is " + result);
+			return result;
 		})
 
 				.collect(Collectors.toList());
-//		System.out.println("weightedRanks list: " + weightedRanks.toString());
+		log.info("weightedRanks list: " + weightedRanks.toString());
 		for (Double weightedRank : weightedRanks) {
 			totalWeightedRank += weightedRank;
 		}
-//		System.out.println(totalWeightedRank);
+		log.info("Final totalWeightRank in rankMatch" + totalWeightedRank);
 		return totalWeightedRank / scaleVariable;
 	}
 
 	public double getScaleVariable() {
 		return scaleVariable;
 	}
+
 }

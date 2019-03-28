@@ -37,6 +37,7 @@ import com.revature.rideshare.matching.services.MatchService;
 @RestController
 @RequestMapping("/matches")
 public class MatchingController {
+
 	private static final Logger LOGGER = LoggerFactory.getLogger(MatchingController.class);
 	private static final String MSG = "Get request to matching controller made with UserId : {} passed. userClient called to find user by that id. userClient returned the user: {}";
 	private static final String NULL = "userClient returned a null user object.";
@@ -66,6 +67,21 @@ public class MatchingController {
 	DislikeService dislikeService;
 
 	/**
+	 * This method is not intended to be used in production please comment out if
+	 * you see this. This method was used to see what we were getting from the feign
+	 * client
+	 * 
+	 * @return
+	 */
+	@RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public ResponseEntity<List<User>> getAllDrivers() {
+		if (!DEBUG) {
+			return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+		}
+		return new ResponseEntity<>(matchService.findAll(), HttpStatus.OK);
+	}
+
+	/**
 	 * Gets all matched drivers to riders using rider's ID as input and driver's ID
 	 * to get drivers.
 	 *
@@ -73,23 +89,51 @@ public class MatchingController {
 	 * @return list of matched drivers by their IDs
 	 */
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<String> getAll(@PathVariable int id, HttpServletRequest req) {
+	public List<String> getDrivers(@PathVariable int id, HttpServletRequest req) {
 		String authToken = req.getHeader("Authorization");
-		LOGGER.info(authToken);
-		LOGGER.info("getAll() for UserId: " + id);
-		
+		LOGGER.info("Token: {}", authToken);
+		LOGGER.info("getDrivers() for UserId: " + id);
+
 		User rider = userClient.findById(id, authToken);
 		if (rider == null) {
 			LOGGER.error(NULL);
 			return new ArrayList<>();
-		} else {
-			LOGGER.info(MSG, id, rider.getFirstName());
-			List<String> matches =  matchService.findMatches(rider).stream()
+		}
+
+		LOGGER.info(MSG, id, rider.getFirstName());
+		List<String> matches = matchService.findMatches(rider).stream()
+				.map(driver -> UriComponentsBuilder.fromPath(USER_ID_URI).buildAndExpand(driver.getId()).toString())
+				.collect(Collectors.toList());
+		LOGGER.debug("Returning matches: " + matches);
+		return matches;
+	}
+
+	/**
+	 * Gets all matched drivers to riders using rider's ID as input and driver's ID
+	 * to get drivers.
+	 *
+	 * @param id the rider's ID
+	 * @return list of matched drivers by their IDs
+	 */
+	@Deprecated
+	@RequestMapping(value = "/old/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<String> getAll(@PathVariable int id, HttpServletRequest req) {
+		String authToken = req.getHeader("Authorization");
+		LOGGER.info(authToken);
+		LOGGER.info("getAll() for UserId: " + id);
+
+		User rider = userClient.findById(id, authToken);
+		if (rider == null) {
+			LOGGER.error(NULL);
+			return new ArrayList<>();
+		}
+
+		LOGGER.info(MSG, id, rider.getFirstName());
+		List<String> matches = matchService.findMatches(rider).stream()
 				.map(driver -> UriComponentsBuilder.fromPath(USER_ID_URI).buildAndExpand(driver.getId()).toString())
 				.collect(Collectors.toList());
 		LOGGER.debug("Returning matches: " + matches.toString());
 		return matches;
-		}
 	}
 
 	/**
@@ -113,7 +157,6 @@ public class MatchingController {
 					.map(driver -> UriComponentsBuilder.fromPath(USER_ID_URI).buildAndExpand(driver.getId()).toString())
 					.collect(Collectors.toList());
 		}
-
 	}
 
 	/**
@@ -214,10 +257,10 @@ public class MatchingController {
 
 		likes = likeService.getLikes(id).stream().map(like -> UriComponentsBuilder.fromPath(USER_ID_URI)
 				.buildAndExpand(like.getPair().getAffectedId()).toString()).collect(Collectors.toList());
-		if(likes == null) {
+		if (likes == null) {
 			LOGGER.error("Mapping process returned null");
 			return new ArrayList<>();
-		}else if (likes.isEmpty()) {
+		} else if (likes.isEmpty()) {
 			LOGGER.error("Mapping process did not return any URIs associated with this user id: {}", id);
 			return likes;
 		} else {
@@ -264,9 +307,9 @@ public class MatchingController {
 		List<String> dislikes = null;
 		dislikes = dislikeService.getDislikes(id).stream().map(dislike -> UriComponentsBuilder.fromPath(USER_ID_URI)
 				.buildAndExpand(dislike.getPair().getAffectedId()).toString()).collect(Collectors.toList());
-		if(dislikes == null) {
+		if (dislikes == null) {
 			return new ArrayList<>();
-		}else if (dislikes.isEmpty()) {
+		} else if (dislikes.isEmpty()) {
 			LOGGER.error("Mapping process did not return any URIs associated with this user id: {} ", id);
 			return dislikes;
 		} else {
@@ -320,8 +363,7 @@ public class MatchingController {
 
 		if (DEBUG) {
 			return new ResponseEntity<>(generateStackTrace(ex, false), HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-		else {
+		} else {
 			return new ResponseEntity<>("An error occurred processing the request", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
@@ -350,4 +392,5 @@ public class MatchingController {
 
 		return stackTrace;
 	}
+
 }
