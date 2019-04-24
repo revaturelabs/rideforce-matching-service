@@ -37,7 +37,7 @@
 		<repository>
 			<id>my-nexus</id>
 			<name>Nexus</name>
-			<url>http://nexus.revature.tech/nexus/content/groups/public</url>
+			<url>http://nexus.revaturelabs.com:8081/repository/maven-group/</url>
 			<releases>
 				<enabled>true</enabled>
 			</releases>
@@ -51,7 +51,7 @@
 		<pluginRepository>
 			<id>my-nexus</id>
 			<name>Nexus</name>
-			<url>http://nexus.revature.tech/nexus/content/groups/public</url>
+			<url>http://nexus.revaturelabs.com:8081/repository/maven-group/</url>
 			<releases>
 				<enabled>true</enabled>
 			</releases>
