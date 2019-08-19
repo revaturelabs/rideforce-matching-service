@@ -158,7 +158,7 @@ public class MatchServiceTest {
 
 		/**
 		 * Testing begins here, it goes through all of the methods in Match service with
-		 * the mock above, it will test as though the rider is in the database These
+		 * the mock above, it will test as though the rider is in the database. These
 		 * assertions test all branches of working calls to Match service
 		 */
 		Assert.assertEquals(drivers, matchService.findMatches(rider));

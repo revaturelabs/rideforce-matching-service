@@ -89,6 +89,7 @@ public class AggregateRankingBuilder {
 			throw new NoRankingCriteriaException("At least one criterion required to run algorithm");
 		}
 		double totalWeightedRank = 0;
+		System.out.println("Total Weighted Rank :" + totalWeightedRank);
 		log.info("Initial totalWeightedRank in rankMatch: " + totalWeightedRank);
 		List<Double> weightedRanks = this.criteria.stream().map(criterion -> {
 			log.info("Executing criterion: " + criterion.getClass().getSimpleName());
