@@ -119,8 +119,6 @@ public class PairBeanTest {
 	public void testUserIdSetter() {
 		Pair p = new Pair(1, 1);
 		p.setUserId(100);
-		;
-
 		assertTrue("Setter did not work: affectedId did not change as expected", p.getUserId() == 100);
 
 	}

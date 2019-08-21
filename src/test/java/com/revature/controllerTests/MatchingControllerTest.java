@@ -43,12 +43,12 @@ public class MatchingControllerTest {
 
 	@Test
 	public void getAllMatchesTest() throws Exception {
-		this.mockMvc.perform(get("/matches/0")).andExpect(status().isOk());
+		this.mockMvc.perform(get("/matches")).andExpect(status().isOk());
 	}
 
 	@Test
 	public void getAllMatchesTest1() throws Exception {
-		this.mockMvc.perform(get("/matches/1")).andExpect(status().isOk());
+		this.mockMvc.perform(get("/matches")).andExpect(status().isOk());
 	}
 
 	@Test
