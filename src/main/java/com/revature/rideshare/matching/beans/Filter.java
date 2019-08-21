@@ -1,6 +1,5 @@
 package com.revature.rideshare.matching.beans;
 
-// TODO: Auto-generated Javadoc
 /**
  * This class is used in the matching algorithm. It is used to determine which
  * criteria are used when ranking matches.

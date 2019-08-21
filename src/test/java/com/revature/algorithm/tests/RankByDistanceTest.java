@@ -142,7 +142,9 @@ public class RankByDistanceTest {
 		try {
 			rank = RankByDistance.class.getDeclaredMethod("rank", User.class, User.class);
 			rank.setAccessible(true);
+		//System.out.println("RankByDistance : " + rankByDistance.toString() );
 			result = (double) rank.invoke(rankByDistance, rider, driver);
+			
 		} catch (NoSuchMethodException e) {
 			e.printStackTrace();
 		} catch (SecurityException e) {
